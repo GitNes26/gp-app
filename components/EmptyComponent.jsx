@@ -10,12 +10,10 @@ const EmptyComponent = ({ title, subtitle }) => {
             className={"w-[270px] h-[125px]"}
             resizeMode="contain"
          />
-         <Text className={"text-xl text-center font-psemibold text-white mt-2"}>
+         <Text className={"text-xl text-center font-semibold text-white mt-2"}>
             {title}
          </Text>
-         <Text className={"font-pmedium text-sm text-gray-100"}>
-            {subtitle}
-         </Text>
+         <Text className={"font-medium text-sm text-gray-100"}>{subtitle}</Text>
       </View>
    );
 };

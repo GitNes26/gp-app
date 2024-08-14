@@ -93,7 +93,7 @@ const TabIcon = ({
          <Ionicons name={icon} size={iconSize} color={color} />
       ) : null}
       <Text
-         className={`${focused ? "font-psemibold" : "font-pregular"} text-xs`}
+         className={`${focused ? "font-semibold" : "font-regular"} text-xs`}
          style={{ color: color }}>
          {name}
       </Text>

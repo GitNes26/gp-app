@@ -1,5 +1,4 @@
 import {
-   Alert,
    Image,
    ScrollView,
    StyleSheet,
@@ -14,9 +13,11 @@ import { StatusBar } from "expo-status-bar";
 import InputComponent from "../../components/InputComponent";
 import colors from "../../constants/colors";
 import ButtonCompnent from "../../components/ButtonCompnent";
-import { Link, router } from "expo-router";
+import { Link, router, useNavigation } from "expo-router";
+import { Foundation } from "@expo/vector-icons";
 
 const SignUp = () => {
+   const navigation = useNavigation();
    const [form, setForm] = useState({
       username: "",
       email: "",
@@ -25,42 +26,59 @@ const SignUp = () => {
    const [isSubmitting, setIsSubmitting] = useState(false);
 
    const onSubmit = ({ values }) => {
+      console.log("🚀 ~ onSubmit ~ values:", values);
       try {
+         setIsSubmitting(true);
          ToastAndroid.showWithGravity(
             `Cuenta creada: Bienvenido ${form.username}`,
             ToastAndroid.LONG,
             ToastAndroid.CENTER,
          );
-         setTimeout(() => {
-            router.dismissAll();
-         }, 1500);
+         // setTimeout(() => {
+         setIsSubmitting(false);
+         navigation.goBack();
+         // }, 1500);
       } catch (error) {
          console.log("🚀 ~ onSubmit ~ error:", error);
-         throw Error;
+         throw Error(error);
+      } finally {
+         // setIsSubmitting(false);
       }
    };
 
    return (
-      <SafeAreaView className={"bg-primary h-full"}>
-         <ScrollView>
-            <View className={"w-full justify-center min-h-[85vh] px-4 my-6"}>
+      <SafeAreaView className={"h-full"}>
+         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <Image
+               source={images.bgAuthUp}
+               className={"w-full h-40"}
+               resizeMode="cover"
+            />
+            <View className={"w-full justify-center px-4 flex-1"}>
                <Image
                   source={images.logo}
-                  className={"w-[115px] h-[35px]"}
+                  className={"w-full h-14"}
                   resizeMode="contain"
                />
-               <Text className={"text-2xl text-white font-psemibold mt-10"}>
-                  Registrate en ComuApp
-               </Text>
+               <View className={"w-full justify-center items-center"}>
+                  <Text
+                     className={"text-3xl font-mbold mt-10 text-primary-200"}>
+                     Bienvenido!
+                  </Text>
+                  <Text className={"text-base font-mmedium text-gray-500"}>
+                     a la App con estrella{" "}
+                     <Foundation name="star" size={18} color={colors.primary} />
+                  </Text>
+               </View>
 
                <InputComponent
-                  title={"Usuario"}
+                  title={"Nombre de Usuario"}
                   value={form.username}
                   handlChangeText={(e) => setForm({ ...form, username: e })}
-                  otherStyles={"mt-10"}
+                  otherStyles={"mt-7"}
+                  // keyboardType={""}
                   placeholder={"Ingresa tu nombre de usuario"}
                />
-
                <InputComponent
                   title={"Correo Electrónico"}
                   value={form.email}
@@ -76,25 +94,30 @@ const SignUp = () => {
                   otherStyles={"mt-7"}
                   // keyboardType={""}
                   isPassword={true}
-                  placeholder={"Ingresa tu correo"}
+                  placeholder={"Ingresa tu contraseña"}
                />
                <ButtonCompnent
-                  title={"Ingresar"}
+                  title={"Registrarme"}
                   handlePress={onSubmit}
                   containerStyles={"mt-7"}
                   isLoading={isSubmitting}
                />
                <View className={"justify-center pt-5 flex-row gap-2"}>
-                  <Text className={"text-lg text-gray-100 font-pregular"}>
+                  <Text className={"text-lg text-gray-700 font-mregular"}>
                      Si ya tienes cuenta,{" "}
                      <Link
-                        href={"/sign-in"}
-                        className="text-lg font-psemibold text-secondary">
+                        href={"/sign-up"}
+                        className="text-lg font-msemibold text-primary">
                         Inicia Sesión
                      </Link>
                   </Text>
                </View>
             </View>
+            <Image
+               source={images.bgAuthDown}
+               className={"w-full h-40"}
+               resizeMode="cover"
+            />
          </ScrollView>
          {/* <StatusBar backgroundColor={colors.primary.DEFAULT} style="inverted"  /> */}
       </SafeAreaView>

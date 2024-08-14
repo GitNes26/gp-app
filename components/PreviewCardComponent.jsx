@@ -31,12 +31,12 @@ const PreviewCardComponent = ({
                </View>
                <View className={"justify-center flex-1 ml-3 gap-y-1"}>
                   <Text
-                     className={"text-white font-psemibold text-sm"}
+                     className={"text-white font-semibold text-sm"}
                      numberOfLines={2}>
                      {title}
                   </Text>
                   <Text
-                     className={"text-gray-100 font-pregular text-sm"}
+                     className={"text-gray-100 font-regular text-sm"}
                      numberOfLines={2}>
                      {title}
                   </Text>

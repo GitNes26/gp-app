@@ -12,17 +12,15 @@ const ButtonCompnent = ({
       <TouchableOpacity
          onPress={handlePress}
          activeOpacity={0.7}
-         className={`bg-secondary rounded-xl min-h-[62px] justify-center items-center px-2 ${containerStyles} ${
+         className={`bg-primary rounded-xl min-h-[62px] justify-center items-center px-2 ${containerStyles} ${
             isLoading ? "opacity-50" : ""
          }`}
          disabled={isLoading}>
-         <Text className={`text-primary font-psemibold text-lg ${textStyles}`}>
-            {title}
+         <Text className={`text-white font-mbold text-lg ${textStyles}`}>
+            {title.toUpperCase()}
          </Text>
       </TouchableOpacity>
    );
 };
 
 export default ButtonCompnent;
-
-const styles = StyleSheet.create({});

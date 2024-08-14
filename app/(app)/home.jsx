@@ -40,7 +40,7 @@ const Home = () => {
    };
 
    return (
-      <SafeAreaView className={"bg-primary h-full"}>
+      <SafeAreaView className={"bg-slate-800 h-full"}>
          <FlatList
             data={photos}
             keyExtractor={(item) => item.$id}

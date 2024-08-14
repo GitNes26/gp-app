@@ -34,6 +34,12 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npx expo install expo-router react-native-safe-area-context react-native-screens expo-linking expo-constants expo-status-bar react-native-reanimated react-native-animatable expo-system-ui
    ```
 
+   Si se utilizara una navegacion de Drawer...
+   ```bash
+   npx expo install @react-navigation/drawer react-native-gesture-handler react-native-reanimated
+   ```
+
+
 2. Tailwind con expo
 
    ```bash
@@ -72,7 +78,13 @@ agregar la siguiente linea en el return como una propiedad más, debajo de **pre
 plugins: ["nativewind/babel", "react-native-reanimated/plugin"],
 ```
 
-#### En el archivo principal app (App.js)
+#### En el archivo package.json
+
+```json
+  "main": "expo-router/entry",
+```
+
+#### En el archivo principal app (App.js)  //POSIBLEMENTE ESE SE OMITA
 
 ```js
 import "react-native-gesture-handler";

@@ -1,6 +1,6 @@
 {
    "light": {
-      "primary": { "DEFAULT": "#161622" },
+      "primary": { "DEFAULT": "#013C02", "100": "#86bb47", "200": "#017200" },
       "secondary": {
          "DEFAULT": "#FF9C01",
          "100": "#FF9001",
