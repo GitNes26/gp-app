@@ -11,9 +11,13 @@ export default function LogoComponent() {
 
    return (
       <StyledPressable
-         className={`active:opacity-40 active:w-10`}
+         className={`active:opacity-40 active:w-10 justify-center items-center`}
          onPress={() => navigator.openDrawer()}>
-         <Image source={images.icon} className={"w-14"} resizeMode="contain" />
+         <Image
+            source={images.icon}
+            className={"w-11 h-11"}
+            resizeMode="contain"
+         />
       </StyledPressable>
    );
 }

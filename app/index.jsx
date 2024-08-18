@@ -39,14 +39,14 @@ export default function App() {
                   className={"w-full justify-center items-center px-4 flex-1"}>
                   <Image
                      source={images.logo}
-                     className={"w-full h-20"}
+                     className={"w-full h-20 mb-5"}
                      resizeMode="contain"
                   />
-                  <Image
+                  {/* <Image
                      source={images.cards}
                      className={"max-w-[380px] w-full h-[100px]"}
                      resizeMode="contain"
-                  />
+                  /> */}
 
                   <View className={"relative mt-5 mx-5"}>
                      <Text className={"text-3xl font-mbold text-center"}>

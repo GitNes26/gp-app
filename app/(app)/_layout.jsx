@@ -12,7 +12,6 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import colors from "../../constants/colors";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import IconPressableComponent from "../../components/IconPressableComponent";
 import images from "../../constants/images";
 import LogoComponent from "../../components/LogoComponent";
 import {
@@ -27,7 +26,15 @@ const data = [
    {
       name: "index",
       label: "Inicio",
-      title: "Inicio",
+      title: () => (
+         <View className={`justify-center items-center `}>
+            <Image
+               source={images.logo}
+               className={"h-12"}
+               resizeMode="contain"
+            />
+         </View>
+      ),
       icon: {
          focus: "home",
          disfocus: "home-outline",
@@ -161,10 +168,14 @@ const CustomDrawerContent = ({ ...props }) => {
 };
 
 const DrawerGroup = () => {
+   // const { top, bottom } = SafeAreaInsetsContext();
    return (
       <Drawer
          drawerContent={CustomDrawerContent}
          screenOptions={{
+            drawerActiveBackgroundColor: colors.primary.DEFAULT,
+            drawerActiveTintColor: colors.primary[100],
+            drawerLabelStyle: { marginLeft: -20, fontWeight: "bold" },
             // drawerHideStatusBarOnOpen: true,
             headerTitleStyle: {
                fontWeight: "800",
@@ -174,17 +185,22 @@ const DrawerGroup = () => {
                width: "100%",
                alignItems: "center",
             },
-            drawerActiveBackgroundColor: colors.primary.DEFAULT,
-            drawerActiveTintColor: colors.primary[100],
-            drawerLabelStyle: { marginLeft: -20, fontWeight: "bold" },
+            headerStyle: {
+               // backgroundColor: "yellow",
+               // height: "10%",
+            },
             // headerShown: false,
             headerLeft: () => (
                <ImagePressableComponent
                   image={images.profile}
-                  imageClassesStyle={`rounded-full`}
+                  imageClassesStyle={`rounded-full ml-2`}
                />
             ),
-            headerRight: () => <LogoComponent />,
+            headerRight: () => (
+               <View className={`mr-2`}>
+                  <LogoComponent />
+               </View>
+            ),
          }}>
          {data.map((item) => (
             <Drawer.Screen
