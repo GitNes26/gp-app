@@ -22,13 +22,13 @@ import { Link } from "expo-router";
 import FooterComponent from "../../components/FooterComponent";
 import HeaderComponent from "../../components/HeaderComponent";
 
-const Index = () => {
+const Report = () => {
    const {
       data: photos,
       isLoading,
       refetch: refetchPhotos,
    } = useFetch(getAllPhotos);
-   // console.log("🚀 ~ Index ~ photos:", photos);
+   // console.log("🚀 ~ Report ~ photos:", photos);
    const { data: users, refetch: refetchUsers } = useFetch(getAllPhotos);
    const dataBtns = [
       { id: 1, icon: images.btnAlumbrado, title: "Alumbrado Público" },
@@ -97,7 +97,7 @@ const Index = () => {
    );
 };
 
-export default Index;
+export default Report;
 
 const CategoryItem = ({ title, icon }) => (
    <View className={`flex-1 items-stretch`}>

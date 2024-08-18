@@ -26,6 +26,7 @@ const data = [
    {
       name: "index",
       label: "Inicio",
+      headerShown: false,
       title: () => (
          <View className={`justify-center items-center `}>
             <Image
@@ -41,9 +42,20 @@ const data = [
       },
    },
    {
+      name: "report",
+      label: "Levantar Reporte",
+      title: "Reporte",
+      headerShown: false,
+      icon: {
+         focus: "settings",
+         disfocus: "settings-outline",
+      },
+   },
+   {
       name: "home",
       label: "Ajustes",
       title: "Ajustes",
+      headerShown: true,
       icon: {
          focus: "settings",
          disfocus: "settings-outline",
@@ -207,6 +219,7 @@ const DrawerGroup = () => {
                key={`key-drawer-screen-${item.name}`}
                name={item.name} // This is the name of the page and must match the url from root
                options={({ route }) => ({
+                  headerShown: item.headerShown,
                   drawerLabel: item.label,
                   headerTitle: item.title,
                   drawerIcon: ({ size, color, focused }) => {
