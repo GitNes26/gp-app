@@ -16,13 +16,13 @@ import PreviewCardComponent from "../../components/PreviewCardComponent";
 import useFetch from "../../hooks/useFetch";
 import { getAllPhotos, getAllPosts } from "../../contexts/GlobalContext";
 
-const Home = () => {
+const Demo = () => {
    const {
       data: photos,
       isLoading,
       refetch: refetchPhotos,
    } = useFetch(getAllPhotos);
-   // console.log("🚀 ~ Home ~ photos:", photos);
+   // console.log("🚀 ~ Demo ~ photos:", photos);
    const { data: users, refetch: refetchUsers } = useFetch(getAllPhotos);
    // const videos = [
    //    { id: "cards.png", image: "cards" },
@@ -93,4 +93,4 @@ const Home = () => {
    );
 };
 
-export default Home;
+export default Demo;

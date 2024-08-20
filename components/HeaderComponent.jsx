@@ -14,7 +14,7 @@ export default function HeaderComponent() {
          <View className={`bg-white`}>
             <Image
                source={images.bgUp}
-               className={"w-full h-10"}
+               className={"w-full h-5"}
                resizeMode="cover"
             />
             <View className={`flex-row justify-center items-center my-2 px-2`}>

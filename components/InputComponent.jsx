@@ -54,5 +54,3 @@ const InputComponent = ({
 };
 
 export default InputComponent;
-
-const styles = StyleSheet.create({});

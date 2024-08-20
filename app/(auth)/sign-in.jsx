@@ -33,7 +33,7 @@ const SignIn = () => {
          );
          // setTimeout(() => {
          setIsSubmitting(false);
-         router.push("/home");
+         router.push("../(app)");
          // }, 1500);
       } catch (error) {
          console.log("🚀 ~ onSubmit ~ error:", error);

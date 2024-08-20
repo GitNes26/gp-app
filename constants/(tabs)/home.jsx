@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import images from "../../constants/images";
+import images from "../images";
 import SearchComponent from "../../components/SearchComponent";
 import CarruselComponent from "../../components/CarruselComponent";
 import EmptyComponent from "../../components/EmptyComponent";
