@@ -15,6 +15,8 @@ import colors from "../../constants/colors";
 import ButtonCompnent from "../../components/ButtonCompnent";
 import { Link, router } from "expo-router";
 import { Foundation } from "@expo/vector-icons";
+import FooterComponent from "../../components/FooterComponent";
+import HeaderComponent from "../../components/HeaderComponent";
 
 const SignIn = () => {
    const [form, setForm] = useState({
@@ -45,12 +47,8 @@ const SignIn = () => {
 
    return (
       <SafeAreaView className={"h-full"}>
+         <HeaderComponent isAuth={true} />
          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-            <Image
-               source={images.bgAuthUp}
-               className={"w-full h-40"}
-               resizeMode="cover"
-            />
             <View className={"w-full justify-center px-4 flex-1"}>
                <Image
                   source={images.logo}
@@ -102,13 +100,8 @@ const SignIn = () => {
                   </Text>
                </View>
             </View>
-            <Image
-               source={images.bgAuthDown}
-               className={"w-full h-40"}
-               resizeMode="cover"
-            />
          </ScrollView>
-         {/* <StatusBar backgroundColor={colors.primary.DEFAULT} style="inverted"  /> */}
+         <FooterComponent isAuth={true} />
       </SafeAreaView>
    );
 };

@@ -67,6 +67,13 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npm install --save --save-dev --force prettier eslint-config-prettier eslint-plugin-prettier
    ```
 
+6. Utilizar la cámara
+
+   ```bash
+   expo install expo-media-library
+   expo install expo-camera
+   ```
+
 
 ## Configuraciones
 

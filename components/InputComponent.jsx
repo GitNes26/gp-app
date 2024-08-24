@@ -19,6 +19,7 @@ const InputComponent = ({
    otherStyles,
    keyboardType,
    isPassword = false,
+   rows = null,
    ...props
 }) => {
    const [showPassword, setShowPassword] = useState(isPassword);
@@ -38,6 +39,9 @@ const InputComponent = ({
                onChangeText={handlChangeText}
                secureTextEntry={showPassword}
                keyboardType={keyboardType}
+               // textContentType="URL"
+               multiline={rows > 0 ? true : false}
+               numberOfLines={rows}
             />
             {isPassword && (
                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>

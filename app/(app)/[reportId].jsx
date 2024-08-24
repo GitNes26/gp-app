@@ -7,6 +7,7 @@ import InputComponent from "../../components/InputComponent";
 import ButtonCompnent from "../../components/ButtonCompnent";
 import images from "../../constants/images";
 import FooterComponent from "../../components/FooterComponent";
+import CameraComponent from "../../components/CameraComponent";
 
 const Report = () => {
    const { reportId } = useLocalSearchParams();
@@ -46,8 +47,8 @@ const Report = () => {
          <HeaderComponent />
          {/* Título */}
          <View className={"w-full justify-center items-center mb-5"}>
-            <Text className={"text-3xl font-mextrabold mt-10 text-primary-200"}>
-               Reporte <Text className={`text-black`}>[{reportId}]</Text>
+            <Text className={"text-2xl font-mextrabold mt-10 text-primary-200"}>
+               Reporte <Text className={`text-black`}>{reportId}</Text>
             </Text>
          </View>
          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -62,11 +63,12 @@ const Report = () => {
                />
                <View className={`flex-row py-4 w-full`}>
                   <View className={`w-1/2 justify-center items-center`}>
-                     <Image
+                     {/* <Image
                         source={images.camera}
                         className={`w-32 h-32`}
                         resizeMode="contain"
-                     />
+                     /> */}
+                     <CameraComponent />
                   </View>
                   <View className={`w-1/2 justify-center items-center`}>
                      <Text
@@ -129,6 +131,7 @@ const Report = () => {
                   otherStyles={"mt-7"}
                   // keyboardType={"text"}
                   placeholder={"Comentarios y/o reporte"}
+                  rows={5}
                />
                <ButtonCompnent
                   title={"reportar"}
@@ -139,7 +142,6 @@ const Report = () => {
             </View>
          </ScrollView>
          <FooterComponent />
-         {/* <StatusBar backgroundColor={colors.primary.DEFAULT} style="inverted"  /> */}
       </SafeAreaView>
    );
 };
