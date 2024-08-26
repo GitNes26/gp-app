@@ -26,7 +26,7 @@ const SearchComponent = ({
    const pathname = usePathname();
    const [query, setQuery] = useState("");
 
-   const handlePressIcon = () => {
+   const handleOnPressIcon = () => {
       if (!query)
          return Alert.alert(
             "Sin Busqueda",
@@ -46,7 +46,7 @@ const SearchComponent = ({
                placeholderTextColor={colors.gray.DEFAULT}
                onChangeText={(e) => setQuery(e)}
             />
-            <TouchableOpacity onPress={handlePressIcon}>
+            <TouchableOpacity onPress={handleOnPressIcon}>
                <Image
                   source={icons.search}
                   className={`w-5 h-5`}

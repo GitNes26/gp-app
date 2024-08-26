@@ -118,7 +118,7 @@ const CustomDrawerContent = ({ ...props }) => {
                   />
                }
                title={"Cerrar Sesión"}
-               handlePress={() => router.dismissAll()}
+               handleOnPress={() => router.dismissAll()}
             />
          </View>
       </View>

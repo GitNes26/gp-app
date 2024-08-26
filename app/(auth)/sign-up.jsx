@@ -49,82 +49,71 @@ const SignUp = () => {
    };
 
    return (
-      <>
-         <SafeAreaView className={"h-full"}>
+      <SafeAreaView className={"h-full"}>
+         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
             <HeaderComponent isAuth={true} />
-            <ScrollView
-               contentContainerStyle={{
-                  flexGrow: 1,
-               }}>
-               <View className={"w-full justify-center px-4 py-2 flex-1"}>
-                  <Image
-                     source={images.logo}
-                     className={"w-full h-14"}
-                     resizeMode="contain"
-                  />
-                  <View className={"w-full justify-center items-center"}>
-                     <Text
-                        className={
-                           "text-3xl font-mbold mt-10 text-primary-200"
-                        }>
-                        Bienvenido!
-                     </Text>
-                     <Text className={"text-base font-mmedium text-gray-500"}>
-                        a la App con estrella{" "}
-                        <Foundation
-                           name="star"
-                           size={18}
-                           color={colors.primary}
-                        />
-                     </Text>
-                  </View>
-
-                  <InputComponent
-                     title={"Nombre de Usuario"}
-                     value={form.username}
-                     handlChangeText={(e) => setForm({ ...form, username: e })}
-                     otherStyles={"mt-7"}
-                     // keyboardType={""}
-                     placeholder={"Ingresa tu nombre de usuario"}
-                  />
-                  <InputComponent
-                     title={"Correo Electrónico"}
-                     value={form.email}
-                     handlChangeText={(e) => setForm({ ...form, email: e })}
-                     otherStyles={"mt-7"}
-                     keyboardType={"email-address"}
-                     placeholder={"Ingresa tu correo"}
-                  />
-                  <InputComponent
-                     title={"Contraseña"}
-                     value={form.password}
-                     handlChangeText={(e) => setForm({ ...form, password: e })}
-                     otherStyles={"mt-7"}
-                     // keyboardType={""}
-                     isPassword={true}
-                     placeholder={"Ingresa tu contraseña"}
-                  />
-                  <ButtonCompnent
-                     title={"Registrarme"}
-                     handlePress={onSubmit}
-                     containerStyles={"mt-7"}
-                     isLoading={isSubmitting}
-                  />
-                  <View className={"justify-center pt-5 flex-row gap-2"}>
-                     <Text className={"text-lg text-gray-700 font-mregular"}>
-                        Si ya tienes cuenta,{" "}
-                        <Link
-                           href={"/sign-in"}
-                           className="text-lg font-msemibold text-primary">
-                           Inicia Sesión
-                        </Link>
-                     </Text>
-                  </View>
+            <View className={"w-full justify-center px-4 py-2 flex-1"}>
+               <Image
+                  source={images.logo}
+                  className={"w-full h-14"}
+                  resizeMode="contain"
+               />
+               <View className={"w-full justify-center items-center"}>
+                  <Text
+                     className={"text-3xl font-mbold mt-10 text-primary-200"}>
+                     Bienvenido!
+                  </Text>
+                  <Text className={"text-base font-mmedium text-gray-500"}>
+                     a la App con estrella{" "}
+                     <Foundation name="star" size={18} color={colors.primary} />
+                  </Text>
                </View>
-            </ScrollView>
+
+               <InputComponent
+                  title={"Nombre de Usuario"}
+                  value={form.username}
+                  handlChangeText={(e) => setForm({ ...form, username: e })}
+                  otherStyles={"mt-7"}
+                  // keyboardType={""}
+                  placeholder={"Ingresa tu nombre de usuario"}
+               />
+               <InputComponent
+                  title={"Correo Electrónico"}
+                  value={form.email}
+                  handlChangeText={(e) => setForm({ ...form, email: e })}
+                  otherStyles={"mt-7"}
+                  keyboardType={"email-address"}
+                  placeholder={"Ingresa tu correo"}
+               />
+               <InputComponent
+                  title={"Contraseña"}
+                  value={form.password}
+                  handlChangeText={(e) => setForm({ ...form, password: e })}
+                  otherStyles={"mt-7"}
+                  // keyboardType={""}
+                  isPassword={true}
+                  placeholder={"Ingresa tu contraseña"}
+               />
+               <ButtonCompnent
+                  title={"Registrarme"}
+                  handleOnPress={onSubmit}
+                  containerStyles={"mt-7"}
+                  isLoading={isSubmitting}
+               />
+               <View className={"justify-center pt-5 flex-row gap-2"}>
+                  <Text className={"text-lg text-gray-700 font-mregular"}>
+                     Si ya tienes cuenta,{" "}
+                     <Link
+                        href={"/sign-in"}
+                        className="text-lg font-msemibold text-primary">
+                        Inicia Sesión
+                     </Link>
+                  </Text>
+               </View>
+            </View>
             <FooterComponent isAuth={true} />
-         </SafeAreaView>
-      </>
+         </ScrollView>
+      </SafeAreaView>
    );
 };
 

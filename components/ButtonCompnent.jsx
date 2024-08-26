@@ -4,7 +4,7 @@ import React from "react";
 
 const ButtonCompnent = ({
    title,
-   handlePress,
+   handleOnPress,
    containerStyles,
    textStyles,
    isLoading,
@@ -13,7 +13,7 @@ const ButtonCompnent = ({
 }) => {
    return (
       <TouchableOpacity
-         onPress={handlePress}
+         onPress={handleOnPress}
          activeOpacity={0.7}
          className={`bg-primary rounded-xl min-h-[62px] flex-row space-x-2 justify-center items-center px-2 ${containerStyles} ${
             isLoading ? "opacity-50" : ""

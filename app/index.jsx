@@ -74,17 +74,12 @@ export default function App() {
 
                   <ButtonCompnent
                      title={"Comencemos"}
-                     handlePress={() => {
+                     handleOnPress={() => {
                         router.push("/sign-in");
                      }}
                      containerStyles={"w-full mt-7"}
                   />
                </View>
-               {/* <Image
-                  source={images.bgAuthDown}
-                  className={"w-full h-40"}
-                  resizeMode="cover"
-               /> */}
             </ScrollView>
          </ImageBackground>
 

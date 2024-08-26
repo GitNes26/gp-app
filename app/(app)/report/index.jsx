@@ -130,7 +130,7 @@
 //                />
 //                <ButtonCompnent
 //                   title={"reportar"}
-//                   handlePress={onSubmit}
+//                   handleOnPress={onSubmit}
 //                   containerStyles={"mt-7 mb-5"}
 //                   isLoading={isSubmitting}
 //                />

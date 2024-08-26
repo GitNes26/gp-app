@@ -43,10 +43,10 @@ const Report = () => {
    };
 
    return (
-      <SafeAreaView className={"h-full "}>
-         <HeaderComponent />
+      <SafeAreaView className={"h-full"}>
          {/* Título */}
-         <View className={"w-full justify-center items-center mb-5"}>
+         <HeaderComponent />
+         <View className={"w-full justify-center items-center mb-5 -mt-5"}>
             <Text className={"text-2xl font-mextrabold mt-10 text-primary-200"}>
                Reporte <Text className={`text-black`}>{reportId}</Text>
             </Text>
@@ -63,21 +63,20 @@ const Report = () => {
                />
                <View className={`flex-row py-4 w-full`}>
                   <View className={`w-1/2 justify-center items-center`}>
-                     {/* <Image
+                     <Image
                         source={images.camera}
                         className={`w-32 h-32`}
                         resizeMode="contain"
-                     /> */}
-                     <CameraComponent />
+                     />
                   </View>
                   <View className={`w-1/2 justify-center items-center`}>
                      <Text
                         className={`text-gray-500 text-center font-mmedium italic mb-2`}>
                         Por favor captura la imagen con buena calidad
                      </Text>
-                     <ButtonCompnent
-                        title={"Capturar evidencia"}
-                        containerStyles={`w-full bg-primary-200`}
+                     <CameraComponent
+                        textButton="Capturar evidencia"
+                        styleButton={`w-full bg-primary-200`}
                      />
                   </View>
                </View>
@@ -135,13 +134,13 @@ const Report = () => {
                />
                <ButtonCompnent
                   title={"reportar"}
-                  handlePress={onSubmit}
+                  handleOnPress={onSubmit}
                   containerStyles={"mt-7 mb-5"}
                   isLoading={isSubmitting}
                />
             </View>
+            <FooterComponent />
          </ScrollView>
-         <FooterComponent />
       </SafeAreaView>
    );
 };

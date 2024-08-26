@@ -47,8 +47,8 @@ const SignIn = () => {
 
    return (
       <SafeAreaView className={"h-full"}>
-         <HeaderComponent isAuth={true} />
          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <HeaderComponent isAuth={true} />
             <View className={"w-full justify-center px-4 flex-1"}>
                <Image
                   source={images.logo}
@@ -85,7 +85,7 @@ const SignIn = () => {
                />
                <ButtonCompnent
                   title={"Ingresar"}
-                  handlePress={onSubmit}
+                  handleOnPress={onSubmit}
                   containerStyles={"mt-7"}
                   isLoading={isSubmitting}
                />
@@ -100,8 +100,8 @@ const SignIn = () => {
                   </Text>
                </View>
             </View>
+            <FooterComponent isAuth={true} />
          </ScrollView>
-         <FooterComponent isAuth={true} />
       </SafeAreaView>
    );
 };

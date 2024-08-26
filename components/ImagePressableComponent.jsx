@@ -8,7 +8,11 @@ import { View } from "react-native-animatable";
 
 const StyledPressable = styled(Pressable);
 
-export default function ImagePressableComponent({ image, imageClassesStyle }) {
+export default function ImagePressableComponent({
+   image,
+   imageClassesStyle,
+   resizeMode = "cover",
+}) {
    const navigator = useNavigation();
 
    return (
@@ -18,7 +22,7 @@ export default function ImagePressableComponent({ image, imageClassesStyle }) {
          <Image
             source={image}
             className={`w-11 h-11 ${imageClassesStyle}`}
-            resizeMode="cover"
+            resizeMode={resizeMode}
          />
       </StyledPressable>
    );

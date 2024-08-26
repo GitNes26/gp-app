@@ -12,6 +12,11 @@ import logout from "../assets/icons/logout.png";
 import eyeHide from "../assets/icons/eye-hide.png";
 import eye from "../assets/icons/eye.png";
 import play from "../assets/icons/play.png";
+import { Ionicons } from "@expo/vector-icons";
+
+export const closeIcon = (...props) => (
+   <Ionicons name="close" size={24} {...props} />
+);
 
 export default {
    play,

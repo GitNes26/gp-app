@@ -4,8 +4,16 @@ import { Pressable } from "react-native";
 
 const StyledPressable = styled(Pressable);
 
-export default function IconPressableComponent({ icon }) {
+export default function IconPressableComponent({
+   icon,
+   handleOnPress,
+   backdrop = false,
+}) {
    return (
-      <StyledPressable className={`active:opacity-60`}>{icon}</StyledPressable>
+      <StyledPressable
+         className={`active:opacity-60 ${backdrop && "m-1 p-1.5 bg-black-100/30 rounded-full"}`}
+         onPress={handleOnPress}>
+         {icon}
+      </StyledPressable>
    );
 }
