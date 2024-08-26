@@ -69,9 +69,26 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
 6. Utilizar la cámara
 
-   ```bash
-   expo install expo-media-library
-   expo install expo-camera
+ ```bash
+   npx expo install expo-media-library
+   npx expo install expo-camera
+   ```
+
+7. Utilizar Localización del dispositivo (https://docs.expo.dev/versions/latest/sdk/location/)
+
+ ```bash
+   npx expo install expo-location
+   ```
+
+   y en el archivo **app.json** agregar en plugins, lo siguiente
+
+   ```json
+   [
+      "expo-location",
+      {
+         "locationAlwaysAndWhenInUsePermission": "Permitir que $(PRODUCT_NAME) use su ubicación."
+      }
+   ]
    ```
 
 
@@ -149,4 +166,51 @@ module.exports = {
    rules: { "prettier/prettier": "error" },
 };
 
+```
+
+
+## Buildear App APK con EAS ([documentacion paso a paso](https://dev.to/chinmaymhatre/how-to-generate-apk-using-react-native-expo-kae))
+
+#### Archivo /eas.js
+
+Creamos el archivo eas.json en la raiz del proyecto y agregar la siguiente lineas. Esto para la realizacion del APK sin firmar
+
+```json
+{
+   "cli": {
+      "version": ">= 10.2.4"
+   },
+   "build": {
+      "preview": {
+         "android": {
+            "buildType": "apk"
+         }
+      },
+      "preview2": {
+         "android": {
+            "gradleCommand": ":app:assembleRelease"
+         }
+      },
+      "preview3": {
+         "developmentClient": true
+      },
+      "preview4": {
+         "distribution": "internal"
+      },
+
+      "production": {}
+   },
+   "submit": {
+      "production": {}
+   }
+}
+```
+
+ejecutamos los sigueintes comandos
+
+```bash
+npm install --global expo-cli eas-cli # asegurarnos de que tenemso instalado el cli de EXPO y de EAS
+npx expo login # iniciamos sesion con nuestro usuario y contraseña de expo
+npx expo whoami # nos arrojara la infromacion de usuario logeado
+npx eas build -p android --profile preview # para buildear el APK par android con un perfil llamado preview
 ```

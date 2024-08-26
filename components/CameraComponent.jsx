@@ -1,28 +1,17 @@
-import { CameraView, useCameraPermissions, Camera } from "expo-camera";
+import { CameraView, useCameraPermissions } from "expo-camera";
 import { CameraType, FlashMode } from "expo-camera/build/legacy/Camera.types";
-import { useEffect, useRef, useState } from "react";
-import {
-   ActivityIndicator,
-   Button,
-   Modal,
-   StyleSheet,
-   Text,
-   ToastAndroid,
-   TouchableOpacity,
-   View,
-} from "react-native";
+import { useRef, useState } from "react";
+import { Button, Modal, Text, ToastAndroid, View } from "react-native";
 import ButtonCompnent from "./ButtonCompnent";
-import Icons, { closeIcon } from "../constants/icons";
-import ImagePressableComponent from "./ImagePressableComponent";
 import { Ionicons } from "@expo/vector-icons";
 import IconPressableComponent from "./IconPressableComponent";
-import { StatusBar } from "expo-status-bar";
 import PhotoPreviewComponent from "./PhotoPreviewComponent";
 import LoadingComponent from "./LoadingComponent";
 
 export default function CameraComponent({
    textButton = "Abrir Cámara",
    styleButton,
+   getData,
 }) {
    const sizeIcon = 26;
    const [openModal, setOpenModal] = useState(false);
@@ -66,13 +55,15 @@ export default function CameraComponent({
    };
 
    const handleRetakePhoto = () => setPoto(null);
-   const handleApprovedPhoto = () => {
+   const handleApprovedPhoto = async () => {
       ToastAndroid.showWithGravity(
-         `IMAGEN GUARDADA`,
+         `IMAGEN APROBADA`,
          ToastAndroid.LONG,
          ToastAndroid.CENTER,
       );
+      await getData(photo.base64);
       setPoto(null);
+      setOpenModal(false);
    };
 
    if (!permission) {
@@ -83,16 +74,18 @@ export default function CameraComponent({
    if (!permission.granted) {
       // Camera permissions are not granted yet.
       return (
-         <View style={styles.container}>
-            <Text style={styles.message}>
-               We need your permission to show the camera
+         <View>
+            <Text className={`text-center`}>
+               Necesitas permitir el uso de la cámara
             </Text>
-            <Button onPress={requestPermission} title="grant permission" />
+            <ButtonCompnent
+               title={"CONCEDER PERMISO"}
+               containerStyles={styleButton}
+               handleOnPress={requestPermission}
+            />
          </View>
       );
    }
-
-   // if (loading) return <ActivityIndicator size={"large"} />;
 
    return (
       <>
@@ -109,6 +102,7 @@ export default function CameraComponent({
                <PhotoPreviewComponent
                   photo={photo}
                   handleRetakePhoto={handleRetakePhoto}
+                  handleApprovedPhoto={handleApprovedPhoto}
                />
             ) : (
                <View className="w-full h-full ">
@@ -162,7 +156,7 @@ export default function CameraComponent({
                            <IconPressableComponent
                               icon={
                                  <Ionicons
-                                    name="scan-circle-outline"
+                                    name="aperture-outline"
                                     size={80}
                                     color={"white"}
                                  />

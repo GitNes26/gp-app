@@ -8,6 +8,7 @@ import ButtonCompnent from "../../components/ButtonCompnent";
 import images from "../../constants/images";
 import FooterComponent from "../../components/FooterComponent";
 import CameraComponent from "../../components/CameraComponent";
+import LocationComponent from "../../components/LocationComponent";
 
 const Report = () => {
    const { reportId } = useLocalSearchParams();
@@ -21,6 +22,15 @@ const Report = () => {
       comments: "",
    });
    const [isSubmitting, setIsSubmitting] = useState(false);
+
+   const handleGetPhoto = (photo64) => {
+      console.log("🚀 ~ handleGetPhoto ~ photo64:");
+      setForm({ ...form, img_evidence: photo64 });
+   };
+
+   const handleGetLocation = (data) => {
+      console.log("🚀 ~ handleGetLocation ~ data:", data);
+   };
 
    const onSubmit = ({ values }) => {
       try {
@@ -55,8 +65,8 @@ const Report = () => {
             <View className="flex-1 px-5">
                <InputComponent
                   title={"Fecha y hora"}
-                  value={form.created_at}
-                  handlChangeText={(e) => setForm({ ...form, created_at: e })}
+                  // value={form.created_at}
+                  // handlChangeText={(e) => setForm({ ...form, created_at: e })}
                   otherStyles={"mt-7"}
                   keyboardType={"datetime"}
                   placeholder={"12:00"}
@@ -64,8 +74,16 @@ const Report = () => {
                <View className={`flex-row py-4 w-full`}>
                   <View className={`w-1/2 justify-center items-center`}>
                      <Image
-                        source={images.camera}
-                        className={`w-32 h-32`}
+                        source={
+                           form.img_evidence === ""
+                              ? images.camera
+                              : {
+                                   uri:
+                                      "data:image/jpg;base64," +
+                                      form.img_evidence,
+                                }
+                        }
+                        className={`w-[95%] h-40 rounded-3xl`}
                         resizeMode="contain"
                      />
                   </View>
@@ -77,6 +95,7 @@ const Report = () => {
                      <CameraComponent
                         textButton="Capturar evidencia"
                         styleButton={`w-full bg-primary-200`}
+                        getData={handleGetPhoto}
                      />
                   </View>
                </View>
@@ -84,7 +103,7 @@ const Report = () => {
                   <View className={`w-1/2 justify-center items-center`}>
                      <Image
                         source={images.ubi}
-                        className={`w-32 h-32`}
+                        className={`w-[95%] h-40 rounded-3xl`}
                         resizeMode="contain"
                      />
                   </View>
@@ -93,9 +112,10 @@ const Report = () => {
                         className={`text-gray-500 text-center font-mmedium italic mb-2`}>
                         Muestra tu ubicacion actual
                      </Text>
-                     <ButtonCompnent
-                        title={"Estoy Aquí"}
-                        containerStyles={`w-full bg-primary-200`}
+                     <LocationComponent
+                        textButton="Estoy Aquí"
+                        styleButton={`w-full bg-primary-200`}
+                        getData={handleGetLocation}
                      />
                   </View>
                </View>
