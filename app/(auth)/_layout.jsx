@@ -1,8 +1,11 @@
 import React from "react";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import LoadingComponent from "../../components/LoadingComponent";
+import useGlobalStore from "../../stores/globalStore";
 
 const AuthLayout = () => {
+   const loading = useGlobalStore((state) => state.loading);
    const data = [
       {
          name: "sign-in",
@@ -25,6 +28,7 @@ const AuthLayout = () => {
                />
             ))}
          </Stack>
+         {loading && <LoadingComponent />}
          {/* <StatusBar backgroundColor="#161622" style="inverted" /> */}
       </>
    );

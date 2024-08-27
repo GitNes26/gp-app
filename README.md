@@ -13,59 +13,73 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
 1. Install dependencies
 
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
 2. Start the app
 
-   ```bash
-   npx expo start
-   ```
+```bash
+npx expo start
+```
 
 
 ## Installacion de dependencias Basicas
 
 2. librerias expo y react-native
 
-   ```bash
-   npm install react-dom --force
+```bash
+npm install react-dom --force
 
-   npx expo install expo-router react-native-safe-area-context react-native-screens expo-linking expo-constants expo-status-bar react-native-reanimated react-native-animatable expo-system-ui
-   ```
+npx expo install expo-router react-native-safe-area-context react-native-screens expo-linking expo-constants expo-status-bar react-native-reanimated react-native-animatable expo-system-ui
+```
 
-   Si se utilizara una navegacion de Drawer...
-   ```bash
-   npx expo install @react-navigation/drawer react-native-gesture-handler react-native-reanimated
-   ```
+Si se utilizara una navegacion de Drawer...
+```bash
+npx expo install @react-navigation/drawer react-native-gesture-handler react-native-reanimated
+```
 
 
 2. Tailwind con expo
 
-   ```bash
-   npm install nativewind
-   npm install --save-dev tailwindcss@3.3.2
-   npx tailwindcss init
-   ```
+```bash
+npm install nativewind
+npm install --save-dev tailwindcss@3.3.2
+npx tailwindcss init
+```
+
 
 3. Iconos - se ven lindos los de AntDesign
 
-   ```bash
-   npm install @expo/vector-icons
+```bash
+npm install @expo/vector-icons
    ```
+   
 
 4. Animaciones - expo av, se comenta que significa audio y video
 
-   ```bash
+```bash
    npm install react-native-animatable expo-av
    ```
 
+   si quieremos agregar animaciones en las View y para crear Skeleton, recomiendan Moti (https://moti.fyi/)
+  
+  ```bash
+   npm i moti --legacy-peer-deps 
+   npm i expo-linear-gradient
+   ``` 
+   
+   asegurarse de tener instalado...
+   import **'react-native-reanimated'**
+   import **'react-native-gesture-handler'**
+   
+
 5. Instalar es lint -- para aviso de errores de sintaxis (teniendo instalado las extensiones de 'EsLint' y 'Prettier-Code Formater')
 
-   ```bash
-   npx expo lint
-   npm install --save --save-dev --force prettier eslint-config-prettier eslint-plugin-prettier
-   ```
+```bash
+npx expo lint
+npm install --save --save-dev --force prettier eslint-config-prettier eslint-plugin-prettier
+```
 
 6. Utilizar la cámara
 
@@ -90,6 +104,21 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
       }
    ]
    ```
+
+7. Instalacion de Formik
+
+```bash
+npm install formik yup --save
+```
+
+
+7. ZUSTAND - para el manejo de estados globales
+
+ ```bash
+   npm install zustand
+   ```
+
+
 
 
 ## Configuraciones

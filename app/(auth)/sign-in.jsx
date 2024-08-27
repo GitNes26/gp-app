@@ -10,39 +10,88 @@ import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../../constants/images";
 import { StatusBar } from "expo-status-bar";
-import InputComponent from "../../components/InputComponent";
 import colors from "../../constants/colors";
 import ButtonCompnent from "../../components/ButtonCompnent";
 import { Link, router } from "expo-router";
 import { Foundation } from "@expo/vector-icons";
 import FooterComponent from "../../components/FooterComponent";
 import HeaderComponent from "../../components/HeaderComponent";
+import useGlobalStore from "../../stores/globalStore";
+import {
+   FormikComponent,
+   InputComponent,
+} from "../../components/FormikComonents";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const SignIn = () => {
-   const [form, setForm] = useState({
+   const loading = useGlobalStore((state) => state.loading);
+   const setLoading = useGlobalStore((state) => state.setLoading);
+   const [formData, setFormData] = useState({
       email: "",
       password: "",
    });
+   const formik = useFormik({
+      initialValues: formData,
+      onSubmit: onSubmit,
+      validationSchema: (values) => {
+         console.log("🚀 ~ SignIn ~ values:", values);
+         return Yup.object().shape({
+            email: Yup.string()
+               .trim()
+               .required("Nombre de usario o Correo requerido"),
+            password: Yup.string()
+               .trim()
+               .min(6, "Mínimo 6 caracteres")
+               .required("Contraseña requerida"),
+         });
+      },
+   });
    const [isSubmitting, setIsSubmitting] = useState(false);
 
-   const onSubmit = ({ values }) => {
+   const onSubmit = (values) => {
+      return console.log("🚀 ~ onSubmit ~ values:", values);
       try {
+         setLoading(true);
          setIsSubmitting(true);
          ToastAndroid.showWithGravity(
-            `Sesión iniciada: Bienvenido ${form.email}`,
+            `Sesión iniciada: Bienvenido ${formData.email}`,
             ToastAndroid.LONG,
             ToastAndroid.CENTER,
          );
-         // setTimeout(() => {
-         setIsSubmitting(false);
-         router.push("../(app)");
-         // }, 1500);
+         setTimeout(() => {
+            setLoading(false);
+            setIsSubmitting(false);
+            router.push("../(app)");
+         }, 3500);
       } catch (error) {
          console.log("🚀 ~ onSubmit ~ error:", error);
          throw Error(error);
       } finally {
          // setIsSubmitting(false);
       }
+   };
+
+   const validationSchemas = () => {
+      let validationSchema;
+      // if (inputUsername)
+      if (true)
+         validationSchema = Yup.object().shape({
+            email: Yup.string()
+               .trim()
+               .required("Nombre de usario o Correo requerido"),
+         });
+      else
+         validationSchema = Yup.object().shape({
+            email: Yup.string()
+               .email("Correo no valida")
+               .required("Nombre de usario o Correo requerido"),
+            password: Yup.string()
+               .trim()
+               .min(3, "Mínimo 6 caracteres")
+               .required("Contraseña requerida"),
+         });
+      return validationSchema;
    };
 
    return (
@@ -66,29 +115,31 @@ const SignIn = () => {
                   </Text>
                </View>
 
-               <InputComponent
-                  title={"Correo Electrónico"}
-                  value={form.email}
-                  handlChangeText={(e) => setForm({ ...form, email: e })}
-                  otherStyles={"mt-7"}
-                  keyboardType={"email-address"}
-                  placeholder={"Ingresa tu correo"}
-               />
-               <InputComponent
-                  title={"Contraseña"}
-                  value={form.password}
-                  handlChangeText={(e) => setForm({ ...form, password: e })}
-                  otherStyles={"mt-7"}
-                  // keyboardType={""}
-                  isPassword={true}
-                  placeholder={"Ingresa tu contraseña"}
-               />
-               <ButtonCompnent
-                  title={"Ingresar"}
-                  handleOnPress={onSubmit}
-                  containerStyles={"mt-7"}
-                  isLoading={isSubmitting}
-               />
+               <FormikComponent
+                  initialValues={formik.initialValues}
+                  validationSchema={formik.validationSchema}
+                  onSubmit={onSubmit}
+                  textBtnSubmit={"INGRESAR"}>
+                  <InputComponent
+                     idName={"email"}
+                     label={"Correo Electrónico"}
+                     placeholder={"Ingresa tu correo"}
+                     // helperText={"texto de ayuda"}
+                     textStyleCase={false}
+                     otherStyles={"mt-7"}
+                     keyboardType={"email-address"}
+                  />
+                  <InputComponent
+                     idName={"password"}
+                     label={"Contraseña"}
+                     placeholder={"Ingresa tu contraseña"}
+                     helperText={"mínimo 6 caracteres"}
+                     textStyleCase={null}
+                     otherStyles={"mt-7"}
+                     keyboardType={""}
+                     isPassword={true}
+                  />
+               </FormikComponent>
                <View className={"justify-center pt-5 flex-row gap-2"}>
                   <Text className={"text-lg text-gray-700 font-mregular"}>
                      ¿Aun no tienes cuenta?{" "}

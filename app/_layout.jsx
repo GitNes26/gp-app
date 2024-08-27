@@ -4,10 +4,16 @@ import { Slot, SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { useColorScheme } from "nativewind";
 import { useColorScheme as useColorSchemeRN } from "react-native";
+import LoadingComponent from "../components/LoadingComponent";
+import useGlobalStore from "../stores/globalStore";
 
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
+   const loading = useGlobalStore((state) => state.loading);
+   console.log("🚀 ~ LoadingComponent ~ loading:", loading);
+   const setLoading = useGlobalStore((state) => state.setLoading);
+
    const [fontsLoaded, error] = useFonts({
       "Montserrat-Black": require("../assets/fonts/Montserrat-Black.ttf"),
       "Montserrat-Bold": require("../assets/fonts/Montserrat-Bold.ttf"),
@@ -26,20 +32,25 @@ const RootLayout = () => {
    useEffect(() => {
       if (error) throw error;
       if (fontsLoaded) SplashScreen.hideAsync();
+      setLoading(false);
    }, [fontsLoaded, error]);
 
    if (!fontsLoaded && !error) return null;
 
+   // if (loading) return;
+
    return (
-      <Stack>
-         <Stack.Screen name="index" options={{ headerShown: false }} />
-         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-         <Stack.Screen name="(app)" options={{ headerShown: false }} />
-         {/* <Stack.Screen
+      <>
+         <Stack>
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+            <Stack.Screen name="(app)" options={{ headerShown: false }} />
+            {/* <Stack.Screen
             name="/search/[query]"
             options={{ headerShown: false }}
          /> */}
-      </Stack>
+         </Stack>
+      </>
    );
 };
 
