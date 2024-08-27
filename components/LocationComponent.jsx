@@ -9,14 +9,15 @@ const LocationComponent = ({
    styleButton,
    getData,
 }) => {
-   const [location, setLocation] = useState(null);
+   const [location, setLocation] = useState({
+      coords: null,
+      ubication: null,
+   });
    const [status, requestPermission] = Location.useBackgroundPermissions();
-   console.log("🚀 ~ status:", status);
 
    const requestPermision = async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
-      // requestPermision(status);
-      console.log("🚀 ~ requestPermision ~ status:", status);
+      // console.log("🚀 ~ requestPermision ~ status:", status);
       if (status !== Location.PermissionStatus.GRANTED) {
          return Alert.alert(
             `SOLICITAR PERMISO`,
@@ -31,38 +32,31 @@ const LocationComponent = ({
             ],
          );
       }
-      // Obtener la ubicación actual
-      // console.log("🚀 ~ requestPermision ~ Obtener la ubicación actual:");
-      // let location = await Location.getLastKnownPositionAsync({});
-      // setLocation(location);
-      // console.log("🚀 ~ requestPermision ~ location:", location);
-      // await getLocation();
+      await getLocation();
    };
 
    const getLocation = async () => {
       try {
-         console.log("🚀 ~ getLocation ~ getLocation: status", status);
-         console.log("🚀 ~ PROCESANDO LOCACION...");
-         const currentLocation = await Location.getCurrentPositionAsync({});
-         console.log("🚀 ~ FIN");
-         setLocation(currentLocation);
-         console.log("Location:");
-         console.log(currentLocation);
+         const currentPosition = await Location.getCurrentPositionAsync({});
+         setLocation(currentPosition);
+         const coords = {
+            latitude: currentPosition.coords.latitude,
+            longitude: currentPosition.coords.longitude,
+         };
+         getUbication(coords);
       } catch (error) {
          console.log("🚀 ~ getLocation ~ error:", error);
       }
    };
-   const handleGetData = async () => {
-      if (getData) getData(location);
+   const getUbication = async (coords) => {
       try {
-         console.log("🚀 ~ handleGetData ~ click");
-         // const currentLocation = await Location.reverseGeocodeAsync({
-         //    latitude: location.coords.latitude,
-         //    longitude: location.coords.longitude,
-         // });
-         // setLocation(currentLocation);
-         // console.log("Location:");
-         // console.log(currentLocation);
+         const ubication = await Location.reverseGeocodeAsync(coords);
+         const currentLocation = {
+            coords,
+            ubication: ubication[0],
+         };
+         setLocation(currentLocation);
+         if (getData) getData(location);
       } catch (error) {
          console.log("🚀 ~ getLocation ~ error:", error);
       }

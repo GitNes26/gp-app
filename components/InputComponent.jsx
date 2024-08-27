@@ -20,6 +20,7 @@ const InputComponent = ({
    keyboardType,
    isPassword = false,
    rows = null,
+   readOnly,
    ...props
 }) => {
    const [showPassword, setShowPassword] = useState(isPassword);
@@ -42,6 +43,7 @@ const InputComponent = ({
                // textContentType="URL"
                multiline={rows > 0 ? true : false}
                numberOfLines={rows}
+               readOnly={readOnly}
             />
             {isPassword && (
                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
