@@ -1,6 +1,12 @@
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import {
+   ActivityIndicator,
+   StyleSheet,
+   Text,
+   TouchableOpacity,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
+import colors from "../constants/colors";
 
 const ButtonCompnent = ({
    title,
@@ -22,6 +28,15 @@ const ButtonCompnent = ({
          {icon && positionIcon === "start" && icon}
          <Text className={`text-white font-mbold text-lg ${textStyles}`}>
             {title.toUpperCase()}
+            &nbsp; &nbsp;
+            {isLoading && (
+               <ActivityIndicator
+                  size={"small"}
+                  color={colors.primary[100]}
+                  className={`ml-2 pt-2`}
+                  // className={`absolute -top-[50%] left-[40%]`}
+               />
+            )}
          </Text>
          {icon && positionIcon === "end" && icon}
       </TouchableOpacity>

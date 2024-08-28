@@ -23,52 +23,50 @@ import {
 } from "../../components/FormikComonents";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { login } from "../../stores/authStore";
+import useFetch from "../../hooks/useFetch";
 
 const SignIn = () => {
    const loading = useGlobalStore((state) => state.loading);
    const setLoading = useGlobalStore((state) => state.setLoading);
+
    const [formData, setFormData] = useState({
       email: "",
       password: "",
    });
    const formik = useFormik({
       initialValues: formData,
-      onSubmit: onSubmit,
-      validationSchema: (values) => {
-         console.log("🚀 ~ SignIn ~ values:", values);
-         return Yup.object().shape({
-            email: Yup.string()
-               .trim()
-               .required("Nombre de usario o Correo requerido"),
-            password: Yup.string()
-               .trim()
-               .min(6, "Mínimo 6 caracteres")
-               .required("Contraseña requerida"),
-         });
-      },
+      onSubmit: (values) => onSubmit(values),
+      validationSchema: () => validationSchemas(),
    });
-   const [isSubmitting, setIsSubmitting] = useState(false);
 
-   const onSubmit = (values) => {
-      return console.log("🚀 ~ onSubmit ~ values:", values);
+   const onSubmit = async (values) => {
+      // return console.log("🚀 ~ onSubmit ~ values:", values);
       try {
          setLoading(true);
-         setIsSubmitting(true);
+         formik.setSubmitting(true);
          ToastAndroid.showWithGravity(
             `Sesión iniciada: Bienvenido ${formData.email}`,
             ToastAndroid.LONG,
             ToastAndroid.CENTER,
          );
+         const {
+            data: res,
+            isLoading,
+            refetch: refetchPhotos,
+         } = useFetch(login(values));
+         // const res = await login(values);
+         console.log("🚀 ~ onSubmit ~ res:", res);
          setTimeout(() => {
             setLoading(false);
-            setIsSubmitting(false);
-            router.push("../(app)");
+            formik.setSubmitting(false);
+            // router.push("../(app)");
          }, 3500);
       } catch (error) {
          console.log("🚀 ~ onSubmit ~ error:", error);
          throw Error(error);
       } finally {
-         // setIsSubmitting(false);
+         formik.setSubmitting(false);
       }
    };
 
@@ -78,17 +76,21 @@ const SignIn = () => {
       if (true)
          validationSchema = Yup.object().shape({
             email: Yup.string()
-               .trim()
+               .email("Formato de correo no valido")
                .required("Nombre de usario o Correo requerido"),
+            password: Yup.string()
+               .trim()
+               .min(6, "Mínimo 6 caracteres")
+               .required("Contraseña requerida"),
          });
       else
          validationSchema = Yup.object().shape({
             email: Yup.string()
-               .email("Correo no valida")
+               .email("Formato de correo no valido")
                .required("Nombre de usario o Correo requerido"),
             password: Yup.string()
                .trim()
-               .min(3, "Mínimo 6 caracteres")
+               .min(6, "Mínimo 6 caracteres")
                .required("Contraseña requerida"),
          });
       return validationSchema;
@@ -115,31 +117,28 @@ const SignIn = () => {
                   </Text>
                </View>
 
-               <FormikComponent
-                  initialValues={formik.initialValues}
-                  validationSchema={formik.validationSchema}
-                  onSubmit={onSubmit}
-                  textBtnSubmit={"INGRESAR"}>
+               <FormikComponent formik={formik} textBtnSubmit={"INGRESAR"}>
                   <InputComponent
+                     formik={formik}
                      idName={"email"}
                      label={"Correo Electrónico"}
                      placeholder={"Ingresa tu correo"}
                      // helperText={"texto de ayuda"}
                      textStyleCase={false}
-                     otherStyles={"mt-7"}
                      keyboardType={"email-address"}
                   />
                   <InputComponent
+                     formik={formik}
                      idName={"password"}
                      label={"Contraseña"}
                      placeholder={"Ingresa tu contraseña"}
                      helperText={"mínimo 6 caracteres"}
                      textStyleCase={null}
-                     otherStyles={"mt-7"}
                      keyboardType={""}
                      isPassword={true}
                   />
                </FormikComponent>
+
                <View className={"justify-center pt-5 flex-row gap-2"}>
                   <Text className={"text-lg text-gray-700 font-mregular"}>
                      ¿Aun no tienes cuenta?{" "}
@@ -158,5 +157,3 @@ const SignIn = () => {
 };
 
 export default SignIn;
-
-const styles = StyleSheet.create({});

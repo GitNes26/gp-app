@@ -8,55 +8,54 @@ import {
    TouchableOpacity,
    View,
 } from "react-native";
-import { Formik, useFormikContext } from "formik";
+import { Form, Formik, useFormikContext } from "formik";
 import ButtonCompnent from "./ButtonCompnent";
 import { Ionicons } from "@expo/vector-icons";
 import { handleInputFormik } from "../utils/formats";
 import colors from "../constants/colors";
 
 //#region FORMIK COMPONENT
-export const FormikComponent = forwardRef(
-   (
-      {
-         initialValues = {},
-         validationSchema = {},
-         onSubmit,
-         children,
-         formikRef = null,
-         handleCancel,
-         className,
-         textBtnSubmit = "ENVIAR",
-      },
-      ref,
-   ) => {
-      console.log("🚀 ~ validationSchema:", validationSchema);
-      return (
-         <Formik
-            initialValues={initialValues}
-            // validationSchema={validationSchema}
-            onSubmit={onSubmit}>
-            {({
-               handleChange,
-               handleBlur,
-               handleSubmit,
-               isSubmitting,
-               resetForm,
-               values,
-            }) => (
-               <View>
-                  {children}
-                  <ButtonCompnent
-                     title={textBtnSubmit}
-                     handleOnPress={handleSubmit}
-                     containerStyles={"mt-7"}
-                     isLoading={isSubmitting}
-                  />
-               </View>
-            )}
-         </Formik>
-      );
-   },
-);
+export const FormikComponent = ({
+   formik,
+   children,
+   textBtnSubmit = "ENVIAR",
+}) => {
+   const {
+      handleChange,
+      handleBlur,
+      values,
+      validationSchema,
+      errors,
+      touched,
+      handleSubmit,
+      isSubmitting,
+      setSubmitting,
+      initialValues,
+   } = formik;
+
+   useEffect(() => {
+      setSubmitting(false);
+   }, []);
+
+   return (
+      <Formik
+         initialValues={initialValues}
+         onSubmit={handleSubmit}
+         validationSchema={validationSchema}>
+         {({ handleSubmit, setSubmitting, resetForm, errors }) => (
+            <View className={`my-2`}>
+               {children}
+               <ButtonCompnent
+                  title={textBtnSubmit}
+                  handleOnPress={handleSubmit}
+                  containerStyles={"mt-7"}
+                  isLoading={isSubmitting}
+               />
+            </View>
+         )}
+      </Formik>
+   );
+};
 //#endregion FORMIK COMPONENT
 
 //#region INPUT COMPONENT
@@ -86,11 +85,12 @@ export const InputComponent = ({
    textStyleCase = null,
    otherStyles,
    keyboardType,
+   formik,
    ...props
 }) => {
    const [showPassword, setShowPassword] = useState(isPassword);
-   const formik = useFormikContext();
-   const { values, errors, touched, handleChange, handleBlur, setFieldValue } =
+   // const formik = useFormikContext();
+   const { values, touched, errors, handleChange, handleBlur, setFieldValue } =
       formik;
    const error = touched[idName] && errors[idName] ? errors[idName] : null;
    const isError = error == null ? false : true;
@@ -101,7 +101,7 @@ export const InputComponent = ({
    }, [idName, values[idName]]);
 
    return (
-      <View className={` ${otherStyles}`}>
+      <View className={`mt-2 mb-3 ${otherStyles}`}>
          <Text
             className={`text-base ${isError ? "text-red-600" : "text-primary"} font-msemibold`}>
             {label}
@@ -137,9 +137,9 @@ export const InputComponent = ({
             {isPassword && (
                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
                   {!showPassword ? (
-                     <Ionicons name="eye-sharp" size={18} color={"black"} />
+                     <Ionicons name="eye-sharp" size={24} color={"black"} />
                   ) : (
-                     <Ionicons name="eye-off-sharp" size={18} color={"black"} />
+                     <Ionicons name="eye-off-sharp" size={24} color={"black"} />
                   )}
                </TouchableOpacity>
             )}
