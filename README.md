@@ -118,6 +118,12 @@ npm install formik yup --save
    npm install zustand
    ```
 
+8. AXIOS - para el manejo de peticiones
+
+ ```bash
+   npm install axios
+   ```
+
 
 
 

@@ -23,7 +23,7 @@ import {
 } from "../../components/FormikComonents";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { login } from "../../stores/authStore";
+import { getAllPosts, login } from "../../stores/authStore";
 import useFetch from "../../hooks/useFetch";
 
 const SignIn = () => {
@@ -31,8 +31,8 @@ const SignIn = () => {
    const setLoading = useGlobalStore((state) => state.setLoading);
 
    const [formData, setFormData] = useState({
-      email: "",
-      password: "",
+      email: "atc@gomezpalacio.gob.mx",
+      password: "123456",
    });
    const formik = useFormik({
       initialValues: formData,
@@ -50,12 +50,12 @@ const SignIn = () => {
             ToastAndroid.LONG,
             ToastAndroid.CENTER,
          );
-         const {
-            data: res,
-            isLoading,
-            refetch: refetchPhotos,
-         } = useFetch(login(values));
-         // const res = await login(values);
+         // const {
+         //    data: res,
+         //    isLoading,
+         //    refetch: refetchPhotos,
+         // } = useFetch(login(values));
+         const res = await login(values);
          console.log("🚀 ~ onSubmit ~ res:", res);
          setTimeout(() => {
             setLoading(false);
