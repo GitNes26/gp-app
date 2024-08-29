@@ -118,10 +118,12 @@ npm install formik yup --save
    npm install zustand
    ```
 
-8. AXIOS - para el manejo de peticiones
+8. AXIOS - para el manejo de peticiones y junto con dotEnv para poder guardar vaiables de entorno en el proyecto
 
  ```bash
    npm install axios
+   npm i react-native-dotenv
+   npx expo install @react-native-async-storage/async-storage pod-install
    ```
 
 
@@ -134,7 +136,22 @@ npm install formik yup --save
 agregar la siguiente linea en el return como una propiedad más, debajo de **presets**
 
 ```json
-plugins: ["nativewind/babel", "react-native-reanimated/plugin"],
+   plugins: ["nativewind/babel", "react-native-reanimated/plugin",[
+         'module:react-native-dotenv',
+         {
+         envName: 'APP_ENV',
+         moduleName: '@env',
+         path: '.env',
+         blocklist: null,
+         allowlist: null,
+         blacklist: null, // DEPRECATED
+         whitelist: null, // DEPRECATED
+         safe: false,
+         allowUndefined: true,
+         verbose: false,
+         },
+      ],
+   ]
 ```
 
 #### En el archivo package.json

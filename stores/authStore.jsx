@@ -1,7 +1,6 @@
-// const { create } = require("zustand");
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { ApiAxios } from "../utils/api";
+import { ApiUrl } from "../utils/api";
 
 const useAuthStore = create(
    persist(
@@ -20,22 +19,14 @@ const useAuthStore = create(
 export default useAuthStore;
 
 export const login = async (data) => {
-   console.log("🚀 ~ login ~ data:", data);
    try {
-      // const request = await fetch(import.meta.ENV.HOST_API);
-      // "https://declaraciones.gomezpalacio.gob.mx/nominas/empleadosnombre/infraesctruturagobmxpalaciopeticioninsegura",
-      const request = await ApiAxios("/login", {
+      const request = await ApiUrl("/login", {
          method: "POST",
          data,
       });
-      // const request = await fetch(
-      //    "https://backend.atc.gomezpalacio.gob.mx/api/gomezapp/login",
-      //    {
-      //       method: "POST",
-      //       body: data,
-      //    },
-      // );
-      console.log("🚀 ~ login ~ request:", request.data.data);
+      // console.log("🚀 ~ login ~ request:", request.data.result);
+      const result = request.data.data;
+      console.log("🚀 ~ login ~ result:", result);
       return result;
    } catch (error) {
       console.log("🚀 ~ login ~ error:", error);

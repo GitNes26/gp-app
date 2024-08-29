@@ -50,12 +50,12 @@ const SignIn = () => {
             ToastAndroid.LONG,
             ToastAndroid.CENTER,
          );
-         // const {
-         //    data: res,
-         //    isLoading,
-         //    refetch: refetchPhotos,
-         // } = useFetch(login(values));
-         const res = await login(values);
+         const {
+            data: res,
+            isLoading,
+            refetch: refetchPhotos,
+         } = useFetch(login(values));
+         // const res = await login(values);
          console.log("🚀 ~ onSubmit ~ res:", res);
          setTimeout(() => {
             setLoading(false);
