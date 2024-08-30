@@ -15,6 +15,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ImagePressableComponent from "../../components/ImagePressableComponent";
 import ButtonCompnent from "../../components/ButtonCompnent";
+import { logout } from "../../stores/authStore";
 
 const data = [
    {
@@ -105,11 +106,10 @@ const CustomDrawerContent = ({ ...props }) => {
             </View>
          </DrawerContentScrollView>
          <View
-            className={`p-5 pb-[${20 + bottom}]`}
+            className={`py-3 px-5 pb-[${20 + bottom}]`}
             style={{ borderTopColor: colors.gray[100], borderTopWidth: 1 }}>
             <ButtonCompnent
                containerStyles={`bg-gray-500`}
-               textStyles={`text-md`}
                icon={
                   <Ionicons
                      name="arrow-back-circle-sharp"
@@ -118,7 +118,7 @@ const CustomDrawerContent = ({ ...props }) => {
                   />
                }
                title={"Cerrar Sesión"}
-               handleOnPress={() => router.dismissAll()}
+               handleOnPress={() => logout()}
             />
          </View>
       </View>

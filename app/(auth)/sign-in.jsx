@@ -23,7 +23,7 @@ import {
 } from "../../components/FormikComonents";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { getAllPosts, login } from "../../stores/authStore";
+import useAuthStore, { getAllPosts, login } from "../../stores/authStore";
 import useFetch from "../../hooks/useFetch";
 
 const SignIn = () => {
@@ -50,13 +50,12 @@ const SignIn = () => {
             ToastAndroid.LONG,
             ToastAndroid.CENTER,
          );
-         const {
-            data: res,
-            isLoading,
-            refetch: refetchPhotos,
-         } = useFetch(login(values));
-         // const res = await login(values);
-         console.log("🚀 ~ onSubmit ~ res:", res);
+         // const {
+         //    data: res,
+         //    isLoading,
+         //    refetch: refetchPhotos,
+         // } = useFetch(login(values));
+         const res = await login(values);
          setTimeout(() => {
             setLoading(false);
             formik.setSubmitting(false);
