@@ -1,6 +1,6 @@
 import { Image, Text, View } from "react-native";
-import React from "react";
-import { useRouter } from "expo-router";
+import React, { useEffect } from "react";
+import { Redirect, router, useRouter } from "expo-router";
 import { Drawer } from "expo-router/drawer";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -15,7 +15,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ImagePressableComponent from "../../components/ImagePressableComponent";
 import ButtonCompnent from "../../components/ButtonCompnent";
-import { logout } from "../../stores/authStore";
+import useAuthStore, { logout } from "../../stores/authStore";
 
 const data = [
    {
@@ -194,6 +194,17 @@ const DrawerGroup = () => {
 };
 
 const AppLayout = () => {
+   const auth = useAuthStore((state) => state.auth);
+
+   if (!auth) {
+      router.canDismiss() && router.dismissAll();
+      return <Redirect href="(auth)" />;
+   }
+
+   // useEffect(() => {
+   //    console.log("🚀 ~ AppLayout ~ auth:", auth);
+   // }, [auth]);
+
    return (
       <GestureHandlerRootView style={{ flex: 1 }}>
          <DrawerGroup />

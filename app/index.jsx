@@ -1,4 +1,4 @@
-import { Link, router } from "expo-router";
+import { Link, Redirect, router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Image, ImageBackground, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -9,16 +9,20 @@ import { Foundation } from "@expo/vector-icons";
 import { useEffect } from "react";
 import { useColorScheme } from "nativewind";
 import { useColorScheme as useColorSchemeRN } from "react-native";
+import useAuthStore from "../stores/authStore";
 
 export default function App() {
    const { colorScheme } = useColorScheme();
    const currentTheme = useColorSchemeRN();
+   const auth = useAuthStore((state) => state.auth);
 
    useEffect(() => {
       // if (fontsLoaded) SplashScreen.hideAsync();
       console.log("colorScheme", colorScheme);
       console.log("currentTheme", currentTheme);
    }, [useColorScheme]);
+
+   if (auth) return <Redirect href="(main)" />;
 
    return (
       <SafeAreaView className={"h-full"}>

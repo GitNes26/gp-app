@@ -1,10 +1,12 @@
 import React from "react";
-import { Stack } from "expo-router";
+import { Redirect, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import LoadingComponent from "../../components/LoadingComponent";
 import useGlobalStore from "../../stores/globalStore";
+import useAuthStore from "../../stores/authStore";
 
 const AuthLayout = () => {
+   const auth = useAuthStore((state) => state.auth);
    const loading = useGlobalStore((state) => state.loading);
    const data = [
       {
@@ -16,6 +18,8 @@ const AuthLayout = () => {
          options: { headerShown: false },
       },
    ];
+
+   if (auth) return <Redirect href="(main)" />;
 
    return (
       <>

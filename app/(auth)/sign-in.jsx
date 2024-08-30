@@ -45,11 +45,11 @@ const SignIn = () => {
       try {
          setLoading(true);
          formik.setSubmitting(true);
-         ToastAndroid.showWithGravity(
-            `Sesión iniciada: Bienvenido ${formData.email}`,
-            ToastAndroid.LONG,
-            ToastAndroid.CENTER,
-         );
+         // ToastAndroid.showWithGravity(
+         //    `Sesión iniciada: Bienvenido ${formData.email}`,
+         //    ToastAndroid.LONG,
+         //    ToastAndroid.CENTER,
+         // );
          // const {
          //    data: res,
          //    isLoading,
@@ -59,7 +59,6 @@ const SignIn = () => {
          setTimeout(() => {
             setLoading(false);
             formik.setSubmitting(false);
-            // router.push("../(app)");
          }, 3500);
       } catch (error) {
          console.log("🚀 ~ onSubmit ~ error:", error);

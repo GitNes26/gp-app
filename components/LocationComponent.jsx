@@ -63,7 +63,7 @@ const LocationComponent = ({
    };
 
    useEffect(() => {
-      console.log("soy el LocationComponent");
+      // console.log("soy el LocationComponent");
       requestPermision();
    }, []);
 
