@@ -193,8 +193,9 @@ const DrawerGroup = () => {
    );
 };
 
-const AppLayout = () => {
-   const auth = useAuthStore((state) => state.auth);
+const MainLayout = () => {
+   const { auth } = useAuthStore();
+   console.log("🚀 ~ MainLayout ~ auth:", auth);
 
    if (!auth) {
       router.canDismiss() && router.dismissAll();
@@ -202,7 +203,7 @@ const AppLayout = () => {
    }
 
    // useEffect(() => {
-   //    console.log("🚀 ~ AppLayout ~ auth:", auth);
+   //    console.log("🚀 ~ MainLayout ~ auth:", auth);
    // }, [auth]);
 
    return (
@@ -214,4 +215,4 @@ const AppLayout = () => {
    );
 };
 
-export default AppLayout;
+export default MainLayout;

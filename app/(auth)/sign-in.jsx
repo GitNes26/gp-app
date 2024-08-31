@@ -27,8 +27,9 @@ import useAuthStore, { getAllPosts, login } from "../../stores/authStore";
 import useFetch from "../../hooks/useFetch";
 
 const SignIn = () => {
-   const loading = useGlobalStore((state) => state.loading);
-   const setLoading = useGlobalStore((state) => state.setLoading);
+   // const loading = useGlobalStore((state) => state.loading);
+   // const setLoading = useGlobalStore((state) => state.setLoading);
+   const { loading, setLoading } = useGlobalStore();
 
    const [formData, setFormData] = useState({
       email: "atc@gomezpalacio.gob.mx",

@@ -276,7 +276,7 @@ const DrawerGroup = () => {
    );
 };
 
-const AppLayout = () => {
+const MainLayout = () => {
    return (
       <GestureHandlerRootView style={{ flex: 1 }}>
          <DrawerGroup />
@@ -286,4 +286,4 @@ const AppLayout = () => {
    );
 };
 
-export default AppLayout;
+export default MainLayout;
