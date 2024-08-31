@@ -195,12 +195,12 @@ const DrawerGroup = () => {
 
 const MainLayout = () => {
    const { auth } = useAuthStore();
-   console.log("🚀 ~ MainLayout ~ auth:", auth);
 
    if (!auth) {
       router.canDismiss() && router.dismissAll();
       return <Redirect href="(auth)" />;
    }
+   // isAuth();
 
    // useEffect(() => {
    //    console.log("🚀 ~ MainLayout ~ auth:", auth);

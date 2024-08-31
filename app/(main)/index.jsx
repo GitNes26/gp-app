@@ -6,7 +6,7 @@ import {
    TouchableOpacity,
    View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../../constants/images";
 import useFetch from "../../hooks/useFetch";
@@ -14,32 +14,40 @@ import { getAllPhotos } from "../../contexts/GlobalContext";
 import { router, useNavigation } from "expo-router";
 import FooterComponent from "../../components/FooterComponent";
 import HeaderComponent from "../../components/HeaderComponent";
+import useAffairStore, { getAllAffairs } from "../../stores/affairStore";
 
 const Index = () => {
    const navigation = useNavigation();
+   const { affairs } = useAffairStore();
 
-   const {
-      data: photos,
-      isLoading,
-      refetch: refetchPhotos,
-   } = useFetch(getAllPhotos);
-   // console.log("🚀 ~ Index ~ photos:", photos);
-   const { data: users, refetch: refetchUsers } = useFetch(getAllPhotos);
-   const dataBtns = [
-      { id: 1, icon: images.btnAlumbrado, title: "Alumbrado Público" },
-      { id: 2, icon: images.btnBacheo, title: "Bacheo" },
-      { id: 3, icon: images.btnBasura, title: "Basura" },
-      { id: 4, icon: images.btnEcologia, title: "Ecología" },
-   ];
+   // const {
+   //    data: affairst,
+   //    isLoading,
+   //    refetch: refetchAffairs,
+   // } = useFetch(getAllAffairs);
+
+   console.log("🚀 ~ Index ~ affairs:", affairs);
+   // const { data: users, refetch: refetchUsers } = useFetch(getAllPhotos);
+   // const dataBtns = [
+   //    { id: 1, icon: images.btnAlumbrado, title: "Alumbrado Público" },
+   //    { id: 2, icon: images.btnBacheo, title: "Bacheo" },
+   //    { id: 3, icon: images.btnBasura, title: "Basura" },
+   //    { id: 4, icon: images.btnEcologia, title: "Ecología" },
+   // ];
    const [refreshing, setRereshing] = useState(false);
 
    const onRefresh = async () => {
       setRereshing(true);
-      await refetchPhotos();
-      await refetchUsers();
+      await refetchAffairs();
       ToastAndroid.show("Se actualizo", ToastAndroid.SHORT);
       setRereshing(false);
    };
+
+   useEffect(() => {
+      console.log("amos a verr...");
+
+      getAllAffairs();
+   }, [affairs]);
 
    return (
       <SafeAreaView className={"h-full "}>
@@ -55,14 +63,14 @@ const Index = () => {
          <View className="flex-1 pt-5">
             {/* Grid de Categorías */}
             <FlatList
-               data={dataBtns}
+               data={affairs}
                keyExtractor={(item) => item.$id}
                numColumns={3}
                renderItem={({ item }) => (
                   <CategoryItem
                      key={`key-${item.id}`}
                      icon={item.icon}
-                     title={item.title}
+                     title={item.asunto}
                      onPress={() => console.log("click")}
                   />
                )}
@@ -77,15 +85,24 @@ const Index = () => {
 
 export default Index;
 
-const CategoryItem = ({ title, icon, onPress }) => (
-   <View className={`flex-1 items-stretch`}>
-      <TouchableOpacity
-         className=" flex items-center justify-start m-2"
-         onPress={() => router.push(`/${title}`)}>
-         <Image source={icon} className={"w-24 h-24 mb-1"} resizeMode="cover" />
-         <Text className={"text-base font-mregular text-center text-gray-500"}>
-            {title}
-         </Text>
-      </TouchableOpacity>
-   </View>
-);
+const CategoryItem = ({ title, icon, onPress }) => {
+   console.log("aqui ando");
+
+   return (
+      <View className={`flex-1 items-stretch`}>
+         <TouchableOpacity
+            className=" flex items-center justify-start m-2"
+            onPress={() => router.push(`/${title}`)}>
+            <Image
+               source={icon}
+               className={"w-24 h-24 mb-1"}
+               resizeMode="cover"
+            />
+            <Text
+               className={"text-base font-mregular text-center text-gray-500"}>
+               {title}
+            </Text>
+         </TouchableOpacity>
+      </View>
+   );
+};

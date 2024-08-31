@@ -14,7 +14,7 @@ import useAuthStore from "../stores/authStore";
 export default function App() {
    const { colorScheme } = useColorScheme();
    const currentTheme = useColorSchemeRN();
-   const auth = useAuthStore((state) => state.auth);
+   const { auth } = useAuthStore();
 
    useEffect(() => {
       // if (fontsLoaded) SplashScreen.hideAsync();
@@ -23,6 +23,7 @@ export default function App() {
    }, [useColorScheme]);
 
    if (auth) return <Redirect href="(main)" />;
+   // isAuth();
 
    return (
       <SafeAreaView className={"h-full"}>

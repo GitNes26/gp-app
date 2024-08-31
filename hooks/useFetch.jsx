@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Alert } from "react-native";
 
 const useFetch = (fn) => {
+   // console.log("🚀 ~ useFetch ~ useFetch:");
    const [data, setData] = useState([]);
    const [isLoading, setIsLoading] = useState(true);
 

@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { ApiUrl, ApiUrlFiles } from "../utils/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { router } from "expo-router";
+import { Redirect, router } from "expo-router";
 import { ToastAndroid } from "react-native";
 import useGlobalStore from "./globalStore";
 
@@ -10,9 +10,14 @@ const useAuthStore = create(
    persist(
       (set) => ({
          auth: null,
+         isAuth: false,
          setAuth: (auth) =>
             set((state) => ({ auth: state.auth !== auth ? auth : state.auth })),
          removeAuth: () => set((state) => ({ auth: null })),
+         // setIsAuth: (isAuth) =>
+         //    set((state) => ({
+         //       isAuth: state.isAuth !== isAuth ? isAuth : state.isAuth,
+         //    })),
       }),
       {
          name: "auth",
@@ -96,7 +101,6 @@ export const login = async (data) => {
       ApiUrl.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       ApiUrlFiles.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-      console.log("Todas las cabeceras:", ApiUrl.defaults.headers);
       await setAuth(res.result);
       router.push("(main)");
    } catch (error) {
@@ -112,25 +116,43 @@ export const login = async (data) => {
 
 export const logout = async () => {
    const auth = useAuthStore.getState().auth;
-   console.log("🚀 ~ logout ~ auth:", auth);
    const removeAuth = useAuthStore.getState().removeAuth;
 
    try {
-      console.log("Todas las cabeceras:", ApiUrl.defaults.headers);
+      // ApiUrl.defaults.headers.common["Authorization"] = `Bearer ${auth.token}`;
+      // ApiUrlFiles.defaults.headers.common["Authorization"] =
+      //    `Bearer ${auth.token}`;
 
-      await removeAuth();
-      // const req = await ApiUrl(`/logout/${auth.id}`, {
-      //    method: "POST",
-      // });
+      const req = await ApiUrl(`/logout/${auth.id}`, {
+         method: "POST",
+      });
       // console.log("🚀 ~ login ~ req:", req);
-      // const res = req.data.data;
-      // ApiUrl.defaults.headers.common["Authorization"] = "";
-      // ApiUrlFiles.defaults.headers.common["Authorization"] = "";
+      const res = req.data.data;
+      if (!res.status) {
+         setLoading(false);
+         ToastAndroid.showWithGravity(
+            res.message,
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+         );
+         return;
+      }
+      ApiUrl.defaults.headers.common["Authorization"] = null;
+      ApiUrlFiles.defaults.headers.common["Authorization"] = null;
+      // console.log("Todas las cabeceras:", ApiUrl.defaults.headers);
+      await removeAuth();
       // console.log("🚀 ~ logout ~ res:", res);
       // await AsyncStorage.getAllKeys();
       // router.canDismiss() && router.dismissAll();
    } catch (error) {
       console.log("🚀 ~ logout ~ error:", error);
+      setLoading(false);
+      ToastAndroid.showWithGravity(
+         "Error en el servidor",
+         ToastAndroid.LONG,
+         ToastAndroid.BOTTOM,
+      );
+      return;
    }
 };
 
@@ -156,3 +178,22 @@ export const signup = async (data) => {
       console.log("🚀 ~ login ~ error:", error);
    }
 };
+
+// export const isAuth = () => {
+// const auth = useAuthStore.getState().auth;
+// const setIsAuth = useAuthStore.getState().setIsAuth;
+// if (auth) {
+//    console.log("toy logeado :)");
+//    ApiUrl.defaults.headers.common["Authorization"] = `Bearer ${auth.token}`;
+//    ApiUrlFiles.defaults.headers.common["Authorization"] =
+//       `Bearer ${auth.token}`;
+//    setIsAuth(true);
+//    <Redirect href="(main)" />;
+// } else {
+//    console.log("NO toy logeado :c");
+//    ApiUrl.defaults.headers.common["Authorization"] = null;
+//    ApiUrlFiles.defaults.headers.common["Authorization"] = null;
+//    setIsAuth(false);
+//    <Redirect href="(auth)" />;
+// }
+// };

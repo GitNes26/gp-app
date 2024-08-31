@@ -7,51 +7,60 @@ import { router } from "expo-router";
 const useAffairStore = create((set) => ({
    affair: null,
    affairs: [],
-   setAffair: (affair) => set({ affair }),
-   removeAffair: () => set({ affair: null }),
+   formData: {},
+   setAffair: (affair) =>
+      set((state) => ({
+         affair: state.affair !== affair ? affair : state.affair,
+      })),
+   removeAffair: () => set((state) => ({ affair: null })),
+   setAllAffairs: (affairs) =>
+      set((state) => ({
+         affairs: state.affairs !== affairs ? affairs : state.affairs,
+      })),
+   removeAllAffairs: () => set((state) => ({ affairs: [] })),
 }));
 export default useAffairStore;
 
-export const login = async (data) => {
+export const getAllAffairs = async () => {
    // const setAffair = useAffairStore((state) => state.setAffair);
-   const affair = useAffairStore.getState().affair;
-   const setAffair = useAffairStore.getState().setAffair;
+   const affairs = useAffairStore.getState().affairs;
+   const setAllAffairs = useAffairStore.getState().setAllAffairs;
 
    try {
-      const req = await ApiUrl("/login", {
-         method: "POST",
-         data,
+      const req = await ApiUrl("/asuntos", {
+         method: "GET",
       });
-      // console.log("🚀 ~ login ~ req:", req.data.res);
+      // console.log("🚀 ~ getAllAffairs ~ req:", req.data.res);
       const res = req.data.data;
-      ApiUrl.defaults.headers.common["Affairorization"] =
-         `Bearer ${res.result.token}`;
-      ApiUrlFiles.defaults.headers.common["Affairorization"] =
-         `Bearer ${res.result.token}`;
-      // console.log("🚀 ~ login ~ res:", res);
-      await setAffair(res.result);
-      router.push("(main)");
+
+      const affairsApp = await res.result.filter((item) => item.app === 1);
+      res.result = affairsApp;
+      // console.log("🚀 ~ getAllAffairs ~ res:", res);
+      await setAllAffairs(res.result);
+      console.log("Store ~ affairs", affairs);
+      console.log("🚀 ~ useAffairStore ~ affairs:", affairs);
+      return res;
    } catch (error) {
-      console.log("🚀 ~ login ~ error:", error);
+      console.log("🚀 ~ getAllAffairs ~ error:", error);
    }
 };
 
-export const logout = async () => {
+export const getAffair = async () => {
    const affair = useAffairStore.getState().affair;
    const removeAffair = useAffairStore.getState().removeAffair;
 
    try {
-      const req = await ApiUrl(`/logout/${affair.id}`, {
-         method: "POST",
-      });
-      // console.log("🚀 ~ login ~ req:", req.data.res);
-      const res = req.data.data;
-      ApiUrl.defaults.headers.common["Affairorization"] = null;
-      ApiUrlFiles.defaults.headers.common["Affairorization"] = null;
-      console.log("🚀 ~ logout ~ res:", res);
-      await removeAffair();
-      await AsyncStorage.getAllKeys();
-      router.canDismiss() && router.dismissAll();
+      // const req = await ApiUrl(`/logout/${affair.id}`, {
+      //    method: "POST",
+      // });
+      // // console.log("🚀 ~ login ~ req:", req.data.res);
+      // const res = req.data.data;
+      // ApiUrl.defaults.headers.common["Affairorization"] = null;
+      // ApiUrlFiles.defaults.headers.common["Affairorization"] = null;
+      // console.log("🚀 ~ logout ~ res:", res);
+      // await removeAffair();
+      // await AsyncStorage.getAllKeys();
+      // router.canDismiss() && router.dismissAll();
    } catch (error) {
       console.log("🚀 ~ logout ~ error:", error);
    }
