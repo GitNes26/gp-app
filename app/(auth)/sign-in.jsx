@@ -25,6 +25,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import useAuthStore, { getAllPosts, login } from "../../stores/authStore";
 import useFetch from "../../hooks/useFetch";
+import { getLocation } from "../../components/LocationComponent";
 
 const SignIn = () => {
    // const loading = useGlobalStore((state) => state.loading);
@@ -46,6 +47,11 @@ const SignIn = () => {
       try {
          setLoading(true);
          formik.setSubmitting(true);
+
+         /** VALIDAR QUE ESTE EN TERRITORIO GOMEZPALATINO */
+         const location = await getLocation();
+         return console.log("🚀 ~ onSubmit ~ location:", location);
+
          // ToastAndroid.showWithGravity(
          //    `Sesión iniciada: Bienvenido ${formData.email}`,
          //    ToastAndroid.LONG,

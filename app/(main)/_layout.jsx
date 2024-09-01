@@ -200,7 +200,7 @@ const MainLayout = () => {
       router.canDismiss() && router.dismissAll();
       return <Redirect href="(auth)" />;
    }
-   // isAuth();
+   // isLoggedIn();
 
    // useEffect(() => {
    //    console.log("🚀 ~ MainLayout ~ auth:", auth);

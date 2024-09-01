@@ -3,20 +3,15 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import { ApiUrl, ApiUrlFiles } from "../utils/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
+import useAuthStore, { checkLoggedIn } from "./authStore";
 
 const useAffairStore = create((set) => ({
    affair: null,
    affairs: [],
    formData: {},
-   setAffair: (affair) =>
-      set((state) => ({
-         affair: state.affair !== affair ? affair : state.affair,
-      })),
+   setAffair: (affair) => set((state) => ({ affair })),
    removeAffair: () => set((state) => ({ affair: null })),
-   setAllAffairs: (affairs) =>
-      set((state) => ({
-         affairs: state.affairs !== affairs ? affairs : state.affairs,
-      })),
+   setAllAffairs: (affairs) => set((state) => ({ affairs })),
    removeAllAffairs: () => set((state) => ({ affairs: [] })),
 }));
 export default useAffairStore;
@@ -27,6 +22,8 @@ export const getAllAffairs = async () => {
    const setAllAffairs = useAffairStore.getState().setAllAffairs;
 
    try {
+      await checkLoggedIn();
+
       const req = await ApiUrl("/asuntos", {
          method: "GET",
       });
@@ -37,8 +34,6 @@ export const getAllAffairs = async () => {
       res.result = affairsApp;
       // console.log("🚀 ~ getAllAffairs ~ res:", res);
       await setAllAffairs(res.result);
-      console.log("Store ~ affairs", affairs);
-      console.log("🚀 ~ useAffairStore ~ affairs:", affairs);
       return res;
    } catch (error) {
       console.log("🚀 ~ getAllAffairs ~ error:", error);
@@ -50,6 +45,7 @@ export const getAffair = async () => {
    const removeAffair = useAffairStore.getState().removeAffair;
 
    try {
+      // await checkLoggedIn();
       // const req = await ApiUrl(`/logout/${affair.id}`, {
       //    method: "POST",
       // });

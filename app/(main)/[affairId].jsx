@@ -9,6 +9,7 @@ import images from "../../constants/images";
 import FooterComponent from "../../components/FooterComponent";
 import CameraComponent from "../../components/CameraComponent";
 import LocationComponent from "../../components/LocationComponent";
+import useAffairStore from "../../stores/affairStore";
 
 const initialValues = {
    created_at: "",
@@ -20,8 +21,9 @@ const initialValues = {
    comments: "",
 };
 const Report = () => {
-   const { reportId } = useLocalSearchParams();
+   const { affairId } = useLocalSearchParams();
 
+   const { affair } = useAffairStore();
    const [formData, setFormData] = useState(initialValues);
    const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -43,7 +45,7 @@ const Report = () => {
       try {
          setIsSubmitting(true);
          ToastAndroid.showWithGravity(
-            `REPORTE [${reportId}] LEVANTADO`.toUpperCase(),
+            `REPORTE [${affair.asunto}] LEVANTADO`.toUpperCase(),
             ToastAndroid.LONG,
             ToastAndroid.CENTER,
          );
@@ -59,7 +61,11 @@ const Report = () => {
       }
    };
 
-   useEffect(() => {}, [formData]);
+   useEffect(() => {
+      console.log("useEffect del reporte");
+   }, []);
+
+   // useEffect(() => {}, [formData]);
 
    return (
       <SafeAreaView className={"h-full"}>
@@ -67,7 +73,7 @@ const Report = () => {
          <HeaderComponent />
          <View className={"w-full justify-center items-center mb-5 -mt-5"}>
             <Text className={"text-2xl font-mextrabold mt-10 text-primary-200"}>
-               Reporte <Text className={`text-black`}>{reportId}</Text>
+               Reporte <Text className={`text-black`}>{affair.asunto}</Text>
             </Text>
          </View>
          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -118,7 +124,7 @@ const Report = () => {
                      />
                      <Text
                         className={`text-gray-500 text-center font-mregular italic mb-2 px-1`}>
-                        Ubicación detectada:{" "}
+                        Ubicación detectada (aprox):{" "}
                         <Text className={`font-mmedium`}>
                            {formData.address}
                         </Text>

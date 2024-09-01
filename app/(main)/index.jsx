@@ -1,6 +1,7 @@
 import {
    FlatList,
    Image,
+   RefreshControl,
    Text,
    ToastAndroid,
    TouchableOpacity,
@@ -15,10 +16,12 @@ import { router, useNavigation } from "expo-router";
 import FooterComponent from "../../components/FooterComponent";
 import HeaderComponent from "../../components/HeaderComponent";
 import useAffairStore, { getAllAffairs } from "../../stores/affairStore";
+import { API_IMG } from "@env";
+import EmptyComponent from "../../components/EmptyComponent";
 
 const Index = () => {
    const navigation = useNavigation();
-   const { affairs } = useAffairStore();
+   const { affairs, setAffair } = useAffairStore();
 
    // const {
    //    data: affairst,
@@ -26,28 +29,25 @@ const Index = () => {
    //    refetch: refetchAffairs,
    // } = useFetch(getAllAffairs);
 
-   console.log("🚀 ~ Index ~ affairs:", affairs);
-   // const { data: users, refetch: refetchUsers } = useFetch(getAllPhotos);
-   // const dataBtns = [
-   //    { id: 1, icon: images.btnAlumbrado, title: "Alumbrado Público" },
-   //    { id: 2, icon: images.btnBacheo, title: "Bacheo" },
-   //    { id: 3, icon: images.btnBasura, title: "Basura" },
-   //    { id: 4, icon: images.btnEcologia, title: "Ecología" },
-   // ];
+   // console.log("🚀 ~ Index ~ affairs:", affairs);
    const [refreshing, setRereshing] = useState(false);
-
    const onRefresh = async () => {
       setRereshing(true);
-      await refetchAffairs();
+      // await refetchAffairs();
+      await getAllAffairs();
       ToastAndroid.show("Se actualizo", ToastAndroid.SHORT);
       setRereshing(false);
    };
 
-   useEffect(() => {
-      console.log("amos a verr...");
+   const handlePressCategory = (id) => {
+      const item = affairs.find((item) => item.id === id);
+      setAffair(item);
+      router.push(`/${id}`);
+   };
 
+   useEffect(() => {
       getAllAffairs();
-   }, [affairs]);
+   }, []);
 
    return (
       <SafeAreaView className={"h-full "}>
@@ -64,16 +64,29 @@ const Index = () => {
             {/* Grid de Categorías */}
             <FlatList
                data={affairs}
-               keyExtractor={(item) => item.$id}
+               keyExtractor={(item, index) => `${item.id}-${index}`}
                numColumns={3}
                renderItem={({ item }) => (
                   <CategoryItem
-                     key={`key-${item.id}`}
-                     icon={item.icon}
+                     key={`key-${item.id}-${item.asunto}`}
+                     // icon={}
+                     uriIcon={item.icono.split("gomezapp/")[1]}
                      title={item.asunto}
-                     onPress={() => console.log("click")}
+                     onPress={() => handlePressCategory(item.id)}
                   />
                )}
+               ListEmptyComponent={() => (
+                  <EmptyComponent
+                     title={"No hay asuntos"}
+                     subtitle={"Carga tu primer video"}
+                  />
+               )}
+               refreshControl={
+                  <RefreshControl
+                     refreshing={refreshing}
+                     onRefresh={onRefresh}
+                  />
+               }
             />
          </View>
          {/* </ScrollView> */}
@@ -85,16 +98,14 @@ const Index = () => {
 
 export default Index;
 
-const CategoryItem = ({ title, icon, onPress }) => {
-   console.log("aqui ando");
-
+const CategoryItem = ({ title, icon, uriIcon, onPress }) => {
    return (
-      <View className={`flex-1 items-stretch`}>
+      <View className={`flex-1 items-stretch mb-10`}>
          <TouchableOpacity
             className=" flex items-center justify-start m-2"
-            onPress={() => router.push(`/${title}`)}>
+            onPress={onPress}>
             <Image
-               source={icon}
+               source={icon ? icon : { uri: `${API_IMG}/${uriIcon}` }}
                className={"w-24 h-24 mb-1"}
                resizeMode="cover"
             />

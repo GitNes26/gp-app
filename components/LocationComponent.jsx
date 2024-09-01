@@ -4,6 +4,35 @@ import * as Location from "expo-location";
 import { Alert, ToastAndroid } from "react-native";
 import LoadingComponent from "./LoadingComponent";
 
+export const getLocation = async () => {
+   try {
+      const currentPosition = await Location.getCurrentPositionAsync({});
+      // setLocation(currentPosition);
+      const coords = {
+         latitude: currentPosition.coords.latitude,
+         longitude: currentPosition.coords.longitude,
+      };
+      const currentLocation = await getUbication(coords);
+      return currentLocation;
+   } catch (error) {
+      console.log("🚀 ~ getLocation ~ error:", error);
+   }
+};
+export const getUbication = async (coords) => {
+   try {
+      const ubication = await Location.reverseGeocodeAsync(coords);
+      const currentLocation = {
+         coords,
+         ubication: ubication[0],
+      };
+      // setLocation(currentLocation);
+      // if (getData) getData(location);
+      return currentLocation;
+   } catch (error) {
+      console.log("🚀 ~ getLocation ~ error:", error);
+   }
+};
+
 const LocationComponent = ({
    textButton = "Conocer mi ubicación",
    styleButton,

@@ -23,7 +23,7 @@ export default function App() {
    }, [useColorScheme]);
 
    if (auth) return <Redirect href="(main)" />;
-   // isAuth();
+   // isLoggedIn();
 
    return (
       <SafeAreaView className={"h-full"}>

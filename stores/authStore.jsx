@@ -10,14 +10,11 @@ const useAuthStore = create(
    persist(
       (set) => ({
          auth: null,
-         isAuth: false,
-         setAuth: (auth) =>
-            set((state) => ({ auth: state.auth !== auth ? auth : state.auth })),
-         removeAuth: () => set((state) => ({ auth: null })),
-         // setIsAuth: (isAuth) =>
-         //    set((state) => ({
-         //       isAuth: state.isAuth !== isAuth ? isAuth : state.isAuth,
-         //    })),
+         isLoggedIn: false,
+         setAuth: (auth) => set((state) => ({ auth })),
+         // set((state) => ({ auth: state.auth !== auth ? auth : state.auth })),
+         // removeAuth: () => set((state) => ({ auth: null })),
+         setIsLoggedIn: (isLoggedIn) => set((state) => ({ isLoggedIn })),
       }),
       {
          name: "auth",
@@ -102,7 +99,7 @@ export const login = async (data) => {
       ApiUrlFiles.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
       await setAuth(res.result);
-      router.push("(main)");
+      // router.push("(main)");
    } catch (error) {
       console.log("🚀 ~ login ~ error:", error);
       setLoading(false);
@@ -116,12 +113,10 @@ export const login = async (data) => {
 
 export const logout = async () => {
    const auth = useAuthStore.getState().auth;
-   const removeAuth = useAuthStore.getState().removeAuth;
+   const setAuth = useAuthStore.getState().setAuth;
 
    try {
-      // ApiUrl.defaults.headers.common["Authorization"] = `Bearer ${auth.token}`;
-      // ApiUrlFiles.defaults.headers.common["Authorization"] =
-      //    `Bearer ${auth.token}`;
+      await checkLoggedIn();
 
       const req = await ApiUrl(`/logout/${auth.id}`, {
          method: "POST",
@@ -140,7 +135,8 @@ export const logout = async () => {
       ApiUrl.defaults.headers.common["Authorization"] = null;
       ApiUrlFiles.defaults.headers.common["Authorization"] = null;
       // console.log("Todas las cabeceras:", ApiUrl.defaults.headers);
-      await removeAuth();
+      await setAuth(null);
+      // await removeAuth();
       // console.log("🚀 ~ logout ~ res:", res);
       // await AsyncStorage.getAllKeys();
       // router.canDismiss() && router.dismissAll();
@@ -179,21 +175,30 @@ export const signup = async (data) => {
    }
 };
 
-// export const isAuth = () => {
+export const checkLoggedIn = async () => {
+   const auth = useAuthStore.getState().auth;
+   if (auth.token && !ApiUrl.defaults.headers.common["Authorization"]) {
+      ApiUrl.defaults.headers.common["Authorization"] = `Bearer ${auth.token}`;
+      ApiUrlFiles.defaults.headers.common["Authorization"] =
+         `Bearer ${auth.token}`;
+   }
+};
+
+// export const isLoggedIn = () => {
 // const auth = useAuthStore.getState().auth;
-// const setIsAuth = useAuthStore.getState().setIsAuth;
+// const setIsLoggedIn = useAuthStore.getState().setIsLoggedIn;
 // if (auth) {
 //    console.log("toy logeado :)");
 //    ApiUrl.defaults.headers.common["Authorization"] = `Bearer ${auth.token}`;
 //    ApiUrlFiles.defaults.headers.common["Authorization"] =
 //       `Bearer ${auth.token}`;
-//    setIsAuth(true);
+//    setIsLoggedIn(true);
 //    <Redirect href="(main)" />;
 // } else {
 //    console.log("NO toy logeado :c");
 //    ApiUrl.defaults.headers.common["Authorization"] = null;
 //    ApiUrlFiles.defaults.headers.common["Authorization"] = null;
-//    setIsAuth(false);
+//    setIsLoggedIn(false);
 //    <Redirect href="(auth)" />;
 // }
 // };
