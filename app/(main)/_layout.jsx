@@ -194,13 +194,18 @@ const DrawerGroup = () => {
 };
 
 const MainLayout = () => {
-   const { auth } = useAuthStore();
+   const { auth, isLoggedIn } = useAuthStore();
 
-   if (!auth) {
-      router.canDismiss() && router.dismissAll();
-      return <Redirect href="(auth)" />;
-   }
-   // isLoggedIn();
+   // if (!auth) {
+   //    // router.canDismiss() && router.dismissAll();
+   //    return <Redirect href="(auth)" />;
+   // }
+   useEffect(() => {
+      console.log("🚀 ~ useEffect ~ isLoggedIn:", isLoggedIn);
+      checkLoggedIn();
+      // if (isLoggedIn) <Redirect href={"(main)"} />;
+      // else <Redirect href={"(auth)"} />;
+   }, [isLoggedIn]);
 
    // useEffect(() => {
    //    console.log("🚀 ~ MainLayout ~ auth:", auth);

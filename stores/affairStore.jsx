@@ -22,7 +22,7 @@ export const getAllAffairs = async () => {
    const setAllAffairs = useAffairStore.getState().setAllAffairs;
 
    try {
-      await checkLoggedIn();
+      // await checkLoggedIn();
 
       const req = await ApiUrl("/asuntos", {
          method: "GET",

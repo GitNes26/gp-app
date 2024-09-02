@@ -67,6 +67,8 @@ const Report = () => {
 
    // useEffect(() => {}, [formData]);
 
+   if (!affair) return router.replace("(main)");
+
    return (
       <SafeAreaView className={"h-full"}>
          {/* Título */}

@@ -21,6 +21,7 @@ import check from "../assets/images/check.png";
 import clock from "../assets/images/clock.png";
 import directory from "../assets/images/directory.png";
 import info from "../assets/images/info.png";
+import empty from "../assets/images/empty.png";
 import share from "../assets/images/share.png";
 import ubi from "../assets/images/ubi.png";
 import user from "../assets/images/user.png";
@@ -50,6 +51,7 @@ export default {
    clock,
    directory,
    info,
+   empty,
    share,
    ubi,
    user,

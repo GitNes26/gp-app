@@ -1,4 +1,26 @@
-import Toast from "./Toast";
+import { getLocation } from "../components/LocationComponent";
+import { ALLOWED_CITY } from "../constants/globals";
+// import Toast from "./Toast";
+
+export const validateLocation = async () => {
+   const location = await getLocation();
+   let go = true;
+   if (location.ubication.city !== ALLOWED_CITY) {
+      ToastAndroid.showWithGravity(
+         `Location: city:${location.ubication.city} | region:${location.ubication.region}`,
+         ToastAndroid.LONG,
+         ToastAndroid.CENTER,
+      );
+      ToastAndroid.showWithGravity(
+         `Lo sentimos, esta App solo esta disponible en la ciudad de ${ALLOWED_CITY}`,
+         ToastAndroid.LONG,
+         ToastAndroid.CENTER,
+      );
+      console.log("🚀 ~ onSubmit ~ location:", location);
+      go = false;
+   }
+   return go;
+};
 
 export const validateImageRequired = (valuesImg, msg = "Imagen requerida") => {
    if (

@@ -7,13 +7,14 @@ const EmptyComponent = ({ title, subtitle }) => {
       <View className={"justify-center items-center px-4"}>
          <Image
             source={images.empty}
-            className={"w-[270px] h-[125px]"}
+            className={"w-[350px] h-[200px]"}
             resizeMode="contain"
          />
-         <Text className={"text-xl text-center font-semibold text-white mt-2"}>
+         <Text
+            className={"text-xl text-center font-semibold text-black-100 mt-1"}>
             {title}
          </Text>
-         <Text className={"font-medium text-sm text-gray-100"}>{subtitle}</Text>
+         <Text className={"font-medium text-sm text-gray-500"}>{subtitle}</Text>
       </View>
    );
 };

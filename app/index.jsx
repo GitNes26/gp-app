@@ -9,12 +9,12 @@ import { Foundation } from "@expo/vector-icons";
 import { useEffect } from "react";
 import { useColorScheme } from "nativewind";
 import { useColorScheme as useColorSchemeRN } from "react-native";
-import useAuthStore from "../stores/authStore";
+import useAuthStore, { checkLoggedIn } from "../stores/authStore";
 
 export default function App() {
    const { colorScheme } = useColorScheme();
    const currentTheme = useColorSchemeRN();
-   const { auth } = useAuthStore();
+   const { auth, isLoggedIn } = useAuthStore();
 
    useEffect(() => {
       // if (fontsLoaded) SplashScreen.hideAsync();
@@ -22,8 +22,12 @@ export default function App() {
       console.log("currentTheme", currentTheme);
    }, [useColorScheme]);
 
-   if (auth) return <Redirect href="(main)" />;
-   // isLoggedIn();
+   useEffect(() => {
+      console.log("🚀 ~ useEffect ~ isLoggedIn:", isLoggedIn);
+      checkLoggedIn()
+      // if (isLoggedIn) <Redirect href={"(main)"} />;
+      // else <Redirect href={"(auth)"} />;
+   }, [isLoggedIn]);
 
    return (
       <SafeAreaView className={"h-full"}>

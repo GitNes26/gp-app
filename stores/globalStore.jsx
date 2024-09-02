@@ -4,9 +4,6 @@ import { create } from "zustand";
 
 const useGlobalStore = create((set) => ({
    loading: true,
-   setLoading: (loading) =>
-      set((state) => ({
-         loading,
-      })),
+   setLoading: (loading) => set((state) => ({ loading })),
 }));
 export default useGlobalStore;

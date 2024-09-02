@@ -26,6 +26,7 @@ import * as Yup from "yup";
 import useAuthStore, { getAllPosts, login } from "../../stores/authStore";
 import useFetch from "../../hooks/useFetch";
 import { getLocation } from "../../components/LocationComponent";
+import { validateLocation } from "../../utils/validations";
 
 const SignIn = () => {
    // const loading = useGlobalStore((state) => state.loading);
@@ -49,24 +50,18 @@ const SignIn = () => {
          formik.setSubmitting(true);
 
          /** VALIDAR QUE ESTE EN TERRITORIO GOMEZPALATINO */
-         const location = await getLocation();
-         return console.log("🚀 ~ onSubmit ~ location:", location);
+         // await validateLocation();
 
-         // ToastAndroid.showWithGravity(
-         //    `Sesión iniciada: Bienvenido ${formData.email}`,
-         //    ToastAndroid.LONG,
-         //    ToastAndroid.CENTER,
-         // );
          // const {
          //    data: res,
          //    isLoading,
          //    refetch: refetchPhotos,
          // } = useFetch(login(values));
          const res = await login(values);
-         setTimeout(() => {
-            setLoading(false);
-            formik.setSubmitting(false);
-         }, 3500);
+         // setTimeout(() => {
+         setLoading(false);
+         formik.setSubmitting(false);
+         // }, 3500);
       } catch (error) {
          console.log("🚀 ~ onSubmit ~ error:", error);
          throw Error(error);

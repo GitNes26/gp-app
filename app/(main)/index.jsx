@@ -70,7 +70,7 @@ const Index = () => {
                   <CategoryItem
                      key={`key-${item.id}-${item.asunto}`}
                      // icon={}
-                     uriIcon={item.icono.split("gomezapp/")[1]}
+                     uriIcon={item.icono}
                      title={item.asunto}
                      onPress={() => handlePressCategory(item.id)}
                   />
@@ -78,7 +78,7 @@ const Index = () => {
                ListEmptyComponent={() => (
                   <EmptyComponent
                      title={"No hay asuntos"}
-                     subtitle={"Carga tu primer video"}
+                     subtitle={"Recarga la sección..."}
                   />
                )}
                refreshControl={
