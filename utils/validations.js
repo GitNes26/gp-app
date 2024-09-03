@@ -1,3 +1,4 @@
+import { ToastAndroid } from "react-native";
 import { getLocation } from "../components/LocationComponent";
 import { ALLOWED_CITY } from "../constants/globals";
 // import Toast from "./Toast";
@@ -16,7 +17,6 @@ export const validateLocation = async () => {
          ToastAndroid.LONG,
          ToastAndroid.CENTER,
       );
-      console.log("🚀 ~ onSubmit ~ location:", location);
       go = false;
    }
    return go;

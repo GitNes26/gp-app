@@ -63,7 +63,7 @@ export const login = async (data) => {
 
       await setAuth(res.result);
       await setIsLoggedIn(true);
-      // router.push("(main)");
+      if (token) router.push("(main)");
    } catch (error) {
       console.log("🚀 ~ login ~ error:", error);
       setLoading(false);
@@ -105,6 +105,10 @@ export const logout = async () => {
       // console.log("Todas las cabeceras:", ApiUrl.defaults.headers);
       await setAuth(null);
       await setIsLoggedIn(false);
+      router.canDismiss() && router.dismiss();
+      router.replace("/(auth)");
+      // return <Redirect href={"(auth)"} />;
+      console.log("cehcado2");
    } catch (error) {
       console.log("🚀 ~ logout ~ error:", error);
       setLoading(false);
@@ -141,23 +145,25 @@ export const checkLoggedIn = async () => {
    const setIsLoggedIn = useAuthStore.getState().setIsLoggedIn;
    const isLoggedIn = useAuthStore.getState().isLoggedIn;
 
-   console.log("🚀 ~ checkLoggedIn ~ auth:", auth);
+   // console.log("🚀 ~ checkLoggedIn ~ auth:", auth);
    let loggedIn = isLoggedIn;
 
    if (!auth) {
       console.log("checkLoggedIn ~ no estoy logeado");
       loggedIn = false;
       await setIsLoggedIn(loggedIn);
-      router.replace("(auth)");
-      return;
+      // router.replace("(auth)");
+      // return;
+   } else {
+      loggedIn = true;
+      if (auth.token && !ApiUrl.defaults.headers.common["Authorization"]) {
+         ApiUrl.defaults.headers.common["Authorization"] =
+            `Bearer ${auth.token}`;
+         ApiUrlFiles.defaults.headers.common["Authorization"] =
+            `Bearer ${auth.token}`;
+      }
+      setIsLoggedIn(loggedIn);
    }
-   loggedIn = true;
-   if (auth.token && !ApiUrl.defaults.headers.common["Authorization"]) {
-      ApiUrl.defaults.headers.common["Authorization"] = `Bearer ${auth.token}`;
-      ApiUrlFiles.defaults.headers.common["Authorization"] =
-         `Bearer ${auth.token}`;
-   }
-   setIsLoggedIn(loggedIn);
 };
 
 // export const isLoggedIn = () => {

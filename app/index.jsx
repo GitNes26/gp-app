@@ -23,11 +23,22 @@ export default function App() {
    }, [useColorScheme]);
 
    useEffect(() => {
-      console.log("🚀 ~ useEffect ~ isLoggedIn:", isLoggedIn);
-      checkLoggedIn()
-      // if (isLoggedIn) <Redirect href={"(main)"} />;
-      // else <Redirect href={"(auth)"} />;
+      const init = async () => {
+         console.log("🚀 INDEXapp ~ useEffect ~ isLoggedIn:", isLoggedIn);
+         await checkLoggedIn();
+         if (auth && isLoggedIn) {
+            console.log("toy requetelogeado");
+            router.replace("(main)");
+         }
+         // return () => {
+         //    if (isLoggedIn) return <Redirect href={"(main)"} />;
+         //    else return <Redirect href={"(auth)"} />;
+         // };
+      };
+      init();
    }, [isLoggedIn]);
+
+   // if (auth && isLoggedIn) return <Redirect href={"(main)"} />;
 
    return (
       <SafeAreaView className={"h-full"}>

@@ -15,7 +15,8 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ImagePressableComponent from "../../components/ImagePressableComponent";
 import ButtonCompnent from "../../components/ButtonCompnent";
-import useAuthStore, { logout } from "../../stores/authStore";
+import useAuthStore, { checkLoggedIn, logout } from "../../stores/authStore";
+import useGlobalStore from "../../stores/globalStore";
 
 const data = [
    {
@@ -79,8 +80,16 @@ const dataStack = [
 ];
 
 const CustomDrawerContent = ({ ...props }) => {
+   const { loading, setLoading } = useGlobalStore();
    const router = useRouter();
    const { top, bottom } = useSafeAreaInsets();
+
+   const handlePressLogout = async () => {
+      setLoading(true);
+      await logout();
+      // router.dismissAll();
+      setLoading(false);
+   };
 
    return (
       <View className={"flex-1"}>
@@ -118,7 +127,7 @@ const CustomDrawerContent = ({ ...props }) => {
                   />
                }
                title={"Cerrar Sesión"}
-               handleOnPress={() => logout()}
+               handleOnPress={() => handlePressLogout()}
             />
          </View>
       </View>
@@ -200,16 +209,23 @@ const MainLayout = () => {
    //    // router.canDismiss() && router.dismissAll();
    //    return <Redirect href="(auth)" />;
    // }
-   useEffect(() => {
-      console.log("🚀 ~ useEffect ~ isLoggedIn:", isLoggedIn);
-      checkLoggedIn();
-      // if (isLoggedIn) <Redirect href={"(main)"} />;
-      // else <Redirect href={"(auth)"} />;
-   }, [isLoggedIn]);
+   // useEffect(() => {
+   //    console.log("🚀 MAINLAYOUT ~ useEffect ~ isLoggedIn:", isLoggedIn);
+
+   //    if (!isLoggedIn) {
+   //       // Usamos el router de Expo para realizar la redirección
+   //       console.log(
+   //          "🚀 ~ useEffect ~ Usamos el router de Expo para realizar la redirección:",
+   //       );
+   //       router.replace("(auth)");
+   //    }
+   // }, [isLoggedIn]);
 
    // useEffect(() => {
    //    console.log("🚀 ~ MainLayout ~ auth:", auth);
    // }, [auth]);
+
+   // if (!isLoggedIn) return router.replace("/");
 
    return (
       <GestureHandlerRootView style={{ flex: 1 }}>

@@ -10,6 +10,7 @@ import FooterComponent from "../../components/FooterComponent";
 import CameraComponent from "../../components/CameraComponent";
 import LocationComponent from "../../components/LocationComponent";
 import useAffairStore from "../../stores/affairStore";
+import useAuthStore from "../../stores/authStore";
 
 const initialValues = {
    created_at: "",
@@ -23,6 +24,7 @@ const initialValues = {
 const Report = () => {
    const { affairId } = useLocalSearchParams();
 
+   const { auth } = useAuthStore();
    const { affair } = useAffairStore();
    const [formData, setFormData] = useState(initialValues);
    const [isSubmitting, setIsSubmitting] = useState(false);
@@ -61,13 +63,13 @@ const Report = () => {
       }
    };
 
-   useEffect(() => {
-      console.log("useEffect del reporte");
-   }, []);
+   // useEffect(() => {
+   //    console.log("useEffect del reporte");
+   // }, []);
 
    // useEffect(() => {}, [formData]);
 
-   if (!affair) return router.replace("(main)");
+   if (!auth && !affair) return router.replace("(main)");
 
    return (
       <SafeAreaView className={"h-full"}>

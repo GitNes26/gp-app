@@ -19,7 +19,7 @@ const AuthLayout = () => {
       },
    ];
 
-   if (auth) return <Redirect href="(main)" />;
+   // if (auth) return <Redirect href="(main)" />;
 
    return (
       <>

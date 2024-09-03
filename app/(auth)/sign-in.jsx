@@ -50,7 +50,7 @@ const SignIn = () => {
          formik.setSubmitting(true);
 
          /** VALIDAR QUE ESTE EN TERRITORIO GOMEZPALATINO */
-         // await validateLocation();
+         await validateLocation();
 
          // const {
          //    data: res,
@@ -58,10 +58,9 @@ const SignIn = () => {
          //    refetch: refetchPhotos,
          // } = useFetch(login(values));
          const res = await login(values);
-         // setTimeout(() => {
-         setLoading(false);
          formik.setSubmitting(false);
-         // }, 3500);
+         // router.replace("(main)");
+         setLoading(false);
       } catch (error) {
          console.log("🚀 ~ onSubmit ~ error:", error);
          throw Error(error);
