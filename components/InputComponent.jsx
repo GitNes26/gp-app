@@ -12,7 +12,7 @@ import icons from "../constants/icons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 const InputComponent = ({
-   title,
+   label,
    value,
    placeholder,
    handlChangeText,
@@ -26,9 +26,9 @@ const InputComponent = ({
    const [showPassword, setShowPassword] = useState(isPassword);
 
    return (
-      <View className={` ${otherStyles}`}>
+      <View className={`mb-5 ${otherStyles}`}>
          <Text className={`text-base text-primary font-msemibold`}>
-            {title}
+            {label}
          </Text>
          <View
             className={`border-2 border-slate-200 w-full h-16 px-4 bg-slate-50 rounded-2xl focus:border-primary-200 items-center flex-row`}>

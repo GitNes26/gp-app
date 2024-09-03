@@ -10,20 +10,41 @@ import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../../constants/images";
 import { StatusBar } from "expo-status-bar";
-import InputComponent from "../../components/InputComponent";
 import colors from "../../constants/colors";
 import ButtonCompnent from "../../components/ButtonCompnent";
 import { Link, router, useNavigation } from "expo-router";
 import { Foundation } from "@expo/vector-icons";
 import HeaderComponent from "../../components/HeaderComponent";
 import FooterComponent from "../../components/FooterComponent";
+import {
+   FormikComponent,
+   InputComponent,
+   RadioButtonComponent,
+} from "../../components/FormikComonents";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const SignUp = () => {
    const navigation = useNavigation();
-   const [form, setForm] = useState({
-      username: "",
-      email: "",
-      password: "",
+
+   const [formData, setFormData] = useState({
+      email: "atc@gomezpalacio.gob.mx",
+      password: "123456",
+   });
+   const validationSchema = Yup.object().shape({
+      email: Yup.string()
+         .email("Formato de correo no valido")
+         .required("Nombre de usario o Correo requerido"),
+      password: Yup.string()
+         .trim()
+         .min(6, "Mínimo 6 caracteres")
+         .required("Contraseña requerida"),
+   });
+
+   const formik = useFormik({
+      initialValues: formData,
+      onSubmit: (values) => onSubmit(values),
+      validationSchema: () => validationSchemas(),
    });
    const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -38,7 +59,7 @@ const SignUp = () => {
          );
          // setTimeout(() => {
          setIsSubmitting(false);
-         navigation.goBack();
+         navigation.canGoBack() && navigation.goBack();
          // }, 1500);
       } catch (error) {
          console.log("🚀 ~ onSubmit ~ error:", error);
@@ -69,37 +90,82 @@ const SignUp = () => {
                   </Text>
                </View>
 
-               <InputComponent
-                  title={"Nombre de Usuario"}
-                  value={form.username}
-                  handlChangeText={(e) => setForm({ ...form, username: e })}
-                  otherStyles={"mt-7"}
-                  // keyboardType={""}
-                  placeholder={"Ingresa tu nombre de usuario"}
-               />
-               <InputComponent
-                  title={"Correo Electrónico"}
-                  value={form.email}
-                  handlChangeText={(e) => setForm({ ...form, email: e })}
-                  otherStyles={"mt-7"}
-                  keyboardType={"email-address"}
-                  placeholder={"Ingresa tu correo"}
-               />
-               <InputComponent
-                  title={"Contraseña"}
-                  value={form.password}
-                  handlChangeText={(e) => setForm({ ...form, password: e })}
-                  otherStyles={"mt-7"}
-                  // keyboardType={""}
-                  isPassword={true}
-                  placeholder={"Ingresa tu contraseña"}
-               />
-               <ButtonCompnent
-                  title={"Registrarme"}
-                  handleOnPress={onSubmit}
-                  containerStyles={"mt-7"}
-                  isLoading={isSubmitting}
-               />
+               <FormikComponent formik={formik} textBtnSubmit={"REGISTRARME"}>
+                  <InputComponent
+                     formik={formik}
+                     idName={"email"}
+                     label={"Correo Electrónico"}
+                     placeholder={"Ingresa tu correo"}
+                     // helperText={"texto de ayuda"}
+                     textStyleCase={false}
+                     keyboardType={"email-address"}
+                  />
+                  <InputComponent
+                     formik={formik}
+                     idName={"password"}
+                     label={"Contraseña"}
+                     placeholder={"Ingresa tu contraseña"}
+                     helperText={"mínimo 6 caracteres"}
+                     textStyleCase={null}
+                     keyboardType={""}
+                     isPassword={true}
+                  />
+                  <InputComponent
+                     formik={formik}
+                     idName={"phone"}
+                     label={"Teléfono"}
+                     placeholder={"Ingresa tu número a 10 dígitos"}
+                     // helperText={"texto de ayuda"}
+                     // textStyleCase={false}
+                     keyboardType={"phone-pad"}
+                  />
+                  <InputComponent
+                     formik={formik}
+                     idName={"name"}
+                     label={"Nombre(s)"}
+                     placeholder={"Ingresa tu(s) nombre(s)"}
+                     // helperText={"texto de ayuda"}
+                     textStyleCase={true}
+                     // keyboardType={""}
+                  />
+                  <InputComponent
+                     formik={formik}
+                     idName={"name"}
+                     label={"Apellido Paterno"}
+                     placeholder={"Ingresa tu apellido paterno"}
+                     // helperText={"texto de ayuda"}
+                     textStyleCase={true}
+                     // keyboardType={""}
+                  />
+                  <InputComponent
+                     formik={formik}
+                     idName={"name"}
+                     label={"Apellido Materno"}
+                     placeholder={"Ingresa tu apellido materno"}
+                     // helperText={"texto de ayuda"}
+                     textStyleCase={true}
+                     // keyboardType={""}
+                  />
+                  <InputComponent
+                     formik={formik}
+                     idName={"curp"}
+                     label={"CURP"}
+                     placeholder={"Ingresa tu CURP"}
+                     // helperText={"texto de ayuda"}
+                     textStyleCase={true}
+                     keyboardType={""}
+                  />
+                  <RadioButtonComponent
+                     formik={formik}
+                     idName={"name"}
+                     label={"Nombre(s)"}
+                     placeholder={"Ingresa tu(s) nombre(s)"}
+                     // helperText={"texto de ayuda"}
+                     textStyleCase={false}
+                     keyboardType={"phone-pad"}
+                  />
+               </FormikComponent>
+
                <View className={"justify-center pt-5 flex-row gap-2"}>
                   <Text className={"text-lg text-gray-700 font-mregular"}>
                      Si ya tienes cuenta,{" "}

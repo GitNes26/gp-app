@@ -105,8 +105,9 @@ export const logout = async () => {
       // console.log("Todas las cabeceras:", ApiUrl.defaults.headers);
       await setAuth(null);
       await setIsLoggedIn(false);
-      router.canDismiss() && router.dismiss();
-      router.replace("/(auth)");
+      router.canDismiss()
+         ? router.dismiss()
+         : router.replace("../app/index.jsx");
       // return <Redirect href={"(auth)"} />;
       console.log("cehcado2");
    } catch (error) {

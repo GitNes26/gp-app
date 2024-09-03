@@ -42,6 +42,31 @@ const SignIn = () => {
       onSubmit: (values) => onSubmit(values),
       validationSchema: () => validationSchemas(),
    });
+   const validationSchemas = () => {
+      let validationSchema;
+      // if (inputUsername)
+      if (true)
+         validationSchema = Yup.object().shape({
+            email: Yup.string()
+               .email("Formato de correo no valido")
+               .required("Nombre de usario o Correo requerido"),
+            password: Yup.string()
+               .trim()
+               .min(6, "Mínimo 6 caracteres")
+               .required("Contraseña requerida"),
+         });
+      else
+         validationSchema = Yup.object().shape({
+            email: Yup.string()
+               .email("Formato de correo no valido")
+               .required("Nombre de usario o Correo requerido"),
+            password: Yup.string()
+               .trim()
+               .min(6, "Mínimo 6 caracteres")
+               .required("Contraseña requerida"),
+         });
+      return validationSchema;
+   };
 
    const onSubmit = async (values) => {
       // return console.log("🚀 ~ onSubmit ~ values:", values);
@@ -67,32 +92,6 @@ const SignIn = () => {
       } finally {
          formik.setSubmitting(false);
       }
-   };
-
-   const validationSchemas = () => {
-      let validationSchema;
-      // if (inputUsername)
-      if (true)
-         validationSchema = Yup.object().shape({
-            email: Yup.string()
-               .email("Formato de correo no valido")
-               .required("Nombre de usario o Correo requerido"),
-            password: Yup.string()
-               .trim()
-               .min(6, "Mínimo 6 caracteres")
-               .required("Contraseña requerida"),
-         });
-      else
-         validationSchema = Yup.object().shape({
-            email: Yup.string()
-               .email("Formato de correo no valido")
-               .required("Nombre de usario o Correo requerido"),
-            password: Yup.string()
-               .trim()
-               .min(6, "Mínimo 6 caracteres")
-               .required("Contraseña requerida"),
-         });
-      return validationSchema;
    };
 
    return (

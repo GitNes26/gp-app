@@ -13,6 +13,7 @@ import ButtonCompnent from "./ButtonCompnent";
 import { Ionicons } from "@expo/vector-icons";
 import { handleInputFormik } from "../utils/formats";
 import colors from "../constants/colors";
+import { styled } from "nativewind";
 
 //#region FORMIK COMPONENT
 export const FormikComponent = ({
@@ -101,7 +102,7 @@ export const InputComponent = ({
    }, [idName, values[idName]]);
 
    return (
-      <View className={`mt-2 mb-3 ${otherStyles}`}>
+      <View className={`mb-3 ${otherStyles}`}>
          <Text
             className={`text-base ${isError ? "text-red-600" : "text-primary"} font-msemibold`}>
             {label}
@@ -160,3 +161,99 @@ export const InputComponent = ({
    );
 };
 //#endregion INPUT COMPONENT
+
+//#region RADIO BUTTONS COMPONENT
+// import React from 'react';
+// import { View, Text, TouchableOpacity } from 'react-native';
+// import { styled } from 'nativewind';
+// import React, { useState } from 'react';
+// import { View } from 'react-native';
+// import RadioButton from './RadioButton';
+// import React from 'react';
+// import { View, Text } from 'react-native';
+// import RadioGroup from './RadioGroup';
+
+const RadioButton = ({ label, value, selected, onPress, horizontal }) => {
+   return (
+      <TouchableOpacity
+         onPress={() => onPress(value)}
+         className={`flex-row items-center my-2 ${horizontal && "mx-3"}`}>
+         <View
+            className={`w-6 h-6 rounded-full border-2 border-gray-400 ${selected ? "border-primary-200" : ""} justify-center items-center`}>
+            {selected && (
+               <View className={`w-3 h-3 rounded-full bg-primary-200`} />
+            )}
+         </View>
+         <Text
+            className={`ml-2 font-mregular text-gray-800 ${selected && "font-msemibold"} `}>
+            {label}
+         </Text>
+      </TouchableOpacity>
+   );
+};
+export default styled(RadioButton);
+
+const RadioGroup = ({ options, onValueChange, horizontal }) => {
+   const [selectedValue, setSelectedValue] = useState(null);
+
+   const handlePress = (value) => {
+      setSelectedValue(value);
+      onValueChange(value);
+   };
+
+   return (
+      <View className={`${horizontal && "flex-row"} `}>
+         {options.map((option) => (
+            <RadioButton
+               key={option.value}
+               label={option.label}
+               value={option.value}
+               selected={selectedValue === option.value}
+               onPress={handlePress}
+               horizontal={horizontal}
+            />
+         ))}
+      </View>
+   );
+};
+
+const options = [
+   { label: "Opción 1", value: "option1" },
+   { label: "Opción 2", value: "option2" },
+   { label: "Opción 3", value: "option3" },
+];
+
+export const RadioButtonComponent = (
+   idName,
+   label,
+   placeholder,
+   helperText,
+   loading,
+   readOnly,
+   otherStyles,
+   formik,
+   ...props
+) => {
+   // const formik = useFormikContext();
+   const { values, touched, errors, handleChange, handleBlur, setFieldValue } =
+      formik;
+   const error = touched[idName] && errors[idName] ? errors[idName] : null;
+   const isError = error == null ? false : true;
+   const inputRef = useRef(null);
+
+   const handleValueChange = (value) => {
+      console.log("Selected:", value);
+   };
+
+   return (
+      <View className="flex-1 justify-center items-center p-4">
+         <Text
+            className={`text-base ${isError ? "text-red-600" : "text-primary"} font-msemibold`}>
+            Selecciona una opción:
+         </Text>
+         <RadioGroup options={options} onValueChange={handleValueChange} />
+      </View>
+   );
+};
+
+//#endregion RADIO BUTTONS COMPONENT

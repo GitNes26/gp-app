@@ -69,7 +69,7 @@ const Report = () => {
 
    // useEffect(() => {}, [formData]);
 
-   if (!auth && !affair) return router.replace("(main)");
+   // if (!auth ) return router.replace("(main)");
 
    return (
       <SafeAreaView className={"h-full"}>
@@ -77,7 +77,7 @@ const Report = () => {
          <HeaderComponent />
          <View className={"w-full justify-center items-center mb-5 -mt-5"}>
             <Text className={"text-2xl font-mextrabold mt-10 text-primary-200"}>
-               Reporte <Text className={`text-black`}>{affair.asunto}</Text>
+               Reporte <Text className={`text-black`}>{affair?.asunto}</Text>
             </Text>
          </View>
          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
