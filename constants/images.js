@@ -1,4 +1,5 @@
 import profile from "../assets/profile.png";
+import profile_manada from "../assets/profile_manada.png";
 import logo from "../assets/images/logo.png";
 import logoGPDgray from "../assets/images/logo_gpd_gray.png";
 import logoGray from "../assets/images/logo_gray.png";
@@ -29,6 +30,7 @@ import userSolo from "../assets/images/user_solo.png";
 
 export default {
    profile,
+   profile_manada,
    logo,
    logoGPDgray,
    logoGray,

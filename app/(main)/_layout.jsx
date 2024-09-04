@@ -10,6 +10,7 @@ import images from "../../constants/images";
 import LogoComponent from "../../components/LogoComponent";
 import {
    DrawerContentScrollView,
+   DrawerItem,
    DrawerItemList,
 } from "@react-navigation/drawer";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -23,6 +24,7 @@ const data = [
       name: "index",
       label: "Inicio",
       headerShown: false,
+      show: true,
       title: () => (
          <View className={`justify-center items-center `}>
             <Image
@@ -38,10 +40,11 @@ const data = [
       },
    },
    {
-      name: "report",
+      name: "my-reports",
       label: "Mis Reporte",
       title: "Reportes",
       headerShown: false,
+      show: true,
       icon: {
          focus: "reader",
          disfocus: "reader-outline",
@@ -52,6 +55,7 @@ const data = [
       label: "Mi Perfil",
       title: "",
       headerShown: false,
+      show: true,
       icon: {
          focus: "person",
          disfocus: "person-outline",
@@ -62,6 +66,18 @@ const data = [
       label: "Demo",
       title: "Demo",
       headerShown: true,
+      show: true,
+      icon: {
+         focus: "settings",
+         disfocus: "settings-outline",
+      },
+   },
+   {
+      name: "[affairId]",
+      label: "AffairId",
+      title: "Reporte reporte",
+      headerShown: false,
+      show: false,
       icon: {
          focus: "settings",
          disfocus: "settings-outline",
@@ -79,17 +95,21 @@ const dataStack = [
    },
 ];
 
-const CustomDrawerContent = ({ ...props }) => {
+const CustomDrawerContent = async ({ ...props }) => {
    const { loading, setLoading } = useGlobalStore();
    const router = useRouter();
    const { top, bottom } = useSafeAreaInsets();
 
+   const { auth, isLoggedIn } = useAuthStore();
+
    const handlePressLogout = async () => {
       setLoading(true);
       await logout();
-      // router.dismissAll();
+      router.dismissAll();
       setLoading(false);
    };
+
+   if (!auth && !isLoggedIn) return;
 
    return (
       <View className={"flex-1"}>
@@ -98,32 +118,29 @@ const CustomDrawerContent = ({ ...props }) => {
             contentContainerStyle={{ backgroundColor: colors.primary[200] }}>
             <View className={`justify-center items-center py-5 `}>
                <Image
-                  source={images.profile}
+                  source={images.profile_manada}
                   className={"w-[100px] h-[100px] rounded-full"}
-                  resizeMode="cover"
+                  resizeMode="contain"
                />
                <Text className={`font-msemibold text-primary-100 text-[15px]`}>
-                  Nombre de Usuario
+                  {auth.email}
                </Text>
             </View>
             <View className={`bg-white pt-1`}>
                <DrawerItemList {...props} />
-               {/* <DrawerItem
-                  label={"Direcctorio"}
-                  onPress={() => router.replace("/")}
-               /> */}
             </View>
          </DrawerContentScrollView>
          <View
-            className={`py-3 px-5 pb-[${20 + bottom}]`}
+            className={`pb-[${20 + bottom}]`}
             style={{ borderTopColor: colors.gray[100], borderTopWidth: 1 }}>
             <ButtonCompnent
-               containerStyles={`bg-gray-500`}
+               containerStyles={`w-full bg-gray-100/50 rounded-none`}
+               textStyles={`text-gray-500`}
                icon={
                   <Ionicons
                      name="arrow-back-circle-sharp"
                      size={22}
-                     color="white"
+                     color={colors.gray[500]}
                   />
                }
                title={"Cerrar Sesión"}
@@ -174,6 +191,9 @@ const DrawerGroup = () => {
                key={`key-drawer-screen-${item.name}`}
                name={item.name} // This is the name of the page and must match the url from root
                options={({ route }) => ({
+                  drawerItemStyle: {
+                     display: !item.show ? "none" : "flex",
+                  },
                   headerShown: item.headerShown,
                   drawerLabel: item.label,
                   headerTitle: item.title,
@@ -205,27 +225,14 @@ const DrawerGroup = () => {
 const MainLayout = () => {
    const { auth, isLoggedIn } = useAuthStore();
 
-   // if (!auth) {
-   //    // router.canDismiss() && router.dismissAll();
-   //    return <Redirect href="(auth)" />;
+   // if (!auth && !isLoggedIn) {
+   //    console.log("ya no tengo auth");
+   //    // console.log("puedo regresar?", router.canDismiss());
+   //    return router.replace("(auth)");
+   //    return <Redirect href={"(auth)"} />;
    // }
-   // useEffect(() => {
-   //    console.log("🚀 MAINLAYOUT ~ useEffect ~ isLoggedIn:", isLoggedIn);
 
-   //    if (!isLoggedIn) {
-   //       // Usamos el router de Expo para realizar la redirección
-   //       console.log(
-   //          "🚀 ~ useEffect ~ Usamos el router de Expo para realizar la redirección:",
-   //       );
-   //       router.replace("(auth)");
-   //    }
-   // }, [isLoggedIn]);
-
-   // useEffect(() => {
-   //    console.log("🚀 ~ MainLayout ~ auth:", auth);
-   // }, [auth]);
-
-   // if (!isLoggedIn) return router.replace("/");
+   useEffect(() => {}, []);
 
    return (
       <GestureHandlerRootView style={{ flex: 1 }}>

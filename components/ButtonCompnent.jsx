@@ -14,6 +14,7 @@ const ButtonCompnent = ({
    containerStyles,
    textStyles,
    isLoading,
+   colorLoading = colors.primary[100],
    icon = null,
    positionIcon = "start",
 }) => {
@@ -32,7 +33,7 @@ const ButtonCompnent = ({
             {isLoading && (
                <ActivityIndicator
                   size={"small"}
-                  color={colors.primary[100]}
+                  color={colorLoading}
                   className={`ml-2 pt-2`}
                   // className={`absolute -top-[50%] left-[40%]`}
                />

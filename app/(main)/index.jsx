@@ -40,7 +40,7 @@ const Index = () => {
    };
 
    const handlePressCategory = (id) => {
-      const item = affairs.find((item) => item.id === id);
+      const item = affairs.find((item) => item.asunto_id === id);
       setAffair(item);
       router.push(`/${id}`);
    };
@@ -64,15 +64,15 @@ const Index = () => {
             {/* Grid de Categorías */}
             <FlatList
                data={affairs}
-               keyExtractor={(item, index) => `${item.id}-${index}`}
+               keyExtractor={(item, index) => `${item.asunto_id}-${index}`}
                numColumns={3}
                renderItem={({ item }) => (
                   <CategoryItem
-                     key={`key-${item.id}-${item.asunto}`}
+                     key={`key-${item.asunto_id}-${item.asunto}`}
                      // icon={}
                      uriIcon={item.icono}
                      title={item.asunto}
-                     onPress={() => handlePressCategory(item.id)}
+                     onPress={() => handlePressCategory(item.asunto_id)}
                   />
                )}
                ListEmptyComponent={() => (

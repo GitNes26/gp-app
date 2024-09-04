@@ -61,6 +61,7 @@ export default function CameraComponent({
          ToastAndroid.LONG,
          ToastAndroid.CENTER,
       );
+      console.log("🚀 ~ handleApprovedPhoto ~ photo.base64:", photo.base64);
       await getData(photo.base64);
       setPoto(null);
       setOpenModal(false);

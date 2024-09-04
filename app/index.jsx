@@ -25,15 +25,11 @@ export default function App() {
    useEffect(() => {
       const init = async () => {
          console.log("🚀 INDEXapp ~ useEffect ~ isLoggedIn:", isLoggedIn);
-         await checkLoggedIn();
+         // await checkLoggedIn();
          if (auth && isLoggedIn) {
             console.log("toy requetelogeado");
-            router.replace("(main)");
+            router.push("(main)");
          }
-         // return () => {
-         //    if (isLoggedIn) return <Redirect href={"(main)"} />;
-         //    else return <Redirect href={"(auth)"} />;
-         // };
       };
       init();
    }, [isLoggedIn]);

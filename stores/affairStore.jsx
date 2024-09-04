@@ -18,23 +18,25 @@ export default useAffairStore;
 
 export const getAllAffairs = async () => {
    // const setAffair = useAffairStore((state) => state.setAffair);
-   const affairs = useAffairStore.getState().affairs;
+   const auth = useAuthStore.getState().auth;
    const setAllAffairs = useAffairStore.getState().setAllAffairs;
 
    try {
-      // await checkLoggedIn();
+      await checkLoggedIn();
 
-      const req = await ApiUrl("/asuntos", {
-         method: "GET",
-      });
-      // console.log("🚀 ~ getAllAffairs ~ req:", req.data.res);
-      const res = req.data.data;
+      if (auth) {
+         const req = await ApiUrl("/asuntosdep", {
+            method: "GET",
+         });
+         // console.log("🚀 ~ getAllAffairs ~ req:", req.data.res);
+         const res = req.data.data;
 
-      const affairsApp = await res.result.filter((item) => item.app === 1);
-      res.result = affairsApp;
-      // console.log("🚀 ~ getAllAffairs ~ res:", res);
-      await setAllAffairs(res.result);
-      return res;
+         const affairsApp = await res.result.filter((item) => item.app === 1);
+         res.result = affairsApp;
+         // console.log("🚀 ~ getAllAffairs ~ res:", res);
+         await setAllAffairs(res.result);
+         return res;
+      }
    } catch (error) {
       console.log("🚀 ~ getAllAffairs ~ error:", error);
    }

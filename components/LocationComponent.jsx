@@ -15,7 +15,7 @@ export const getLocation = async () => {
       const currentLocation = await getUbication(coords);
       return currentLocation;
    } catch (error) {
-      console.log("🚀 ~ getLocation ~ error:", error);
+      console.log("🚀 ~ EXPORT getLocation ~ error:", error);
    }
 };
 export const getUbication = async (coords) => {
@@ -29,7 +29,7 @@ export const getUbication = async (coords) => {
       // if (getData) getData(location);
       return currentLocation;
    } catch (error) {
-      console.log("🚀 ~ getLocation ~ error:", error);
+      console.log("🚀 ~ EXPORT getUbication ~ error:", error);
    }
 };
 
@@ -43,8 +43,10 @@ const LocationComponent = ({
       ubication: null,
    });
    const [status, requestPermission] = Location.useBackgroundPermissions();
+   const [isLoading, setIsLoading] = useState(false);
 
    const requestPermision = async () => {
+      setIsLoading(true);
       const { status } = await Location.requestForegroundPermissionsAsync();
       // console.log("🚀 ~ requestPermision ~ status:", status);
       if (status !== Location.PermissionStatus.GRANTED) {
@@ -62,10 +64,12 @@ const LocationComponent = ({
          );
       }
       await getLocation();
+      setIsLoading(false);
    };
 
    const getLocation = async () => {
       try {
+         setIsLoading(true);
          const currentPosition = await Location.getCurrentPositionAsync({});
          setLocation(currentPosition);
          const coords = {
@@ -85,9 +89,10 @@ const LocationComponent = ({
             ubication: ubication[0],
          };
          setLocation(currentLocation);
+         setIsLoading(false);
          if (getData) getData(location);
       } catch (error) {
-         console.log("🚀 ~ getLocation ~ error:", error);
+         console.log("🚀 ~ getUbication ~ error:", error);
       }
    };
 
@@ -101,6 +106,8 @@ const LocationComponent = ({
          {/* <LoadingComponent /> */}
 
          <ButtonCompnent
+            isLoading={isLoading}
+            colorLoading="white"
             title={textButton}
             containerStyles={styleButton}
             handleOnPress={getLocation}

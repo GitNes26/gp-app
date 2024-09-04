@@ -1,18 +1,9 @@
-import {
-   Image,
-   ScrollView,
-   StyleSheet,
-   Text,
-   ToastAndroid,
-   View,
-} from "react-native";
+import { Image, ScrollView, Text, View } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../../constants/images";
-import { StatusBar } from "expo-status-bar";
 import colors from "../../constants/colors";
-import ButtonCompnent from "../../components/ButtonCompnent";
-import { Link, router } from "expo-router";
+import { Link } from "expo-router";
 import { Foundation } from "@expo/vector-icons";
 import FooterComponent from "../../components/FooterComponent";
 import HeaderComponent from "../../components/HeaderComponent";
@@ -23,9 +14,7 @@ import {
 } from "../../components/FormikComonents";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import useAuthStore, { getAllPosts, login } from "../../stores/authStore";
-import useFetch from "../../hooks/useFetch";
-import { getLocation } from "../../components/LocationComponent";
+import { login } from "../../stores/authStore";
 import { validateLocation } from "../../utils/validations";
 
 const SignIn = () => {
@@ -33,15 +22,10 @@ const SignIn = () => {
    // const setLoading = useGlobalStore((state) => state.setLoading);
    const { loading, setLoading } = useGlobalStore();
 
-   const [formData, setFormData] = useState({
-      email: "atc@gomezpalacio.gob.mx",
-      password: "123456",
-   });
-   const formik = useFormik({
-      initialValues: formData,
-      onSubmit: (values) => onSubmit(values),
-      validationSchema: () => validationSchemas(),
-   });
+   const initialValues = {
+      email: "",
+      password: "",
+   };
    const validationSchemas = () => {
       let validationSchema;
       // if (inputUsername)
@@ -67,7 +51,6 @@ const SignIn = () => {
          });
       return validationSchema;
    };
-
    const onSubmit = async (values) => {
       // return console.log("🚀 ~ onSubmit ~ values:", values);
       try {
@@ -93,6 +76,11 @@ const SignIn = () => {
          formik.setSubmitting(false);
       }
    };
+   const formik = useFormik({
+      initialValues: initialValues,
+      onSubmit: (values) => onSubmit(values),
+      validationSchema: () => validationSchemas(),
+   });
 
    return (
       <SafeAreaView className={"h-full"}>

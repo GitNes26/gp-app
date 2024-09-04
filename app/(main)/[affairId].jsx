@@ -3,65 +3,107 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
 import HeaderComponent from "../../components/HeaderComponent";
-import InputComponent from "../../components/InputComponent";
-import ButtonCompnent from "../../components/ButtonCompnent";
 import images from "../../constants/images";
 import FooterComponent from "../../components/FooterComponent";
 import CameraComponent from "../../components/CameraComponent";
 import LocationComponent from "../../components/LocationComponent";
 import useAffairStore from "../../stores/affairStore";
 import useAuthStore from "../../stores/authStore";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import useGlobalStore from "../../stores/globalStore";
+import {
+   FormikComponent,
+   InputComponent,
+} from "../../components/FormikComonents";
+import { postReport } from "../../stores/reportStore";
+import { SimpleToast } from "../../utils/alerts";
+import { base64ToFile } from "../../utils/formats";
 
-const initialValues = {
-   created_at: "",
-   img_evidence: "",
-   lat: "",
-   lon: "",
-   address: "",
-   ref: "",
-   comments: "",
-};
 const Report = () => {
    const { affairId } = useLocalSearchParams();
+   const { loading, setLoading } = useGlobalStore();
 
    const { auth } = useAuthStore();
    const { affair } = useAffairStore();
-   const [formData, setFormData] = useState(initialValues);
-   const [isSubmitting, setIsSubmitting] = useState(false);
+   // console.log("🚀 ~ Report ~ affair:", affair);
+   const initialValues = {
+      id: null,
+      fecha_reporte: "",
+      imgFile: null,
+      imgFilePreview: null,
+      latitud: "",
+      longitud: "",
+      id_user: auth.id,
+      referencias: "",
+      comentarios: "",
+      id_departamento: affair.department_id,
+      id_asunto: affair.asunto_id,
 
-   const handleGetPhoto = (photo64) => {
-      setFormData({ ...formData, img_evidence: photo64 });
+      address: "",
    };
-
-   const handleGetLocation = (data) => {
-      setFormData({
-         ...formData,
-         address: data.ubication.formattedAddress,
-         lat: data.coords.latitude.toString(),
-         lon: data.coords.longitude.toString(),
-      });
-   };
-
-   const onSubmit = (values) => {
-      // return console.log("🚀 ~ onSubmit ~ values:", values);
+   const validationSchema = Yup.object().shape({
+      latitud: Yup.string().required("Latitud requerida"),
+      longitud: Yup.string().required("Longitud requerida"),
+      referencias: Yup.string().required("Referencias requerida"),
+      comentarios: Yup.string().required("Comentarios requeridos"),
+   });
+   const onSubmit = async (values) => {
+      return console.log("🚀 ~ onSubmit ~ values:", values);
       try {
-         setIsSubmitting(true);
-         ToastAndroid.showWithGravity(
-            `REPORTE [${affair.asunto}] LEVANTADO`.toUpperCase(),
-            ToastAndroid.LONG,
-            ToastAndroid.CENTER,
+         setLoading(true);
+         formik.setSubmitting(true);
+
+         const res = await postReport(values);
+         console.log("🚀 ~ onSubmit ~ res:", res);
+         SimpleToast(res.alert_text, "center");
+         SimpleToast(
+            `REPORTE DE [${affair.asunto}] LEVANTADO`.toUpperCase(),
+            "center",
          );
-         // setTimeout(() => {
-         setIsSubmitting(false);
+
+         formik.setSubmitting(false);
+         formik.resetForm();
+
+         setLoading(false);
          router.back();
-         // }, 1500);
       } catch (error) {
          console.log("🚀 ~ onSubmit ~ error:", error);
          throw Error(error);
       } finally {
-         // setIsSubmitting(false);
+         formik.setSubmitting(false);
       }
    };
+   const formik = useFormik({
+      initialValues: initialValues,
+      onSubmit: (values) => onSubmit(values),
+      validationSchema: validationSchema,
+   });
+
+   const handleGetPhoto = async (photo64) => {
+      formik.setFieldValue("imgFilePreview", photo64);
+      // const compressedFile = new File([photo64], "evidencia.jpg", {
+      //    type: "image/jpeg",
+      //    lastModified: Date.now(),
+      // });
+      console.log("🚀 ~ handleGetPhoto ~ photo64:", photo64);
+      // const file = await base64ToFile(
+      //    "data:image/jpg;base64," + photo64,
+      //    "evidencia.jpg",
+      // );
+      // console.log("🚀 ~ handleGetPhoto ~ compressedFile:", file);
+      // formik.setFieldValue("imgFile", file);
+   };
+
+   const handleGetLocation = (data) => {
+      formik.setFieldValue("address", data.ubication.formattedAddress);
+      formik.setFieldValue("latitud", data.coords.latitude.toString());
+      formik.setFieldValue("longitud", data.coords.longitude.toString());
+   };
+
+   // setInterval(() => {
+   //    formik.setFieldValue("fecha_reporte", new Date());
+   // }, 1000);
 
    // useEffect(() => {
    //    console.log("useEffect del reporte");
@@ -81,26 +123,31 @@ const Report = () => {
             </Text>
          </View>
          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-            <View className="flex-1 px-5">
+            <FormikComponent
+               formik={formik}
+               textBtnSubmit={"REGISTRARME"}
+               containerStyles={`mx-5`}>
                <InputComponent
-                  title={"Fecha y hora"}
-                  // value={formData.created_at}
-                  // handlChangeText={(e) => setFormData({ ...formData, created_at: e })}
-                  otherStyles={"mt-7"}
-                  keyboardType={"datetime"}
-                  placeholder={"12:00"}
+                  formik={formik}
+                  idName={"fecha_reporte"}
+                  label={"Fecha del reporte"}
+                  placeholder={"fecha actual"}
+                  // helperText={"texto de ayuda"}
+                  textStyleCase={false}
+                  // keyboardType={"email-address"}
                />
+
                <View className={`flex-row py-4 w-full`}>
                   <View
                      className={`w-1/2 justify-center items-center border border-gray-300 rounded-2xl`}>
                      <Image
                         source={
-                           formData.img_evidence === ""
+                           formik.values.imgFilePreview === null
                               ? images.camera
                               : {
                                    uri:
                                       "data:image/jpg;base64," +
-                                      formData.img_evidence,
+                                      formik.values.imgFilePreview,
                                 }
                         }
                         className={`w-[95%] h-40 rounded-3xl`}
@@ -119,6 +166,7 @@ const Report = () => {
                      />
                   </View>
                </View>
+
                <View className={`flex-row py-4 w-full`}>
                   <View className={`w-1/2 justify-center items-center`}>
                      <Image
@@ -130,7 +178,7 @@ const Report = () => {
                         className={`text-gray-500 text-center font-mregular italic mb-2 px-1`}>
                         Ubicación detectada (aprox):{" "}
                         <Text className={`font-mmedium`}>
-                           {formData.address}
+                           {formik.values.address}
                         </Text>
                      </Text>
                   </View>
@@ -146,51 +194,52 @@ const Report = () => {
                      />
                   </View>
                </View>
+
                <InputComponent
-                  title={"Latitud"}
-                  value={formData.lat}
-                  // handlChangeText={(e) => setFormData({ ...formData, lat: e })}
-                  otherStyles={"mt-7"}
-                  keyboardType={"number"}
-                  placeholder={"25.252525"}
+                  formik={formik}
+                  idName={"latitud"}
+                  label={"Latitud"}
+                  placeholder={"00.00000"}
+                  // helperText={"texto de ayuda"}
+                  textStyleCase={false}
                   readOnly={true}
+                  // keyboardType={"email-address"}
                />
                <InputComponent
-                  title={"Longitud"}
-                  value={formData.lon}
-                  // handlChangeText={(e) => setFormData({ ...formData, lon: e })}
-                  otherStyles={"mt-7"}
-                  keyboardType={"number"}
-                  placeholder={"25.252525"}
+                  formik={formik}
+                  idName={"longitud"}
+                  label={"Longitud"}
+                  placeholder={"00.00000"}
+                  // helperText={"texto de ayuda"}
+                  textStyleCase={false}
                   readOnly={true}
+                  // keyboardType={"email-address"}
                />
+
                <InputComponent
-                  title={"Referncias"}
-                  value={formData.ref}
-                  handlChangeText={(e) => setFormData({ ...formData, ref: e })}
-                  otherStyles={"mt-7"}
-                  // keyboardType={"text"}
-                  placeholder={"Describa referencias del lugar"}
-                  rows={5}
-               />
-               <InputComponent
-                  title={"Comentarios/Reporte"}
-                  value={formData.comments}
-                  handlChangeText={(e) =>
-                     setFormData({ ...formData, comments: e })
+                  formik={formik}
+                  idName={"referencias"}
+                  label={"Referencias"}
+                  placeholder={
+                     "Describe el entorno para ubicar mejor el lugar..."
                   }
-                  otherStyles={"mt-7"}
-                  // keyboardType={"text"}
-                  placeholder={"Comentarios y/o reporte"}
+                  // helperText={"texto de ayuda"}
+                  textStyleCase={false}
                   rows={5}
+                  // keyboardType={"email-address"}
                />
-               <ButtonCompnent
-                  title={"reportar"}
-                  handleOnPress={onSubmit}
-                  containerStyles={"mt-7 mb-5"}
-                  isLoading={isSubmitting}
+
+               <InputComponent
+                  formik={formik}
+                  idName={"comentarios"}
+                  label={"Comentarios/Reporte"}
+                  placeholder={"Describe el asunto..."}
+                  // helperText={"texto de ayuda"}
+                  textStyleCase={false}
+                  rows={5}
+                  // keyboardType={"email-address"}
                />
-            </View>
+            </FormikComponent>
             <FooterComponent />
          </ScrollView>
       </SafeAreaView>

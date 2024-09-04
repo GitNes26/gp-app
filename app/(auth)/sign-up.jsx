@@ -23,51 +23,72 @@ import {
 } from "../../components/FormikComonents";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import useGlobalStore from "../../stores/globalStore";
+import { signup } from "../../stores/authStore";
 
 const SignUp = () => {
    const navigation = useNavigation();
+   const { loading, setLoading } = useGlobalStore();
 
-   const [formData, setFormData] = useState({
-      email: "atc@gomezpalacio.gob.mx",
-      password: "123456",
-   });
+   const initialValues = {
+      id: null,
+      email: "",
+      password: "",
+      role_id: 3,
+      phone: "",
+      name: "",
+      paternal_last_name: "",
+      maternal_last_name: "",
+      curp: "",
+      sexo: "",
+   };
    const validationSchema = Yup.object().shape({
       email: Yup.string()
          .email("Formato de correo no valido")
-         .required("Nombre de usario o Correo requerido"),
+         .required("Correo requerido"),
       password: Yup.string()
          .trim()
          .min(6, "Mínimo 6 caracteres")
          .required("Contraseña requerida"),
+      phone: Yup.string()
+         .min(10, "El número telefónico debe ser a 10 digitos")
+         .required("Teléfono requerido"),
+      name: Yup.string().required("Nombre(s) requerido(s)"),
+      paternal_last_name: Yup.string().required("Apellido Paterno requerido"),
+      maternal_last_name: Yup.string().required("Apellido Materno requerido"),
+      curp: Yup.string()
+         .matches(
+            /^[A-Z]{4}[0-9]{6}[HM][A-Z]{2}[A-Z0-9]{4}[0-9]{1}$/,
+            "Formato de CURP invalido",
+         )
+         .required("CURP requerido"),
+      sexo: Yup.string().trim().required("Género requerido"),
    });
-
-   const formik = useFormik({
-      initialValues: formData,
-      onSubmit: (values) => onSubmit(values),
-      validationSchema: () => validationSchemas(),
-   });
-   const [isSubmitting, setIsSubmitting] = useState(false);
-
-   const onSubmit = ({ values }) => {
-      console.log("🚀 ~ onSubmit ~ values:", values);
+   const onSubmit = async (values) => {
+      // console.log("🚀 ~ onSubmit ~ values:", values);
       try {
-         setIsSubmitting(true);
-         ToastAndroid.showWithGravity(
-            `Cuenta creada: Bienvenido ${form.username}`,
-            ToastAndroid.LONG,
-            ToastAndroid.CENTER,
-         );
-         // setTimeout(() => {
-         setIsSubmitting(false);
-         navigation.canGoBack() && navigation.goBack();
-         // }, 1500);
+         setLoading(true);
+         formik.setSubmitting(true);
+
+         await signup(values);
+
+         formik.setSubmitting(false);
+         setLoading(true);
+
+         formik.resetForm();
+         setLoading(false);
       } catch (error) {
          console.log("🚀 ~ onSubmit ~ error:", error);
          throw Error(error);
       } finally {
-         // setIsSubmitting(false);
+         formik.setSubmitting(false);
       }
    };
+   const formik = useFormik({
+      initialValues: initialValues,
+      onSubmit: (values) => onSubmit(values),
+      validationSchema: validationSchema,
+   });
 
    return (
       <SafeAreaView className={"h-full"}>
@@ -117,6 +138,7 @@ const SignUp = () => {
                      placeholder={"Ingresa tu número a 10 dígitos"}
                      // helperText={"texto de ayuda"}
                      // textStyleCase={false}
+                     maxLength={10}
                      keyboardType={"phone-pad"}
                   />
                   <InputComponent
@@ -130,7 +152,7 @@ const SignUp = () => {
                   />
                   <InputComponent
                      formik={formik}
-                     idName={"name"}
+                     idName={"paternal_last_name"}
                      label={"Apellido Paterno"}
                      placeholder={"Ingresa tu apellido paterno"}
                      // helperText={"texto de ayuda"}
@@ -139,7 +161,7 @@ const SignUp = () => {
                   />
                   <InputComponent
                      formik={formik}
-                     idName={"name"}
+                     idName={"maternal_last_name"}
                      label={"Apellido Materno"}
                      placeholder={"Ingresa tu apellido materno"}
                      // helperText={"texto de ayuda"}
@@ -157,12 +179,16 @@ const SignUp = () => {
                   />
                   <RadioButtonComponent
                      formik={formik}
-                     idName={"name"}
-                     label={"Nombre(s)"}
-                     placeholder={"Ingresa tu(s) nombre(s)"}
-                     // helperText={"texto de ayuda"}
+                     idName={"sexo"}
+                     label={"Género"}
+                     options={[
+                        { label: "Hombre", value: "M" },
+                        { label: "Mujer", value: "F" },
+                     ]}
+                     // helperText={""}
+                     // horizontal={true}
                      textStyleCase={false}
-                     keyboardType={"phone-pad"}
+                     // loading={true}
                   />
                </FormikComponent>
 

@@ -46,6 +46,7 @@ export const login = async (data) => {
          return;
       }
       const res = req.data.data;
+      // console.log("🚀 ~ login ~ res:", res);
       if (!res.status) {
          setLoading(false);
          ToastAndroid.showWithGravity(
@@ -83,6 +84,7 @@ export const logout = async () => {
 
    try {
       await checkLoggedIn();
+      console.log("🚀 ~ logout ~ auth:", auth);
 
       if (auth) {
          const req = await ApiUrl(`/logout/${auth.id}`, {
@@ -103,16 +105,17 @@ export const logout = async () => {
       ApiUrl.defaults.headers.common["Authorization"] = null;
       ApiUrlFiles.defaults.headers.common["Authorization"] = null;
       // console.log("Todas las cabeceras:", ApiUrl.defaults.headers);
-      await setAuth(null);
       await setIsLoggedIn(false);
-      router.canDismiss()
-         ? router.dismiss()
-         : router.replace("../app/index.jsx");
+      await setAuth(null);
+      router.canDismiss() ? router.dismiss() : router.replace("(auth)");
       // return <Redirect href={"(auth)"} />;
       console.log("cehcado2");
    } catch (error) {
       console.log("🚀 ~ logout ~ error:", error);
+      await setAuth(null);
+      await setIsLoggedIn(false);
       setLoading(false);
+      // router.canDismiss() ? router.dismiss() : null;
       ToastAndroid.showWithGravity(
          "Error en el servidor",
          ToastAndroid.LONG,
@@ -123,26 +126,67 @@ export const logout = async () => {
 };
 
 export const signup = async (data) => {
-   // const auth = useAuthStore.getState().auth;
-   // const setAuth = useAuthStore.getState().setAuth;
+   const setLoading = useGlobalStore.getState().setLoading;
+   const setIsLoggedIn = useAuthStore.getState().setIsLoggedIn;
 
    try {
-      // const req = await ApiUrl("/login", {
-      //    method: "POST",
-      //    data,
-      // });
-      // // console.log("🚀 ~ login ~ req:", req.data.res);
-      // const res = req.data.data;
-      // // console.log("🚀 ~ login ~ res:", res);
-      // await setAuth(data.result);
-      // router.push("(main)");
+      const req = await ApiUrl("/users", {
+         method: "POST",
+         data,
+      });
+      // console.log("🚀 ~ signup ~ req:", req);
+      if (!req.data.data) {
+         setLoading(false);
+         ToastAndroid.showWithGravity(
+            "ERROR INESPERADO", //req.data,
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+         );
+         return;
+      }
+      const res = req.data.data;
+      // console.log("🚀 ~ signup ~ res:", res);
+      ToastAndroid.showWithGravity(
+         res.alert_text,
+         ToastAndroid.LONG,
+         ToastAndroid.BOTTOM,
+      );
+      // console.log("🚀 ~ signup ~ res:", res);
+
+      await setIsLoggedIn(false);
+      if (res.status) router.replace("/sign-in");
    } catch (error) {
-      console.log("🚀 ~ login ~ error:", error);
+      console.log("🚀 ~ signup ~ error:", error);
+      setLoading(false);
+      ToastAndroid.showWithGravity(
+         error,
+         ToastAndroid.LONG,
+         ToastAndroid.BOTTOM,
+      );
+   }
+};
+
+export const getProfile = async () => {
+   const auth = useAuthStore.getState().auth;
+
+   try {
+      if (auth) {
+         const req = await ApiUrl(`/users/${auth.id}`, {
+            method: "GET",
+         });
+         // return console.log("🚀 ~ getProfile ~ req:", req.data.res);
+         const res = req.data.data;
+         return true;
+      }
+   } catch (error) {
+      console.log("🚀 ~ getProfile ~ error:", error);
+      return false;
    }
 };
 
 export const checkLoggedIn = async () => {
    const auth = useAuthStore.getState().auth;
+   const setAuth = useAuthStore.getState().setAuth;
    const setIsLoggedIn = useAuthStore.getState().setIsLoggedIn;
    const isLoggedIn = useAuthStore.getState().isLoggedIn;
 
@@ -150,20 +194,29 @@ export const checkLoggedIn = async () => {
    let loggedIn = isLoggedIn;
 
    if (!auth) {
-      console.log("checkLoggedIn ~ no estoy logeado");
+      console.log("checkLoggedIn ~ no tengo auth");
       loggedIn = false;
+      await setAuth(null);
       await setIsLoggedIn(loggedIn);
       // router.replace("(auth)");
       // return;
    } else {
-      loggedIn = true;
-      if (auth.token && !ApiUrl.defaults.headers.common["Authorization"]) {
-         ApiUrl.defaults.headers.common["Authorization"] =
-            `Bearer ${auth.token}`;
-         ApiUrlFiles.defaults.headers.common["Authorization"] =
-            `Bearer ${auth.token}`;
+      console.log("checkLoggedIn ~ SI tengo auth");
+      // const authValidate = await getProfile();
+      if (!isLoggedIn) {
+         loggedIn = false;
+         await setAuth(null);
+         await setIsLoggedIn(loggedIn);
+      } else {
+         loggedIn = true;
+         if (auth.token) {
+            ApiUrl.defaults.headers.common["Authorization"] =
+               `Bearer ${auth.token}`;
+            ApiUrlFiles.defaults.headers.common["Authorization"] =
+               `Bearer ${auth.token}`;
+         }
+         setIsLoggedIn(loggedIn);
       }
-      setIsLoggedIn(loggedIn);
    }
 };
 

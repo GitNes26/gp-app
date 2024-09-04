@@ -460,3 +460,30 @@ export function setPropsOriginals(original, newArray) {
 //       </div>
 //    );
 // };
+
+export async function base64ToFile(base64String, fileName) {
+   console.log("🚀 ~ base64ToFile ~ base64String:", base64String);
+   return true;
+   // Divide la cadena Base64 en dos partes: la primera es el encabezado de datos y la segunda son los datos en sí.
+   const arr = base64String.split(",");
+
+   // Extrae el tipo MIME del encabezado de datos.
+   const mime = arr[0].match(/:(.*?);/)[1];
+
+   // Decodifica la parte base64 (los datos en sí).
+   const bstr = atob(arr[1]);
+
+   // Crea un array de bytes (Uint8Array) a partir de los datos decodificados.
+   let n = bstr.length;
+   const u8arr = new Uint8Array(n);
+   while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+   }
+
+   // Crea un objeto Blob utilizando los datos binarios.
+   const blob = new Blob([u8arr], { type: mime });
+
+   // Crea un objeto File utilizando el Blob y el nombre del archivo.
+   console.log(file);
+   return new File([blob], fileName, { type: mime });
+}

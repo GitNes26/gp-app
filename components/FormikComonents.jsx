@@ -20,6 +20,7 @@ export const FormikComponent = ({
    formik,
    children,
    textBtnSubmit = "ENVIAR",
+   containerStyles,
 }) => {
    const {
       handleChange,
@@ -44,7 +45,7 @@ export const FormikComponent = ({
          onSubmit={handleSubmit}
          validationSchema={validationSchema}>
          {({ handleSubmit, setSubmitting, resetForm, errors }) => (
-            <View className={`my-2`}>
+            <View className={`my-2 ${containerStyles}`}>
                {children}
                <ButtonCompnent
                   title={textBtnSubmit}
@@ -86,6 +87,7 @@ export const InputComponent = ({
    textStyleCase = null,
    otherStyles,
    keyboardType,
+   maxLength,
    formik,
    ...props
 }) => {
@@ -102,13 +104,13 @@ export const InputComponent = ({
    }, [idName, values[idName]]);
 
    return (
-      <View className={`mb-3 ${otherStyles}`}>
+      <View className={`mb-5 ${otherStyles}`}>
          <Text
-            className={`text-base ${isError ? "text-red-600" : "text-primary"} font-msemibold`}>
+            className={`text-base pl-3 ${isError ? "text-red-600" : "text-primary"} font-msemibold`}>
             {label}
          </Text>
          <View
-            className={`border-2 border-slate-200 w-full h-16 px-4 bg-slate-50 rounded-2xl focus:border-primary-200 items-center flex-row ${isError && "border-red-600"} ${readOnly && "bg-slate-500"}`}>
+            className={`border-2 border-slate-200 w-full ${!rows && "h-16"} px-4 bg-slate-50 rounded-2xl focus:border-primary-200 items-center flex-row ${isError && "border-red-600"} ${readOnly && "bg-slate-200"}`}>
             <TextInput
                key={`key-${idName}`}
                id={idName}
@@ -130,6 +132,7 @@ export const InputComponent = ({
                // }}
                secureTextEntry={showPassword}
                keyboardType={keyboardType}
+               maxLength={maxLength}
                // textContentType="URL"
                multiline={rows > 0 ? true : false}
                numberOfLines={rows}
@@ -173,11 +176,19 @@ export const InputComponent = ({
 // import { View, Text } from 'react-native';
 // import RadioGroup from './RadioGroup';
 
-const RadioButton = ({ label, value, selected, onPress, horizontal }) => {
+const RadioButton = ({
+   label,
+   value,
+   selected,
+   onPress,
+   horizontal,
+   readOnly,
+}) => {
    return (
       <TouchableOpacity
          onPress={() => onPress(value)}
-         className={`flex-row items-center my-2 ${horizontal && "mx-3"}`}>
+         className={`flex-row items-center my-2 ${horizontal && "mx-3"}`}
+         disabled={readOnly}>
          <View
             className={`w-6 h-6 rounded-full border-2 border-gray-400 ${selected ? "border-primary-200" : ""} justify-center items-center`}>
             {selected && (
@@ -193,7 +204,7 @@ const RadioButton = ({ label, value, selected, onPress, horizontal }) => {
 };
 export default styled(RadioButton);
 
-const RadioGroup = ({ options, onValueChange, horizontal }) => {
+const RadioGroup = ({ options, onValueChange, horizontal, readOnly }) => {
    const [selectedValue, setSelectedValue] = useState(null);
 
    const handlePress = (value) => {
@@ -211,30 +222,31 @@ const RadioGroup = ({ options, onValueChange, horizontal }) => {
                selected={selectedValue === option.value}
                onPress={handlePress}
                horizontal={horizontal}
+               readOnly={readOnly}
             />
          ))}
       </View>
    );
 };
 
-const options = [
-   { label: "Opción 1", value: "option1" },
-   { label: "Opción 2", value: "option2" },
-   { label: "Opción 3", value: "option3" },
-];
-
-export const RadioButtonComponent = (
+// const options = [
+//    { label: "Opción 1", value: "option1" },
+// ];
+export const RadioButtonComponent = ({
    idName,
    label,
+   options,
    placeholder,
    helperText,
    loading,
    readOnly,
    otherStyles,
+   horizontal = true,
    formik,
    ...props
-) => {
+}) => {
    // const formik = useFormikContext();
+   // console.log("🚀 ~ formik:", formik);
    const { values, touched, errors, handleChange, handleBlur, setFieldValue } =
       formik;
    const error = touched[idName] && errors[idName] ? errors[idName] : null;
@@ -243,15 +255,40 @@ export const RadioButtonComponent = (
 
    const handleValueChange = (value) => {
       console.log("Selected:", value);
+      formik.setFieldValue(idName, value);
    };
 
+   useEffect(() => {
+      // console.log("isError", isError);
+   }, [idName, values[idName]]);
+
    return (
-      <View className="flex-1 justify-center items-center p-4">
+      <View className="mb-3 flex-1 justify-center">
          <Text
-            className={`text-base ${isError ? "text-red-600" : "text-primary"} font-msemibold`}>
-            Selecciona una opción:
+            className={`text-base pl-3 ${isError ? "text-red-600" : "text-primary"} font-msemibold`}>
+            {label}
          </Text>
-         <RadioGroup options={options} onValueChange={handleValueChange} />
+         <View
+            className={`border-2 border-slate-200 w-full h-auto p-3 bg-slate-50 rounded-2xl focus:border-primary-200 justify-center items-center  ${isError && "border-red-600"} ${readOnly && "bg-slate-200"}`}>
+            <RadioGroup
+               options={options}
+               onValueChange={handleValueChange}
+               horizontal={horizontal}
+               readOnly={readOnly}
+            />
+            {loading && (
+               <ActivityIndicator
+                  size={"large"}
+                  color={colors.primary[200]}
+                  // className={`ml-1`}
+                  className={`absolute top-[35%] right-[1%]`}
+               />
+            )}
+         </View>
+         <Text
+            className={`text-sm italic px-2 ${isError ? "text-red-600" : "text-gray-400"} font-mlight`}>
+            {isError ? error : helperText}
+         </Text>
       </View>
    );
 };
