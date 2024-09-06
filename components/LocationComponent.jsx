@@ -107,7 +107,7 @@ const LocationComponent = ({
 
          <ButtonCompnent
             isLoading={isLoading}
-            colorLoading="white"
+            colorisLoading="white"
             title={textButton}
             containerStyles={styleButton}
             handleOnPress={getLocation}

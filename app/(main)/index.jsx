@@ -9,10 +9,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import images from "../../constants/images";
-import useFetch from "../../hooks/useFetch";
-import { getAllPhotos } from "../../contexts/GlobalContext";
-import { router, useNavigation } from "expo-router";
+import { router } from "expo-router";
 import FooterComponent from "../../components/FooterComponent";
 import HeaderComponent from "../../components/HeaderComponent";
 import useAffairStore, { getAllAffairs } from "../../stores/affairStore";
@@ -20,7 +17,6 @@ import { API_IMG } from "@env";
 import EmptyComponent from "../../components/EmptyComponent";
 
 const Index = () => {
-   const navigation = useNavigation();
    const { affairs, setAffair } = useAffairStore();
 
    // const {

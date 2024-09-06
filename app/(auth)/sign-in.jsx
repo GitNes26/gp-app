@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../../constants/images";
 import colors from "../../constants/colors";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { Foundation } from "@expo/vector-icons";
 import FooterComponent from "../../components/FooterComponent";
 import HeaderComponent from "../../components/HeaderComponent";
@@ -18,9 +18,8 @@ import { login } from "../../stores/authStore";
 import { validateLocation } from "../../utils/validations";
 
 const SignIn = () => {
-   // const loading = useGlobalStore((state) => state.loading);
-   // const setLoading = useGlobalStore((state) => state.setLoading);
-   const { loading, setLoading } = useGlobalStore();
+   const { isLoading, setIsLoading } = useGlobalStore();
+   // const { isLoading, setIsLoading } = useGlobalStore();
 
    const initialValues = {
       email: "",
@@ -54,11 +53,14 @@ const SignIn = () => {
    const onSubmit = async (values) => {
       // return console.log("🚀 ~ onSubmit ~ values:", values);
       try {
-         setLoading(true);
+         setIsLoading(true);
          formik.setSubmitting(true);
 
          /** VALIDAR QUE ESTE EN TERRITORIO GOMEZPALATINO */
-         await validateLocation();
+         if (!(await validateLocation())) {
+            setIsLoading(false);
+            return;
+         }
 
          // const {
          //    data: res,
@@ -66,9 +68,13 @@ const SignIn = () => {
          //    refetch: refetchPhotos,
          // } = useFetch(login(values));
          const res = await login(values);
+
          formik.setSubmitting(false);
+         setIsLoading(false);
+
+         if (res.status && res.result.token) router.push("(main)");
+
          // router.replace("(main)");
-         setLoading(false);
       } catch (error) {
          console.log("🚀 ~ onSubmit ~ error:", error);
          throw Error(error);

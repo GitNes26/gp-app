@@ -22,7 +22,7 @@ import { base64ToFile } from "../../utils/formats";
 
 const Report = () => {
    const { affairId } = useLocalSearchParams();
-   const { loading, setLoading } = useGlobalStore();
+   const { isLoading, setIsLoading } = useGlobalStore();
 
    const { auth } = useAuthStore();
    const { affair } = useAffairStore();
@@ -34,7 +34,7 @@ const Report = () => {
       imgFilePreview: null,
       latitud: "",
       longitud: "",
-      id_user: auth.id,
+      id_user: auth?.id,
       referencias: "",
       comentarios: "",
       id_departamento: affair.department_id,
@@ -51,7 +51,7 @@ const Report = () => {
    const onSubmit = async (values) => {
       return console.log("🚀 ~ onSubmit ~ values:", values);
       try {
-         setLoading(true);
+         setIsLoading(true);
          formik.setSubmitting(true);
 
          const res = await postReport(values);
@@ -65,7 +65,7 @@ const Report = () => {
          formik.setSubmitting(false);
          formik.resetForm();
 
-         setLoading(false);
+         setIsLoading(false);
          router.back();
       } catch (error) {
          console.log("🚀 ~ onSubmit ~ error:", error);
@@ -100,18 +100,6 @@ const Report = () => {
       formik.setFieldValue("latitud", data.coords.latitude.toString());
       formik.setFieldValue("longitud", data.coords.longitude.toString());
    };
-
-   // setInterval(() => {
-   //    formik.setFieldValue("fecha_reporte", new Date());
-   // }, 1000);
-
-   // useEffect(() => {
-   //    console.log("useEffect del reporte");
-   // }, []);
-
-   // useEffect(() => {}, [formData]);
-
-   // if (!auth ) return router.replace("(main)");
 
    return (
       <SafeAreaView className={"h-full"}>

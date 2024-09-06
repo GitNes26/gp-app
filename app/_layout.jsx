@@ -1,16 +1,12 @@
 import React, { useEffect } from "react";
-import { Redirect, SplashScreen, Stack } from "expo-router";
+import { SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { useColorScheme } from "nativewind";
 import { useColorScheme as useColorSchemeRN } from "react-native";
-import useGlobalStore from "../stores/globalStore";
-import useAuthStore from "../stores/authStore";
 
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
-   const { loading, setLoading } = useGlobalStore();
-
    const [fontsLoaded, error] = useFonts({
       "Montserrat-Black": require("../assets/fonts/Montserrat-Black.ttf"),
       "Montserrat-Bold": require("../assets/fonts/Montserrat-Bold.ttf"),
@@ -29,12 +25,9 @@ const RootLayout = () => {
    useEffect(() => {
       if (error) throw error;
       if (fontsLoaded) SplashScreen.hideAsync();
-      setLoading(false);
    }, [fontsLoaded, error]);
 
    if (!fontsLoaded && !error) return null;
-
-   // if (loading) return;
 
    return (
       <Stack screenOptions={{ headerShown: false }}>

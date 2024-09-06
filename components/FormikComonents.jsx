@@ -80,7 +80,7 @@ export const InputComponent = ({
    placeholder,
    // handlChangeText,
    helperText,
-   loading,
+   isLoading,
    isPassword = false,
    rows = null,
    readOnly,
@@ -147,7 +147,7 @@ export const InputComponent = ({
                   )}
                </TouchableOpacity>
             )}
-            {loading && (
+            {isLoading && (
                <ActivityIndicator
                   size={"large"}
                   color={colors.primary[200]}
@@ -238,7 +238,7 @@ export const RadioButtonComponent = ({
    options,
    placeholder,
    helperText,
-   loading,
+   isLoading,
    readOnly,
    otherStyles,
    horizontal = true,
@@ -276,7 +276,7 @@ export const RadioButtonComponent = ({
                horizontal={horizontal}
                readOnly={readOnly}
             />
-            {loading && (
+            {isLoading && (
                <ActivityIndicator
                   size={"large"}
                   color={colors.primary[200]}

@@ -1,4 +1,4 @@
-import { LoadingButton } from "@mui/lab";
+import { isLoadingButton } from "@mui/lab";
 import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
 import React, {
    forwardRef,
@@ -103,7 +103,7 @@ export const DividerComponent = ({
 
 //#region FORMIK COMPONENT
 //#region IMPORTS
-// import { LoadingButton } from "@mui/lab";
+// import { isLoadingButton } from "@mui/lab";
 // import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
 // import { Button } from "@mui/material";
 // import { Formik } from "formik";
@@ -186,16 +186,16 @@ export const FormikComponent = forwardRef(
                            </Grid>
                         </Grid>
                         <Grid width={"100%"} xs={12}>
-                           <LoadingButton
+                           <isLoadingButton
                               type="submit"
                               disabled={isSubmitting}
-                              loading={isSubmitting}
-                              // loadingPosition="start"
+                              isLoading={isSubmitting}
+                              // isLoadingPosition="start"
                               variant="contained"
                               fullWidth
                               size="large">
                               {textBtnSubmit}
-                           </LoadingButton>
+                           </isLoadingButton>
                            {/* <ButtonGroup variant="outlined" fullWidth> */}
                            <Button
                               type="reset"
@@ -242,7 +242,7 @@ export const InputComponent = ({
    helperText,
    color,
    rows,
-   loading = false,
+   isLoading = false,
    hidden,
    mask,
    variant = "outlined",
@@ -322,7 +322,7 @@ export const InputComponent = ({
                      }
                      onChange={(e) => field.onChange(e)} // Utiliza field.onChange para actualizar el valor en Formik
                      onBlur={(e) => field.onBlur(e)} // Utiliza field.onBlur para manejar el desenfoque y activar la validación
-                     disabled={loading || disabled}>
+                     disabled={isLoading || disabled}>
                      {(inputProps) => (
                         <TextField
                            key={idName}
@@ -399,7 +399,7 @@ export const InputComponent = ({
                            : null;
                      }}
                      {...props}
-                     disabled={loading || disabled}
+                     disabled={isLoading || disabled}
                      fullWidth
                      multiline={rows > 0 ? true : false}
                      rows={rows && rows} // Establece las filas solo si type no está definido
@@ -473,7 +473,7 @@ export const InputComponent = ({
                            : null;
                      }}
                      {...props}
-                     disabled={loading || disabled}
+                     disabled={isLoading || disabled}
                      fullWidth
                      multiline={rows > 0 ? true : false}
                      rows={rows && rows} // Establece las filas solo si type no está definido
@@ -513,7 +513,7 @@ export const InputComponent = ({
                )}
             </>
          )}
-         {loading && (
+         {isLoading && (
             <CircularProgress
                sx={{ position: "relative", top: "-50%", left: "40%" }}
             />
@@ -554,7 +554,7 @@ export const PasswordCompnent = ({
    placeholder,
    helperText,
    color,
-   loading = false,
+   isLoading = false,
    hidden,
    variant = "outlined",
    marginBottom,
@@ -735,7 +735,7 @@ export const PasswordCompnent = ({
                   </Box>
                </FormControl>
             )}
-            {loading && (
+            {isLoading && (
                <CircularProgress
                   sx={{ position: "absolute", top: "13%", left: "40%" }}
                />
@@ -774,8 +774,8 @@ export const Select2Component = ({
    size = "medium",
 
    helperText,
-   // loading = false,
-   // setLoading,
+   // isLoading = false,
+   // setIsLoading,
    color,
    hidden,
    variant = "outlined",
@@ -802,7 +802,7 @@ export const Select2Component = ({
 
    const [dataOptions, setDataOptions] = useState([]);
    const [labelValue, setLabelValue] = useState("Selecciona una opción...");
-   const [loading, setLoading] = useState(false);
+   const [isLoading, setIsLoading] = useState(false);
 
    const handleValue = (name, value) => {
       if (handleGetValue) {
@@ -849,13 +849,13 @@ export const Select2Component = ({
          // console.log("values", values);
 
          if (handleChangeValueSuccess) {
-            setLoading(true);
+            setIsLoading(true);
             await handleChangeValueSuccess(
                idName,
                selectedOption,
                setFieldValue,
             );
-            setLoading(false);
+            setIsLoading(false);
          } //en esta funcion
       } catch (error) {
          console.log(error);
@@ -865,9 +865,9 @@ export const Select2Component = ({
 
    const handleClickRefresh = async () => {
       try {
-         setLoading(true);
+         setIsLoading(true);
          await refreshSelect(refreshSelectParams);
-         setLoading(false);
+         setIsLoading(false);
          Toast.Success("Actualizada");
       } catch (error) {
          console.log(error);
@@ -877,7 +877,7 @@ export const Select2Component = ({
 
    useEffect(() => {
       // console.log("Select2Component ~ UseEffect ~ options", idName, options);
-      setLoading(true);
+      setIsLoading(true);
       const _options = [{ id: 0, label: "Selecciona una opción..." }];
       // console.log(options);
       options.map((option, index) => {
@@ -894,14 +894,14 @@ export const Select2Component = ({
       // }
       Number(formik.values[idName]) == 0 &&
          setLabelValue("Selecciona una opción...");
-      setLoading(false);
+      setIsLoading(false);
 
       if (Array.isArray(options) && options.length > 0) {
-         setLoading(false);
+         setIsLoading(false);
       }
       if (!Array.isArray(options)) {
          options = [];
-         setLoading(false);
+         setIsLoading(false);
       }
    }, [options, formik.values[idName]]);
 
@@ -989,7 +989,7 @@ export const Select2Component = ({
                                  //       return <Chip variant="outlined" label={option} key={key} {...tagProps} />;
                                  //    })
                                  // }
-                                 disabled={disabled || loading}
+                                 disabled={disabled || isLoading}
                                  error={isError ? isError : undefined}
                               />
                            );
@@ -1005,7 +1005,7 @@ export const Select2Component = ({
                               color="primary"
                               sx={{ borderRadius: "12px", mr: 1 }}
                               onClick={handleClickRefresh}
-                              disabled={disabled || loading}>
+                              disabled={disabled || isLoading}>
                               <IconReload />
                            </IconButton>
                         </Tooltip>
@@ -1014,7 +1014,7 @@ export const Select2Component = ({
                   <FormHelperText error={isError} id={`ht-${idName}`}>
                      {isError ? error : helperText}
                   </FormHelperText>
-                  {loading && (
+                  {isLoading && (
                      <CircularProgress
                         sx={{
                            position: "absolute",
@@ -1053,7 +1053,7 @@ export const SwitchComponent = ({
    textDisable = "Inactivo",
    // helperText,
    color,
-   loading = false,
+   isLoading = false,
    hidden,
    marginBottom,
    focus,
@@ -1105,7 +1105,7 @@ export const SwitchComponent = ({
                />
             </Button>
          </Tooltip>
-         {loading && (
+         {isLoading && (
             <CircularProgress
                sx={{ position: "relative", top: "-50%", left: "20%" }}
             />
@@ -1127,7 +1127,7 @@ export const SwitchComponent = ({
 
 // =================== COMPONENTE =======================
 export const RadioButtonComponent = ({
-   // loading = false,
+   // isLoading = false,
    xsOffset,
    col,
    idName,
@@ -1145,18 +1145,18 @@ export const RadioButtonComponent = ({
 }) => {
    const { values, errors, touched, handleChange, handleBlur } =
       useFormikContext(); // Obtener valores, errores y funciones de Formik
-   const [loading, setLoading] = useState(false);
+   const [isLoading, setIsLoading] = useState(false);
    const inputRef = useRef(null);
 
    useEffect(() => {
       if (Array.isArray(options) && options.length > 0) {
-         setLoading(false);
+         setIsLoading(false);
       }
       if (Array.isArray(options) && options.length == 0) {
-         setLoading(true);
+         setIsLoading(true);
       }
       if (!Array.isArray(options)) {
-         setLoading(true);
+         setIsLoading(true);
          options = [];
       }
    }, [title, idName, values[idName], options]);
@@ -1227,7 +1227,7 @@ export const RadioButtonComponent = ({
                            />
                         }
                         label={option.label}
-                        disabled={loading}
+                        disabled={isLoading}
                         sx={{
                            mr: rowLayout && 5,
                            marginBottom: rowLayout ? 0 : "8px", // Espacio entre los radio buttons si están en columnas
@@ -1252,7 +1252,7 @@ export const RadioButtonComponent = ({
          <FormHelperText error={isError} id={`ht-${idName}`}>
             {isError ? error : helperText}
          </FormHelperText>
-         {loading && (
+         {isLoading && (
             <CircularProgress
                sx={{ position: "absolute", bottom: "20%", left: "50%" }}
             />
@@ -1272,7 +1272,7 @@ export const RadioButtonComponent = ({
 
 // =================== COMPONENTE =======================
 export const CheckboxComponent = ({
-   loading = false,
+   isLoading = false,
    col,
    label,
    idName,
@@ -1319,7 +1319,7 @@ export const CheckboxComponent = ({
                         setCheckedComponent(checked); // Actualiza el estado del componente
                         formik.setFieldValue(idName, checked ? value : false);
                      }}
-                     disabled={loading || disabled}
+                     disabled={isLoading || disabled}
                      color={color}
                   />
                }
@@ -1336,7 +1336,7 @@ export const CheckboxComponent = ({
                }}
                {...props}
             />
-            {loading && (
+            {isLoading && (
                <CircularProgress
                   sx={{ position: "absolute", top: "40%", left: "40%" }}
                />
@@ -1365,7 +1365,7 @@ export const CheckboxComponent = ({
 
 // =================== COMPONENTE =======================
 export const DatePickerComponent = ({
-   loading = false,
+   isLoading = false,
    col,
    idName,
    label,
@@ -1415,7 +1415,7 @@ export const DatePickerComponent = ({
                            )
                         }
                         error={errors[idName] && touched[idName]}
-                        disabled={loading || disabled}
+                        disabled={isLoading || disabled}
                      />
                      {touched[idName] && errors[idName] && (
                         <FormHelperText error id={`ht-${idName}`}>
@@ -1450,7 +1450,7 @@ export const DatePickerComponent = ({
       setDisabledState,
       setDisabledCity,
       setDisabledColony,
-      setShowLoading,
+      setShowisLoading,
       setDataStates,
       setDataCities,
       setDataColonies,
@@ -1481,7 +1481,7 @@ export const DatePickerComponent = ({
       setDisabledState,
       setDisabledCity,
       setDisabledColony,
-      setShowLoading,
+      setShowisLoading,
       setDataStates,
       setDataCities,
       setDataColonies,
@@ -1509,7 +1509,7 @@ export const getCommunity = async (
    setDisabledState,
    setDisabledCity,
    setDisabledColony,
-   setShowLoading,
+   setShowisLoading,
    setDataStates,
    setDataCities,
    setDataColonies,
@@ -1518,7 +1518,7 @@ export const getCommunity = async (
 ) => {
    try {
       // let _community_id = null;
-      setShowLoading(true);
+      setShowisLoading(true);
       setDisabledState(true);
       setDisabledCity(true);
       setDisabledColony(true);
@@ -1591,7 +1591,7 @@ export const getCommunity = async (
       );
 
       // if (zip !== "" && states.length === 1) {
-      //    setShowLoading(false);
+      //    setShowisLoading(false);
       //    return Toast.Info("No hay comunidades registradas con este C.P.");
       // }
       if (states.length > 1) setDisabledState(false);
@@ -1629,11 +1629,11 @@ export const getCommunity = async (
       );
       // if (!community_id) setFieldValue("community_id", colonies.length == 2 && coloniesComplete[1].id);
       // setFieldValue("colony", community_id ? community_id : colonies[0]["id"]);
-      setShowLoading(false);
+      setShowisLoading(false);
    } catch (error) {
       console.log(error);
       Toast.Error(error);
-      setShowLoading(false);
+      setShowisLoading(false);
    }
 };
 
@@ -1644,8 +1644,8 @@ export const getCommunity = async (
  */
 // =================== COMPONENTE =======================
 export const InputsCommunityComponent = ({
-   // loading = false,
-   // setLoading,
+   // isLoading = false,
+   // setIsLoading,
    formData,
    setFormData,
    hidden,
@@ -1656,15 +1656,15 @@ export const InputsCommunityComponent = ({
    ...props
 }) => {
    const {
-      setCursorLoading,
+      setCursorisLoading,
       disabledState,
       setDisabledState,
       disabledCity,
       setDisabledCity,
       disabledColony,
       setDisabledColony,
-      showLoading,
-      setShowLoading,
+      showisLoading,
+      setShowisLoading,
       dataStates,
       setDataStates,
       dataCities,
@@ -1689,7 +1689,7 @@ export const InputsCommunityComponent = ({
                setDisabledState,
                setDisabledCity,
                setDisabledColony,
-               setShowLoading,
+               setShowisLoading,
                setDataStates,
                setDataCities,
                setDataColonies,
@@ -1714,7 +1714,7 @@ export const InputsCommunityComponent = ({
                setDisabledState,
                setDisabledCity,
                setDisabledColony,
-               setShowLoading,
+               setShowisLoading,
                setDataStates,
                setDataCities,
                setDataColonies,
@@ -1729,8 +1729,8 @@ export const InputsCommunityComponent = ({
       } catch (error) {
          console.log(error);
          Toast.Error(error);
-         // setCursorLoading(false);
-         setShowLoading(false);
+         // setCursorisLoading(false);
+         setShowisLoading(false);
       }
    };
    const handleChangeColony = async (inputName, colony, setFieldValue) => {
@@ -1770,8 +1770,8 @@ export const InputsCommunityComponent = ({
                placeholder={"35000"}
                inputProps={{ maxLength: 5 }}
                onKeyUp={(e) => handleKeyUpZip(e, formik.setFieldValue)}
-               disabled={showLoading}
-               loading={showLoading}
+               disabled={showisLoading}
+               isLoading={showisLoading}
             />
 
             {/* Estado */}
@@ -2001,7 +2001,7 @@ const mySwal = withReactContent(Swal);
 
 export const FileInputComponent = ({
    xsOffset = null,
-   // loading = false,
+   // isLoading = false,
    col,
    idName,
    label,

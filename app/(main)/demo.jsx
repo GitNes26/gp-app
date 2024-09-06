@@ -23,7 +23,6 @@ const Demo = () => {
       refetch: refetchPhotos,
    } = useFetch(getAllPhotos);
    // console.log("🚀 ~ Demo ~ photos:", photos);
-   const { data: users, refetch: refetchUsers } = useFetch(getAllPhotos);
    // const videos = [
    //    { id: "cards.png", image: "cards" },
    //    { id: "profile.png", image: "profile" },
@@ -34,7 +33,6 @@ const Demo = () => {
    const onRefresh = async () => {
       setRereshing(true);
       await refetchPhotos();
-      await refetchUsers();
       ToastAndroid.show("Se actualizo", ToastAndroid.SHORT);
       setRereshing(false);
    };

@@ -9,11 +9,13 @@ import { Foundation } from "@expo/vector-icons";
 import { useEffect } from "react";
 import { useColorScheme } from "nativewind";
 import { useColorScheme as useColorSchemeRN } from "react-native";
-import useAuthStore, { checkLoggedIn } from "../stores/authStore";
+import useGlobalStore from "../stores/globalStore";
+import useAuthStore from "../stores/authStore";
 
 export default function App() {
    const { colorScheme } = useColorScheme();
    const currentTheme = useColorSchemeRN();
+   const { isLoading } = useGlobalStore();
    const { auth, isLoggedIn } = useAuthStore();
 
    useEffect(() => {
@@ -22,19 +24,20 @@ export default function App() {
       console.log("currentTheme", currentTheme);
    }, [useColorScheme]);
 
-   useEffect(() => {
-      const init = async () => {
-         console.log("🚀 INDEXapp ~ useEffect ~ isLoggedIn:", isLoggedIn);
-         // await checkLoggedIn();
-         if (auth && isLoggedIn) {
-            console.log("toy requetelogeado");
-            router.push("(main)");
-         }
-      };
-      init();
-   }, [isLoggedIn]);
+   // useEffect(() => {
+   //    console.log("🚀 ~ MainLayout ~ auth:", auth);
+   //    console.log("🚀 ~ MainLayout ~ isLoggedIn:", isLoggedIn);
+   //    console.log("🚀 ~ MainLayout ~ isLoading:", isLoading);
+   //    if (!isLoading && auth && isLoggedIn) {
+   //       console.log("no hay nadita");
+   //       router.replace("(main)");
+   //    }
+   // }, []);
 
-   // if (auth && isLoggedIn) return <Redirect href={"(main)"} />;
+   // if (!isLoading && auth && isLoggedIn) {
+   //    router.push("(main)");
+   //    // return <Redirect href={"(main)"} />;
+   // }
 
    return (
       <SafeAreaView className={"h-full"}>

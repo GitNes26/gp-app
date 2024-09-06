@@ -24,9 +24,7 @@ const useAuthStore = create(
 export default useAuthStore;
 
 export const login = async (data) => {
-   // const setAuth = useAuthStore((state) => state.setAuth);
-   const setLoading = useGlobalStore.getState().setLoading;
-   const auth = useAuthStore.getState().auth;
+   const setIsLoading = useGlobalStore.getState().setIsLoading;
    const setAuth = useAuthStore.getState().setAuth;
    const setIsLoggedIn = useAuthStore.getState().setIsLoggedIn;
 
@@ -37,7 +35,7 @@ export const login = async (data) => {
       });
       // console.log("🚀 ~ login ~ req:", req);
       if (!req.data.data) {
-         setLoading(false);
+         setIsLoading(false);
          ToastAndroid.showWithGravity(
             "CREDENCIALES INCORRECTAS, VERIFICA TUS DATOS", //req.data,
             ToastAndroid.LONG,
@@ -48,7 +46,7 @@ export const login = async (data) => {
       const res = req.data.data;
       // console.log("🚀 ~ login ~ res:", res);
       if (!res.status) {
-         setLoading(false);
+         setIsLoading(false);
          ToastAndroid.showWithGravity(
             res.message,
             ToastAndroid.LONG,
@@ -64,10 +62,10 @@ export const login = async (data) => {
 
       await setAuth(res.result);
       await setIsLoggedIn(true);
-      if (token) router.push("(main)");
+      return res;
    } catch (error) {
       console.log("🚀 ~ login ~ error:", error);
-      setLoading(false);
+      setIsLoading(false);
       ToastAndroid.showWithGravity(
          "Datos Incorrectos o Cuenta no Registrada",
          ToastAndroid.LONG,
@@ -77,23 +75,24 @@ export const login = async (data) => {
 };
 
 export const logout = async () => {
-   const setLoading = useGlobalStore.getState().setLoading;
+   const setIsLoading = useGlobalStore.getState().setIsLoading;
    const auth = useAuthStore.getState().auth;
    const setAuth = useAuthStore.getState().setAuth;
    const setIsLoggedIn = useAuthStore.getState().setIsLoggedIn;
 
    try {
       await checkLoggedIn();
-      console.log("🚀 ~ logout ~ auth:", auth);
+      // console.log("🚀 ~ logout ~ auth:", auth);
+      let res = null;
 
       if (auth) {
          const req = await ApiUrl(`/logout/${auth.id}`, {
             method: "POST",
          });
          // console.log("🚀 ~ login ~ req:", req);
-         const res = req.data.data;
+         res = req.data.data;
          if (!res.status) {
-            setLoading(false);
+            setIsLoading(false);
             ToastAndroid.showWithGravity(
                res.message,
                ToastAndroid.LONG,
@@ -107,15 +106,12 @@ export const logout = async () => {
       // console.log("Todas las cabeceras:", ApiUrl.defaults.headers);
       await setIsLoggedIn(false);
       await setAuth(null);
-      router.canDismiss() ? router.dismiss() : router.replace("(auth)");
-      // return <Redirect href={"(auth)"} />;
-      console.log("cehcado2");
+      return res;
    } catch (error) {
       console.log("🚀 ~ logout ~ error:", error);
       await setAuth(null);
       await setIsLoggedIn(false);
-      setLoading(false);
-      // router.canDismiss() ? router.dismiss() : null;
+      setIsLoading(false);
       ToastAndroid.showWithGravity(
          "Error en el servidor",
          ToastAndroid.LONG,
@@ -126,7 +122,7 @@ export const logout = async () => {
 };
 
 export const signup = async (data) => {
-   const setLoading = useGlobalStore.getState().setLoading;
+   const setIsLoading = useGlobalStore.getState().setIsLoading;
    const setIsLoggedIn = useAuthStore.getState().setIsLoggedIn;
 
    try {
@@ -136,7 +132,7 @@ export const signup = async (data) => {
       });
       // console.log("🚀 ~ signup ~ req:", req);
       if (!req.data.data) {
-         setLoading(false);
+         setIsLoading(false);
          ToastAndroid.showWithGravity(
             "ERROR INESPERADO", //req.data,
             ToastAndroid.LONG,
@@ -154,10 +150,10 @@ export const signup = async (data) => {
       // console.log("🚀 ~ signup ~ res:", res);
 
       await setIsLoggedIn(false);
-      if (res.status) router.replace("/sign-in");
+      return res;
    } catch (error) {
       console.log("🚀 ~ signup ~ error:", error);
-      setLoading(false);
+      setIsLoading(false);
       ToastAndroid.showWithGravity(
          error,
          ToastAndroid.LONG,
@@ -176,8 +172,9 @@ export const getProfile = async () => {
          });
          // return console.log("🚀 ~ getProfile ~ req:", req.data.res);
          const res = req.data.data;
-         return true;
+         if (res.status && res.result?.id) return true;
       }
+      return false;
    } catch (error) {
       console.log("🚀 ~ getProfile ~ error:", error);
       return false;
@@ -191,50 +188,30 @@ export const checkLoggedIn = async () => {
    const isLoggedIn = useAuthStore.getState().isLoggedIn;
 
    // console.log("🚀 ~ checkLoggedIn ~ auth:", auth);
-   let loggedIn = isLoggedIn;
 
    if (!auth) {
       console.log("checkLoggedIn ~ no tengo auth");
-      loggedIn = false;
       await setAuth(null);
-      await setIsLoggedIn(loggedIn);
-      // router.replace("(auth)");
-      // return;
+      await setIsLoggedIn(false);
    } else {
       console.log("checkLoggedIn ~ SI tengo auth");
-      // const authValidate = await getProfile();
-      if (!isLoggedIn) {
-         loggedIn = false;
+      const authValidate = await getProfile();
+      if (!authValidate) {
+         console.log("checkLoggedIn ~ pero no ya no es valido");
          await setAuth(null);
-         await setIsLoggedIn(loggedIn);
+         await setIsLoggedIn(false);
       } else {
-         loggedIn = true;
          if (auth.token) {
             ApiUrl.defaults.headers.common["Authorization"] =
                `Bearer ${auth.token}`;
             ApiUrlFiles.defaults.headers.common["Authorization"] =
                `Bearer ${auth.token}`;
          }
-         setIsLoggedIn(loggedIn);
+         setIsLoggedIn(true);
       }
    }
+   if (!auth && !isLoggedIn) {
+      console.log("checkLoggedIn ~ DE PLANO NO TENGO SESIÓN");
+      router.canDismiss() ? router.dismissAll() : router.replace("(auth)");
+   }
 };
-
-// export const isLoggedIn = () => {
-// const auth = useAuthStore.getState().auth;
-// const setIsLoggedIn = useAuthStore.getState().setIsLoggedIn;
-// if (auth) {
-//    console.log("toy logeado :)");
-//    ApiUrl.defaults.headers.common["Authorization"] = `Bearer ${auth.token}`;
-//    ApiUrlFiles.defaults.headers.common["Authorization"] =
-//       `Bearer ${auth.token}`;
-//    setIsLoggedIn(true);
-//    <Redirect href="(main)" />;
-// } else {
-//    console.log("NO toy logeado :c");
-//    ApiUrl.defaults.headers.common["Authorization"] = null;
-//    ApiUrlFiles.defaults.headers.common["Authorization"] = null;
-//    setIsLoggedIn(false);
-//    <Redirect href="(auth)" />;
-// }
-// };

@@ -1,15 +1,32 @@
-// ESTA NO ES DE CONTEXTO, ES DE PRUEBA
-export const getAllPosts = async () => {
-   try {
-      const request = await fetch(
-         "https://jsonplaceholder.typicode.com/posts/1",
-      );
-      const result = await request.json();
-      return result;
-   } catch (error) {
-      console.log("🚀 ~ getAllPosts ~ error:", error);
-   }
+import { createContext, useState, useEffect } from "react";
+
+export const GlobalContext = createContext();
+export const useGlobalContext = () => useGlobalContext(GlobalContext);
+
+const GlobalProvider = ({ children }) => {
+   const [isLoggedIn, setIsLoggedIn] = useState(false);
+   const [auth, setAuth] = useState(null);
+   const [isLoading, setIsLoading] = useState(false);
+
+   // useEffect(() => {
+   //    console.log("Estoy en el useEffect de GLobalContext");
+   // }, []);
+
+   return (
+      <GlobalContext.Provider
+         value={{
+            isLoggedIn,
+            setIsLoggedIn,
+            auth,
+            setAuth,
+            isLoading,
+            setIsLoading,
+         }}>
+         {children}
+      </GlobalContext.Provider>
+   );
 };
+export default GlobalProvider;
 
 export const getAllPhotos = async () => {
    try {
@@ -23,14 +40,3 @@ export const getAllPhotos = async () => {
       console.log("🚀 ~ getAllPhotos ~ error:", error);
    }
 };
-
-export const getAllUsers = async () => {
-   try {
-      const request = await fetch("https://jsonplaceholder.typicode.com/users");
-      const result = await request.json();
-      return result;
-   } catch (error) {
-      console.log("🚀 ~ getAllUsers ~ error:", error);
-   }
-};
-// ESTA NO ES DE CONTEXTO, ES DE PRUEBA

@@ -6,16 +6,16 @@ import useGlobalStore from "../stores/globalStore";
 
 const LoadingComponent = ({ text = "CARGANDO" }) => {
    // const [visible, setVisible] = useState(true);
-   const loading = useGlobalStore((state) => state.loading);
-   const setLoading = useGlobalStore((state) => state.setLoading);
+   const isLoading = useGlobalStore((state) => state.isLoading);
+   const setIsLoading = useGlobalStore((state) => state.setIsLoading);
 
    return (
       <SafeAreaView className={"h-full"}>
          <Modal
             transparent={true}
             animationType="fade"
-            visible={loading}
-            onRequestClose={() => setLoading(false)}>
+            visible={isLoading}
+            onRequestClose={() => setIsLoading(false)}>
             <View
                className={`absolute inset-0 w-full h-full bg-black-100/50 justify-center items-center`}>
                <Text className={`font-mbold text-2xl text-white mb-5`}>

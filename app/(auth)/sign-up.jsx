@@ -1,18 +1,9 @@
-import {
-   Image,
-   ScrollView,
-   StyleSheet,
-   Text,
-   ToastAndroid,
-   View,
-} from "react-native";
-import React, { useState } from "react";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../../constants/images";
-import { StatusBar } from "expo-status-bar";
 import colors from "../../constants/colors";
-import ButtonCompnent from "../../components/ButtonCompnent";
-import { Link, router, useNavigation } from "expo-router";
+import { Link, router } from "expo-router";
 import { Foundation } from "@expo/vector-icons";
 import HeaderComponent from "../../components/HeaderComponent";
 import FooterComponent from "../../components/FooterComponent";
@@ -27,8 +18,7 @@ import useGlobalStore from "../../stores/globalStore";
 import { signup } from "../../stores/authStore";
 
 const SignUp = () => {
-   const navigation = useNavigation();
-   const { loading, setLoading } = useGlobalStore();
+   const { setIsLoading } = useGlobalStore();
 
    const initialValues = {
       id: null,
@@ -67,16 +57,16 @@ const SignUp = () => {
    const onSubmit = async (values) => {
       // console.log("🚀 ~ onSubmit ~ values:", values);
       try {
-         setLoading(true);
+         setIsLoading(true);
          formik.setSubmitting(true);
 
-         await signup(values);
+         const res = await signup(values);
 
          formik.setSubmitting(false);
-         setLoading(true);
-
+         if (!res.status) return setIsLoading(false);
          formik.resetForm();
-         setLoading(false);
+         setIsLoading(false);
+         router.replace("/sign-in");
       } catch (error) {
          console.log("🚀 ~ onSubmit ~ error:", error);
          throw Error(error);
@@ -188,7 +178,7 @@ const SignUp = () => {
                      // helperText={""}
                      // horizontal={true}
                      textStyleCase={false}
-                     // loading={true}
+                     // isLoading={true}
                   />
                </FormikComponent>
 
@@ -210,5 +200,3 @@ const SignUp = () => {
 };
 
 export default SignUp;
-
-const styles = StyleSheet.create({});

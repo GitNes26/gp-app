@@ -1,10 +1,8 @@
 import React from "react";
 import { Image, Pressable } from "react-native";
-import images from "../constants/images";
 import { useNavigation } from "expo-router";
 import { styled } from "nativewind";
 import { DrawerActions } from "@react-navigation/native";
-import { View } from "react-native-animatable";
 
 const StyledPressable = styled(Pressable);
 

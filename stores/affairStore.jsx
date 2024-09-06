@@ -17,12 +17,12 @@ const useAffairStore = create((set) => ({
 export default useAffairStore;
 
 export const getAllAffairs = async () => {
-   // const setAffair = useAffairStore((state) => state.setAffair);
    const auth = useAuthStore.getState().auth;
    const setAllAffairs = useAffairStore.getState().setAllAffairs;
 
    try {
-      await checkLoggedIn();
+      // await checkLoggedIn();
+      console.log("a buscar los asuntos");
 
       if (auth) {
          const req = await ApiUrl("/asuntosdep", {
@@ -42,13 +42,13 @@ export const getAllAffairs = async () => {
    }
 };
 
-export const getAffair = async () => {
+export const getAffair = async (id) => {
    const affair = useAffairStore.getState().affair;
    const removeAffair = useAffairStore.getState().removeAffair;
 
    try {
       // await checkLoggedIn();
-      // const req = await ApiUrl(`/logout/${affair.id}`, {
+      // const req = await ApiUrl(`/asuntosdep/${affair.id}`, {
       //    method: "POST",
       // });
       // // console.log("🚀 ~ login ~ req:", req.data.res);

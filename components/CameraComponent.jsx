@@ -20,7 +20,7 @@ export default function CameraComponent({
    const [flashIcon, setFlashIcon] = useState("flash-off-sharp");
    const [permission, requestPermission] = useCameraPermissions();
    const [photo, setPoto] = useState(null);
-   const [loading, setLoading] = useState(false);
+   const [isLoading, setIsLoading] = useState(false);
    const cameraRef = useRef(null);
 
    const handleOpenModal = () => setOpenModal(true);
@@ -39,9 +39,9 @@ export default function CameraComponent({
    };
 
    const handleTakePhoto = async () => {
-      setLoading(false);
+      setIsLoading(false);
       if (cameraRef.current) {
-         setLoading(true);
+         setIsLoading(true);
          // console.log("🚀 ~ handleTakePhoto ~ cameraRef:", cameraRef.current);
          const options = {
             quiality: 1,
@@ -50,7 +50,7 @@ export default function CameraComponent({
          };
          const takedPhoto = await cameraRef.current.takePictureAsync(options);
          setPoto(takedPhoto);
-         setLoading(false);
+         setIsLoading(false);
       }
    };
 
@@ -68,7 +68,7 @@ export default function CameraComponent({
    };
 
    if (!permission) {
-      // Camera permissions are still loading.
+      // Camera permissions are still isLoading.
       return <View />;
    }
 
@@ -116,7 +116,7 @@ export default function CameraComponent({
                      ratio="16:9"
                      mode="picture"
                      flash={flash}>
-                     {loading && <LoadingComponent text={`CARGANDO FOTO`} />}
+                     {isLoading && <LoadingComponent text={`CARGANDO FOTO`} />}
                      <View className="flex-1 flex-col justify-between bg-transparent p-4">
                         <View className={`flex-row justify-between`}>
                            <IconPressableComponent

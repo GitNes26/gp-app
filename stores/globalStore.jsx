@@ -3,7 +3,7 @@ import { create } from "zustand";
 // import { persist } from "zustand/middleware";
 
 const useGlobalStore = create((set) => ({
-   loading: true,
-   setLoading: (loading) => set((state) => ({ loading })),
+   isLoading: false,
+   setIsLoading: (isLoading) => set((state) => ({ isLoading })),
 }));
 export default useGlobalStore;

@@ -1,6 +1,6 @@
-import { Image, Text, View } from "react-native";
+import { Image, View } from "react-native";
 import React, { useEffect } from "react";
-import { Redirect, router, useRouter } from "expo-router";
+import { Redirect, router } from "expo-router";
 import { Drawer } from "expo-router/drawer";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -8,16 +8,10 @@ import colors from "../../constants/colors";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import images from "../../constants/images";
 import LogoComponent from "../../components/LogoComponent";
-import {
-   DrawerContentScrollView,
-   DrawerItem,
-   DrawerItemList,
-} from "@react-navigation/drawer";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ImagePressableComponent from "../../components/ImagePressableComponent";
-import ButtonCompnent from "../../components/ButtonCompnent";
-import useAuthStore, { checkLoggedIn, logout } from "../../stores/authStore";
+import useAuthStore from "../../stores/authStore";
 import useGlobalStore from "../../stores/globalStore";
+import CustomDrawerContent from "../../components/navigation/CustomDrawerContent";
 
 const data = [
    {
@@ -95,64 +89,7 @@ const dataStack = [
    },
 ];
 
-const CustomDrawerContent = async ({ ...props }) => {
-   const { loading, setLoading } = useGlobalStore();
-   const router = useRouter();
-   const { top, bottom } = useSafeAreaInsets();
-
-   const { auth, isLoggedIn } = useAuthStore();
-
-   const handlePressLogout = async () => {
-      setLoading(true);
-      await logout();
-      router.dismissAll();
-      setLoading(false);
-   };
-
-   if (!auth && !isLoggedIn) return;
-
-   return (
-      <View className={"flex-1"}>
-         <DrawerContentScrollView
-            {...props}
-            contentContainerStyle={{ backgroundColor: colors.primary[200] }}>
-            <View className={`justify-center items-center py-5 `}>
-               <Image
-                  source={images.profile_manada}
-                  className={"w-[100px] h-[100px] rounded-full"}
-                  resizeMode="contain"
-               />
-               <Text className={`font-msemibold text-primary-100 text-[15px]`}>
-                  {auth.email}
-               </Text>
-            </View>
-            <View className={`bg-white pt-1`}>
-               <DrawerItemList {...props} />
-            </View>
-         </DrawerContentScrollView>
-         <View
-            className={`pb-[${20 + bottom}]`}
-            style={{ borderTopColor: colors.gray[100], borderTopWidth: 1 }}>
-            <ButtonCompnent
-               containerStyles={`w-full bg-gray-100/50 rounded-none`}
-               textStyles={`text-gray-500`}
-               icon={
-                  <Ionicons
-                     name="arrow-back-circle-sharp"
-                     size={22}
-                     color={colors.gray[500]}
-                  />
-               }
-               title={"Cerrar Sesión"}
-               handleOnPress={() => handlePressLogout()}
-            />
-         </View>
-      </View>
-   );
-};
-
 const DrawerGroup = () => {
-   // const { top, bottom } = SafeAreaInsetsContext();
    return (
       <Drawer
          drawerContent={CustomDrawerContent}
@@ -223,16 +160,20 @@ const DrawerGroup = () => {
 };
 
 const MainLayout = () => {
+   const { isLoading } = useGlobalStore();
    const { auth, isLoggedIn } = useAuthStore();
 
-   // if (!auth && !isLoggedIn) {
-   //    console.log("ya no tengo auth");
-   //    // console.log("puedo regresar?", router.canDismiss());
-   //    return router.replace("(auth)");
-   //    return <Redirect href={"(auth)"} />;
-   // }
+   useEffect(() => {
+      console.log("🚀 ~ MainLayout ~ auth:", auth);
+      console.log("🚀 ~ MainLayout ~ isLoggedIn:", isLoggedIn);
+      console.log("🚀 ~ MainLayout ~ isLoading:", isLoading);
+      if (!isLoading && !auth && !isLoggedIn) {
+         console.log("no hay nadita");
+         router.replace("(auth)");
+      }
+   }, [isLoggedIn]);
 
-   useEffect(() => {}, []);
+   // if (!isLoading && auth && isLoggedIn) return <Redirect href={"(auth)"} />;
 
    return (
       <GestureHandlerRootView style={{ flex: 1 }}>

@@ -6,8 +6,8 @@ import useGlobalStore from "../../stores/globalStore";
 import useAuthStore from "../../stores/authStore";
 
 const AuthLayout = () => {
-   const auth = useAuthStore((state) => state.auth);
-   const loading = useGlobalStore((state) => state.loading);
+   const { auth } = useAuthStore();
+   const { isLoading } = useGlobalStore();
    const data = [
       {
          name: "sign-in",
@@ -32,7 +32,7 @@ const AuthLayout = () => {
                />
             ))}
          </Stack>
-         {loading && <LoadingComponent />}
+         {isLoading && <LoadingComponent />}
          {/* <StatusBar backgroundColor="#161622" style="inverted" /> */}
       </>
    );

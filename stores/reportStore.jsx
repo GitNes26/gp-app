@@ -21,7 +21,7 @@ export const getAllReports = async () => {
    const setAllReports = useReportStore.getState().setAllReports;
 
    try {
-      await checkLoggedIn();
+      // await checkLoggedIn();
 
       if (auth) {
          const req = await ApiUrl("/app/reportes", {
@@ -67,7 +67,7 @@ export const postReport = async (data) => {
    const auth = useAuthStore.getState().auth;
 
    try {
-      await checkLoggedIn();
+      // await checkLoggedIn();
 
       if (auth) {
          const req = await ApiUrlFiles("/app/reportes", {
