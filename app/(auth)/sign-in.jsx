@@ -59,7 +59,7 @@ const SignIn = () => {
          /** VALIDAR QUE ESTE EN TERRITORIO GOMEZPALATINO */
          if (!(await validateLocation())) {
             setIsLoading(false);
-            return;
+            // return;
          }
 
          // const {

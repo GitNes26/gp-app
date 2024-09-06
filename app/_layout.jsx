@@ -1,8 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { useColorScheme } from "nativewind";
 import { useColorScheme as useColorSchemeRN } from "react-native";
+
+import * as Camera from "expo-camera";
+import * as MediaLibrary from "expo-media-library";
+import * as Location from "expo-location";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -19,12 +23,36 @@ const RootLayout = () => {
       "Montserrat-Thin": require("../assets/fonts/Montserrat-Thin.ttf"),
    });
 
+   const [permissionsGranted, setPermissionsGranted] = useState({
+      camera: false,
+      mediaLibrary: false,
+      location: false,
+   });
+
    const { colorScheme } = useColorScheme();
    const currentTheme = useColorSchemeRN();
 
    useEffect(() => {
       if (error) throw error;
       if (fontsLoaded) SplashScreen.hideAsync();
+
+      const requestPermissions = async () => {
+         // Solicitar permiso para la cámara
+         const { status: cameraStatus } =
+            await Camera.Camera.requestCameraPermissionsAsync();
+         const { status: locationStatus } =
+            await Location.requestForegroundPermissionsAsync();
+         const { status: mediaLibraryStatus } =
+            await MediaLibrary.requestPermissionsAsync();
+
+         setPermissionsGranted({
+            camera: cameraStatus === "granted",
+            location: locationStatus === "granted",
+            mediaLibrary: mediaLibraryStatus === "granted",
+         });
+      };
+
+      requestPermissions();
    }, [fontsLoaded, error]);
 
    if (!fontsLoaded && !error) return null;
