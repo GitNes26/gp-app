@@ -57,10 +57,10 @@ const SignIn = () => {
          formik.setSubmitting(true);
 
          /** VALIDAR QUE ESTE EN TERRITORIO GOMEZPALATINO */
-         if (!(await validateLocation())) {
-            setIsLoading(false);
-            // return;
-         }
+         // if (!(await validateLocation())) {
+         //    setIsLoading(false);
+         //    // return;
+         // }
 
          // const {
          //    data: res,

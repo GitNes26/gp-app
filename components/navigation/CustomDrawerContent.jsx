@@ -29,7 +29,7 @@ const CustomDrawerContent = async ({ ...props }) => {
          <DrawerContentScrollView
             {...props}
             contentContainerStyle={{ backgroundColor: colors.primary[200] }}>
-            <View className={`justify-center items-center py-5 `}>
+            <View className={`justify-center items-center py-6 `}>
                <Image
                   source={images.profile_manada}
                   className={"w-[100px] h-[100px] rounded-full"}

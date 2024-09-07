@@ -7,10 +7,14 @@ import { useColorScheme as useColorSchemeRN } from "react-native";
 import * as Camera from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
+import useAuthStore from "../stores/authStore";
 
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
+   const { auth, isLoggedIn } = useAuthStore();
+   // const { isLoading } = useGlobalContext();
+
    const [fontsLoaded, error] = useFonts({
       "Montserrat-Black": require("../assets/fonts/Montserrat-Black.ttf"),
       "Montserrat-Bold": require("../assets/fonts/Montserrat-Bold.ttf"),
@@ -33,6 +37,9 @@ const RootLayout = () => {
    const currentTheme = useColorSchemeRN();
 
    useEffect(() => {
+      console.log("auth", auth);
+      console.log("isLoggedIn", isLoggedIn);
+
       if (error) throw error;
       if (fontsLoaded) SplashScreen.hideAsync();
 
@@ -57,10 +64,18 @@ const RootLayout = () => {
 
    if (!fontsLoaded && !error) return null;
 
+   if (!auth && !isLoggedIn) {
+      console.log("no tengo nada");
+      return (
+         <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="index" />
+            <Stack.Screen name="(auth)" />
+         </Stack>
+      );
+   }
+
    return (
       <Stack screenOptions={{ headerShown: false }}>
-         <Stack.Screen name="index" />
-         <Stack.Screen name="(auth)" />
          <Stack.Screen name="(main)" />
       </Stack>
    );

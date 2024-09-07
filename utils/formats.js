@@ -1,9 +1,7 @@
-// import moment from "moment";
 // import Toast from "./Toast";
-// import dayjs from "dayjs";
+import dayjs from "dayjs";
 
-// dayjs.locale("es");
-// moment.locale("es");
+dayjs.locale("es");
 
 //#region /** FECHAS - FORMATEADO */
 function validateRangeDates(action, input_initial_date, input_final_date) {
@@ -39,7 +37,7 @@ function validateRangeDates(action, input_initial_date, input_final_date) {
 
 function binaryDateTimeFormat(the_date) {
    let date = new Date(parseInt(the_date.substr(6)));
-   let datetime = moment(date).format("MM-DD-YYYY h:mm:ss a");
+   let datetime = dayjs(date).format("MM-DD-YYYY h:mm:ss a");
    // let datetime = new Intl.DateTimeFormat("es-MX", { day: '2-digit', month: '2-digit', year: 'numeric', hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }).format(date);
 
    return datetime;
@@ -47,8 +45,6 @@ function binaryDateTimeFormat(the_date) {
 
 export function formatDatetime(the_date, long_format = true, format = null) {
    if (the_date == null) return "Sin Fecha";
-   //#region OPCION DayJS
-   moment.locale("es");
    dayjs.locale("es");
    let date = new Date(the_date);
    let datetime;
@@ -65,31 +61,10 @@ export function formatDatetime(the_date, long_format = true, format = null) {
          : "DD-MM-YYYY"
       : format;
    return (datetime = dayjs(date).format(formato));
-   //#endregion OPCION DayJS
-
-   //#region OPCION MomentJS
-   // moment.locale("es");
-   // let date = new Date(the_date);
-   // let datetime;
-
-   // if (the_date.length <= 10) {
-   //    date = new Date(date.setDate(date.getDate() + 1));
-   //    return (datetime = moment(date).format("DD-MM-YYYY"));
-   //    // return datetime = new Intl.DateTimeFormat("es-MX", { day: '2-digit', month: '2-digit', year: 'numeric'}).format(date);
-   // }
-
-   // date = new Date(the_date);
-   // const formato = !format ? (long_format ? "DD-MM-YYYY h:mm:ss a" : "DD-MM-YYYY") : format;
-   // return (datetime = moment(date).format(formato));
-   //#endregion OPCION MomentJS
-
-   //#region OPCION Intl
-   // return datetime = new Intl.DateTimeFormat("es-MX", { day: '2-digit', month: '2-digit', year: 'numeric', hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true }).format(date);
-   //#endregion OPCION Intl
 }
 
 export function formatDatetimeToSQL(the_date) {
-   let datetime = moment(the_date).format("YYYY-MM-DDTh:mm:ss");
+   let datetime = dayjs(the_date).format("YYYY-MM-DDTh:mm:ss");
    return datetime;
 }
 //#endregion /** FECHAS - FORMATEADO */
@@ -129,7 +104,6 @@ export function formatToLowerCase(event) {
    return newText;
 }
 export function formatToUpperCase(event) {
-   // console.log("🚀 ~ formatToUpperCase ~ event:", event.target);
    const newText = event.target.value.toUpperCase();
    return newText;
 }
@@ -140,7 +114,6 @@ export const handleInputFormik = async (
    input,
    toUpper = true,
 ) => {
-   console.log("🚀 ~ e:", e);
    try {
       const newText = toUpper
          ? await formatToUpperCase(e)
@@ -148,7 +121,7 @@ export const handleInputFormik = async (
       setFieldValue(input, newText);
    } catch (error) {
       console.log(error);
-      // Toast.Error(error);
+      Toast.Error(error);
    }
 };
 export const handleInputStringCase = async (e, setState, toUpper = true) => {
@@ -286,7 +259,6 @@ const centenas = [
    "novecientos",
 ];
 /**
- * Transformará la cantidad de un número y la retornará en texto, por el momento limitada hasta el 99,999.99
  * @param {number} number
  */
 export const numberToText = (number) => {
@@ -460,30 +432,3 @@ export function setPropsOriginals(original, newArray) {
 //       </div>
 //    );
 // };
-
-export async function base64ToFile(base64String, fileName) {
-   console.log("🚀 ~ base64ToFile ~ base64String:", base64String);
-   return true;
-   // Divide la cadena Base64 en dos partes: la primera es el encabezado de datos y la segunda son los datos en sí.
-   const arr = base64String.split(",");
-
-   // Extrae el tipo MIME del encabezado de datos.
-   const mime = arr[0].match(/:(.*?);/)[1];
-
-   // Decodifica la parte base64 (los datos en sí).
-   const bstr = atob(arr[1]);
-
-   // Crea un array de bytes (Uint8Array) a partir de los datos decodificados.
-   let n = bstr.length;
-   const u8arr = new Uint8Array(n);
-   while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-   }
-
-   // Crea un objeto Blob utilizando los datos binarios.
-   const blob = new Blob([u8arr], { type: mime });
-
-   // Crea un objeto File utilizando el Blob y el nombre del archivo.
-   console.log(file);
-   return new File([blob], fileName, { type: mime });
-}

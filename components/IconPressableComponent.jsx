@@ -8,10 +8,11 @@ export default function IconPressableComponent({
    icon,
    handleOnPress,
    backdrop = false,
+   styleContent,
 }) {
    return (
       <StyledPressable
-         className={`active:opacity-60 ${backdrop && "m-1 p-1.5 bg-black-100/30 rounded-full"}`}
+         className={`active:opacity-60 ${backdrop && "m-1 p-1.5 bg-black-100/30 rounded-full"} ${styleContent}`}
          onPress={handleOnPress}>
          {icon}
       </StyledPressable>

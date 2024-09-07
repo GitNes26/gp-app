@@ -48,6 +48,12 @@ npm install --save-dev tailwindcss@3.3.2
 npx tailwindcss init
 ```
 
+4. Formateador de Fechas
+
+```bash
+npm install dayjs
+   ```
+
 
 3. Iconos - se ven lindos los de AntDesign
 

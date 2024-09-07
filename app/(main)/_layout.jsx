@@ -47,8 +47,8 @@ const data = [
    {
       name: "profile",
       label: "Mi Perfil",
-      title: "",
-      headerShown: false,
+      title: "Mi Perfil",
+      headerShown: true,
       show: true,
       icon: {
          focus: "person",
@@ -78,16 +78,6 @@ const data = [
       },
    },
 ];
-const dataStack = [
-   {
-      name: "index",
-      options: { headerShown: false },
-   },
-   {
-      name: "addReport",
-      options: { headerShown: false },
-   },
-];
 
 const DrawerGroup = () => {
    return (
@@ -113,7 +103,7 @@ const DrawerGroup = () => {
             headerShown: false,
             headerLeft: () => (
                <ImagePressableComponent
-                  image={images.profile}
+                  image={images.profile_manada}
                   imageClassesStyle={`rounded-full ml-2`}
                />
             ),
@@ -165,10 +155,9 @@ const MainLayout = () => {
 
    useEffect(() => {
       console.log("🚀 ~ MainLayout ~ auth:", auth);
-      console.log("🚀 ~ MainLayout ~ isLoggedIn:", isLoggedIn);
-      console.log("🚀 ~ MainLayout ~ isLoading:", isLoading);
+      // console.log("🚀 ~ MainLayout ~ isLoggedIn:", isLoggedIn);
+      // console.log("🚀 ~ MainLayout ~ isLoading:", isLoading);
       if (!isLoading && !auth && !isLoggedIn) {
-         console.log("no hay nadita");
          router.replace("(auth)");
       }
    }, [isLoggedIn]);

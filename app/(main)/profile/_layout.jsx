@@ -1,12 +1,15 @@
 import React from "react";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const ProfileLayout = () => {
+   const { top, bottom } = useSafeAreaInsets();
+
    const data = [
       {
          name: "index",
-         options: { headerShown: false },
+         options: { headerShown: false, presentation: "modal" },
       },
    ];
 
@@ -17,7 +20,14 @@ const ProfileLayout = () => {
                <Stack.Screen
                   key={`key-Stack-Screen-${item.name}`}
                   name={item.name}
-                  options={{ headerShown: item.options.headerShown }}
+                  options={{
+                     headerShown: item.options.headerShown,
+                     headerShadowVisible: false,
+                     presentation: "transparentModal",
+                     contentStyle: {
+                        // top: top - 1,
+                     },
+                  }}
                />
             ))}
          </Stack>
