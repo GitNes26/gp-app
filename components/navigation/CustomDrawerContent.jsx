@@ -1,8 +1,8 @@
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { router, useRouter } from "expo-router";
+import { Redirect, router, useRouter } from "expo-router";
 import useAuthStore, { logout } from "../../stores/authStore";
 import useGlobalStore from "../../stores/globalStore";
-import { Image, Text, View } from "react-native";
+import { Image, Pressable, Text, View } from "react-native";
 import {
    DrawerContentScrollView,
    DrawerItemList,
@@ -11,6 +11,7 @@ import colors from "../../constants/colors";
 import images from "../../constants/images";
 import { Ionicons } from "@expo/vector-icons";
 import ButtonCompnent from "../ButtonCompnent";
+import TouchableContentComponent from "../TouchableContentComponent";
 
 const CustomDrawerContent = async ({ ...props }) => {
    const { setIsLoading } = useGlobalStore();
@@ -21,6 +22,7 @@ const CustomDrawerContent = async ({ ...props }) => {
       setIsLoading(true);
       await logout();
       setIsLoading(false);
+      // return <Redirect href={"(auth)"} />;
       router.canDismiss() ? router.dismissAll() : router.replace("(auth)");
    };
 
@@ -29,16 +31,19 @@ const CustomDrawerContent = async ({ ...props }) => {
          <DrawerContentScrollView
             {...props}
             contentContainerStyle={{ backgroundColor: colors.primary[200] }}>
-            <View className={`justify-center items-center py-6 `}>
-               <Image
-                  source={images.profile_manada}
-                  className={"w-[100px] h-[100px] rounded-full"}
-                  resizeMode="contain"
-               />
-               <Text className={`font-msemibold text-primary-100 text-[15px]`}>
-                  {auth?.email}
-               </Text>
-            </View>
+            <TouchableContentComponent onPress={() => router.push("/profile")}>
+               <View className={`justify-center items-center py-6 `}>
+                  <Image
+                     source={images.profile_manada}
+                     className={"w-[100px] h-[100px] rounded-full"}
+                     resizeMode="contain"
+                  />
+                  <Text
+                     className={`font-msemibold text-primary-100 text-[15px]`}>
+                     {auth?.email}
+                  </Text>
+               </View>
+            </TouchableContentComponent>
             <View className={`bg-white pt-1`}>
                <DrawerItemList {...props} />
             </View>

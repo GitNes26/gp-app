@@ -18,10 +18,10 @@ export default function HeaderComponent({ isAuth = false }) {
                resizeMode="cover"
             />
          ) : (
-            <View className={`bg-white`}>
+            <View className={`bg-white border-b-2 border-gray-200/50`}>
                <Image
                   source={images.bgUp}
-                  className={"w-full h-5"}
+                  className={"w-full h-12"}
                   resizeMode="cover"
                />
                <View

@@ -1,176 +1,100 @@
-import { CameraView, useCameraPermissions } from "expo-camera";
-import { CameraType, FlashMode } from "expo-camera/build/legacy/Camera.types";
-import { useRef, useState } from "react";
-import { Button, Modal, Text, ToastAndroid, View } from "react-native";
+import { useEffect, useState } from "react";
+import { Button, Image, View, StyleSheet } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import ButtonCompnent from "./ButtonCompnent";
-import { Ionicons } from "@expo/vector-icons";
-import IconPressableComponent from "./IconPressableComponent";
-import PhotoPreviewComponent from "./PhotoPreviewComponent";
-import LoadingComponent from "./LoadingComponent";
+import { convertImageToFile } from "../utils/formats";
 
 export default function CameraComponent({
    textButton = "Abrir Cámara",
    styleButton,
    getData,
 }) {
-   const sizeIcon = 26;
-   const [openModal, setOpenModal] = useState(false);
-   const [facing, setFacing] = useState(CameraType.back);
-   const [flash, setFlash] = useState(FlashMode.off);
-   const [flashIcon, setFlashIcon] = useState("flash-off-sharp");
-   const [permission, requestPermission] = useCameraPermissions();
-   const [photo, setPoto] = useState(null);
-   const [isLoading, setIsLoading] = useState(false);
-   const cameraRef = useRef(null);
+   const [status, requestPermission] = ImagePicker.useCameraPermissions();
+   // const [status:statusMedia, requestPermission:requestPermissionMedia] = ImagePicker.useMediaLibraryPermissions();
+   const [image, setImage] = useState(null);
 
-   const handleOpenModal = () => setOpenModal(true);
-   const handleCloseModal = () => setOpenModal(false);
+   const pickImage = async () => {
+      // No permissions request is necessary for launching the image library
+      let result = await ImagePicker.launchImageLibraryAsync({
+         mediaTypes: ImagePicker.MediaTypeOptions.All,
+         allowsEditing: true,
+         aspect: [9, 16],
+         quality: 1,
+      });
 
-   const toggleCameraFacing = () =>
-      setFacing((current) =>
-         current === "back" ? CameraType.front : CameraType.back,
-      );
+      console.log(result);
 
-   const toggleFlash = () => {
-      setFlashIcon((current) =>
-         flash === "off" ? "flash-off-sharp" : "flash-sharp",
-      );
-      setFlash((current) => (current === "off" ? FlashMode.on : FlashMode.off));
-   };
-
-   const handleTakePhoto = async () => {
-      setIsLoading(false);
-      if (cameraRef.current) {
-         setIsLoading(true);
-         // console.log("🚀 ~ handleTakePhoto ~ cameraRef:", cameraRef.current);
-         const options = {
-            quiality: 1,
-            base64: true,
-            exif: false,
-         };
-         const takedPhoto = await cameraRef.current.takePictureAsync(options);
-         setPoto(takedPhoto);
-         setIsLoading(false);
+      if (!result.canceled) {
+         setImage(result.assets[0].uri);
+         const data = result.assets[0];
+         const file = await convertImageToFile(
+            data.uri,
+            data.fileName,
+            data.mimeType,
+         );
+         console.log("🚀 ~ pickImage ~ file:", file);
+         getData(file);
       }
    };
 
-   const handleRetakePhoto = () => setPoto(null);
-   const handleApprovedPhoto = async () => {
-      ToastAndroid.showWithGravity(
-         `IMAGEN APROBADA`,
-         ToastAndroid.LONG,
-         ToastAndroid.CENTER,
-      );
-      console.log("🚀 ~ handleApprovedPhoto ~ photo.base64:", photo.base64);
-      await getData(photo.base64);
-      setPoto(null);
-      setOpenModal(false);
+   const pickPhoto = async () => {
+      // No permissions request is necessary for launching the image library
+      let result = await ImagePicker.launchCameraAsync({
+         cameraType: ImagePicker.CameraType.back,
+         mediaTypes: ImagePicker.MediaTypeOptions.Images, // Solo imágenes
+         allowsEditing: true, // Permitir al usuario editar la imagen
+         aspect: [4, 3], // Relación de aspecto fija (4:3)
+         quality: 0.8, // Calidad de imagen (0.0 a 1.0)
+         base64: true, // Opcional: obtener también la imagen en base64
+         exif: true, // Incluir metadatos EXIF (geolocalización, etc.)
+      });
+
+      // console.log(result);
+
+      if (!result.canceled) {
+         setImage(result.assets[0].uri);
+         const imgData = result.assets[0];
+         const file = await convertImageToFile(
+            imgData.uri,
+            imgData.fileName,
+            imgData.mimeType,
+         );
+         const data = {
+            uri: imgData.uri,
+            file,
+         };
+         // console.log("🚀 ~ pickImage ~ data:", data);
+         getData(data);
+      }
    };
 
-   if (!permission) {
-      // Camera permissions are still isLoading.
-      return <View />;
-   }
-
-   if (!permission.granted) {
-      // Camera permissions are not granted yet.
-      return (
-         <View>
-            <Text className={`text-center`}>
-               Necesitas permitir el uso de la cámara
-            </Text>
-            <ButtonCompnent
-               title={"CONCEDER PERMISO"}
-               containerStyles={styleButton}
-               handleOnPress={requestPermission}
-            />
-         </View>
-      );
-   }
-
    return (
-      <>
-         <ButtonCompnent
-            title={textButton}
-            containerStyles={styleButton}
-            handleOnPress={handleOpenModal}
-         />
-         <Modal
-            visible={openModal}
-            animationType="slide"
-            className={`w-full h-full bg-black-100`}>
-            {photo ? (
-               <PhotoPreviewComponent
-                  photo={photo}
-                  handleRetakePhoto={handleRetakePhoto}
-                  handleApprovedPhoto={handleApprovedPhoto}
-               />
-            ) : (
-               <View className="w-full h-full ">
-                  <CameraView
-                     ref={cameraRef}
-                     className="flex-1 w-full h-full rounded-3xl"
-                     facing={facing}
-                     focusable={true}
-                     autofocus="on"
-                     ratio="16:9"
-                     mode="picture"
-                     flash={flash}>
-                     {isLoading && <LoadingComponent text={`CARGANDO FOTO`} />}
-                     <View className="flex-1 flex-col justify-between bg-transparent p-4">
-                        <View className={`flex-row justify-between`}>
-                           <IconPressableComponent
-                              icon={
-                                 <Ionicons
-                                    name="close-outline"
-                                    size={sizeIcon}
-                                    color={"white"}
-                                 />
-                              }
-                              backdrop={true}
-                              handleOnPress={handleCloseModal}
-                           />
-                           <IconPressableComponent
-                              icon={
-                                 <Ionicons
-                                    name="camera-reverse"
-                                    size={sizeIcon}
-                                    color={"white"}
-                                 />
-                              }
-                              backdrop={true}
-                              handleOnPress={toggleCameraFacing}
-                           />
-                           <IconPressableComponent
-                              icon={
-                                 <Ionicons
-                                    name={flashIcon}
-                                    size={sizeIcon}
-                                    color={"white"}
-                                 />
-                              }
-                              backdrop={true}
-                              handleOnPress={toggleFlash}
-                           />
-                        </View>
-                        <View className={`flex-row justify-center`}>
-                           <IconPressableComponent
-                              icon={
-                                 <Ionicons
-                                    name="aperture-outline"
-                                    size={80}
-                                    color={"white"}
-                                 />
-                              }
-                              backdrop={true}
-                              handleOnPress={handleTakePhoto}
-                           />
-                        </View>
-                     </View>
-                  </CameraView>
-               </View>
-            )}
-         </Modal>
-      </>
+      <ButtonCompnent
+         title={textButton}
+         containerStyles={styleButton}
+         handleOnPress={pickPhoto}
+      />
    );
+   // return (
+   //    <View style={styles.container}>
+   //       <ButtonCompnent
+   //          title={textButton}
+   //          containerStyles={styleButton}
+   //          handleOnPress={pickPhoto}
+   //       />
+   //       {image && <Image source={{ uri: image }} style={styles.image} />}
+   //    </View>
+   // );
 }
+
+const styles = StyleSheet.create({
+   container: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+   },
+   image: {
+      width: 200,
+      height: 200,
+   },
+});

@@ -46,8 +46,8 @@ const Index = () => {
    }, []);
 
    return (
-      <SafeAreaView className={"h-full "}>
-         <HeaderComponent />
+      <View className={"h-full "}>
+         {/* <HeaderComponent /> */}
          {/* Título */}
          <View className={"w-full justify-center items-center mb-5"}>
             <Text className={"text-3xl font-mblack mt-10 text-primary-200"}>
@@ -88,7 +88,7 @@ const Index = () => {
          {/* </ScrollView> */}
          <FooterComponent />
          {/* <StatusBar backgroundColor={colors.primary.DEFAULT} style="inverted"  /> */}
-      </SafeAreaView>
+      </View>
    );
 };
 

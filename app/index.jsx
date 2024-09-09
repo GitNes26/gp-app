@@ -35,8 +35,8 @@ export default function App() {
    // }, []);
 
    // if (!isLoading && auth && isLoggedIn) {
-   //    router.push("(main)");
-   //    // return <Redirect href={"(main)"} />;
+   //    // router.push("(main)");
+   //    return <Redirect href={"(main)"} />;
    // }
 
    return (

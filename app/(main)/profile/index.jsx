@@ -18,9 +18,10 @@ import colors from "../../../constants/colors";
 import useAuthStore from "./../../../stores/authStore";
 import IconPressableComponent from "./../../../components/IconPressableComponent";
 import { formatDatetime, formatPhone } from "../../../utils/formats";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const Profile = () => {
-   const { auth } = useAuthStore();
+   const { auth, isLoggedIn } = useAuthStore();
 
    const [refreshing, setRereshing] = useState(false);
 
@@ -32,11 +33,16 @@ const Profile = () => {
       setRereshing(false);
    };
 
+   if (!auth && !isLoggedIn) return <View></View>;
+
    return (
       <>
          {/* <SafeAreaView className={"h-full"}> */}
          {/* <HeaderComponent /> */}
-         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+         <KeyboardAwareScrollView
+            contentContainerStyle={{ flexGrow: 1 }}
+            keyboardShouldPersistTaps="handled"
+            alwaysBounceVertical={true}>
             <View className="flex-1 bg-white p-4">
                {/* Imagen de Perfil */}
                <View className="items-center mt-2">
@@ -66,7 +72,7 @@ const Profile = () => {
                   {/* <Text className="text-sm font-mregular text-gray-500">
                      22 años, dev del Campo
                   </Text> */}
-                  <Text className="text-xs font-mregular text-gray-400">
+                  <Text className="text-xs font-mregular text-gray-500">
                      Miembro desde -{" "}
                      {formatDatetime(
                         auth.created_at,
@@ -90,36 +96,21 @@ const Profile = () => {
                   </View>
 
                   <View className="bg-gray-100/25 p-4 rounded-lg mt-4 space-y-8">
-                     <View className="flex-row items-center">
-                        <Ionicons
-                           name="mail"
-                           size={20}
-                           color={colors.primary[200]}
-                        />
-                        <Text className="ml-2 font-mmedium text-gray-700">
-                           {auth.email}
-                        </Text>
-                     </View>
-                     <View className="flex-row items-center">
-                        <Ionicons
-                           name="phone-portrait"
-                           size={20}
-                           color={colors.primary[200]}
-                        />
-                        <Text className="ml-2 font-mmedium text-gray-700">
-                           {formatPhone(auth.phone)}
-                        </Text>
-                     </View>
-                     <View className="flex-row items-center">
-                        <Ionicons
-                           name="finger-print"
-                           size={20}
-                           color={colors.primary[200]}
-                        />
-                        <Text className="ml-2 font-mmedium text-gray-700">
-                           {auth.curp}
-                        </Text>
-                     </View>
+                     <ItemContent
+                        iconName={"mail"}
+                        title={"Correo"}
+                        value={auth.email}
+                     />
+                     <ItemContent
+                        iconName={"phone-portrait"}
+                        title={"Teléfono"}
+                        value={formatPhone(auth.phone)}
+                     />
+                     <ItemContent
+                        iconName={"finger-print"}
+                        title={"CURP"}
+                        value={auth.curp}
+                     />
                   </View>
                </View>
 
@@ -137,7 +128,7 @@ const Profile = () => {
                   </TouchableOpacity>
                </View> */}
             </View>
-         </ScrollView>
+         </KeyboardAwareScrollView>
          <FooterComponent />
          {/* <StatusBar backgroundColor={colors.primary.DEFAULT} style="inverted"  /> */}
          {/* </SafeAreaView> */}
@@ -146,3 +137,15 @@ const Profile = () => {
 };
 
 export default Profile;
+
+const ItemContent = ({ iconName, title, value }) => {
+   return (
+      <View className="flex-row items-center justify-between my-4">
+         <View className="flex-row items-center">
+            <Ionicons name={iconName} size={20} color={colors.primary[200]} />
+            <Text className="ml-2 font-mmedium text-gray-400">{title}:</Text>
+         </View>
+         <Text className="ml-2 font-mmedium text-gray-700">{value}</Text>
+      </View>
+   );
+};

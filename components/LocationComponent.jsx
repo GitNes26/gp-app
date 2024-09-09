@@ -76,7 +76,9 @@ const LocationComponent = ({
             latitude: currentPosition.coords.latitude,
             longitude: currentPosition.coords.longitude,
          };
-         getUbication(coords);
+         const currentLocation = await getUbication(coords);
+         setIsLoading(false);
+         if (getData) getData(currentLocation);
       } catch (error) {
          console.log("🚀 ~ getLocation ~ error:", error);
       }
@@ -89,8 +91,7 @@ const LocationComponent = ({
             ubication: ubication[0],
          };
          setLocation(currentLocation);
-         setIsLoading(false);
-         if (getData) getData(location);
+         return currentLocation;
       } catch (error) {
          console.log("🚀 ~ getUbication ~ error:", error);
       }
@@ -98,7 +99,7 @@ const LocationComponent = ({
 
    useEffect(() => {
       // console.log("soy el LocationComponent");
-      requestPermision();
+      // requestPermision();
    }, []);
 
    return (

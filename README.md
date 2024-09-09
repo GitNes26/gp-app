@@ -91,8 +91,26 @@ npm install --save --save-dev --force prettier eslint-config-prettier eslint-plu
 
  ```bash
    npx expo install expo-media-library
-   npx expo install expo-camera
+   npx expo install expo-camera || npx expo install expo-image-picker # Me parece que sera mejor el expo-image-picker
    ```
+
+   <!-- SI SE INSTALA EL EXPO-IMAGE-PICKER -->
+   y en el archivo **app.json** agregar en plugins, lo siguiente 
+
+   ```json
+   [
+      "expo-image-picker",
+      {
+         "photosPermission": "Permitir que $(PRODUCT_NAME) acceda a tus fotos. La aplicación accede a tus fotos para permitirte compartirlas con tus amigos.",
+         "cameraPermission": "Permitir que $(PRODUCT_NAME) acceda a la cámara."
+      }
+   ]
+   ```
+   
+   
+   
+   
+   
 
 7. Utilizar Localización del dispositivo (https://docs.expo.dev/versions/latest/sdk/location/)
 
@@ -111,10 +129,12 @@ npm install --save --save-dev --force prettier eslint-config-prettier eslint-plu
    ]
    ```
 
-7. Instalacion de Formik
+7. Instalacion de Formik, 
+   keyboard-scroll-view nos ayuda a mantener el area del input al salir el teclado
 
 ```bash
 npm install formik yup --save
+npm i react-native-keyboard-aware-scroll-view --save
 ```
 
 

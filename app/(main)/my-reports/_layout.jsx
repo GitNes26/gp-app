@@ -1,12 +1,15 @@
 import React from "react";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-const ReportLayout = () => {
+const MyReportsLayout = () => {
+   const { top, bottom } = useSafeAreaInsets();
+
    const data = [
       {
          name: "index",
-         options: { headerShown: false },
+         options: { headerShown: false, presentation: "modal" },
       },
    ];
 
@@ -17,7 +20,14 @@ const ReportLayout = () => {
                <Stack.Screen
                   key={`key-Stack-Screen-${item.name}`}
                   name={item.name}
-                  options={{ headerShown: item.options.headerShown }}
+                  options={{
+                     headerShown: item.options.headerShown,
+                     headerShadowVisible: true,
+                     presentation: "modal",
+                     contentStyle: {
+                        // top: top - 1,
+                     },
+                  }}
                />
             ))}
          </Stack>
@@ -26,4 +36,4 @@ const ReportLayout = () => {
    );
 };
 
-export default ReportLayout;
+export default MyReportsLayout;

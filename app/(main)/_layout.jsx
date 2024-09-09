@@ -12,6 +12,7 @@ import ImagePressableComponent from "../../components/ImagePressableComponent";
 import useAuthStore from "../../stores/authStore";
 import useGlobalStore from "../../stores/globalStore";
 import CustomDrawerContent from "../../components/navigation/CustomDrawerContent";
+import HeaderComponent from "../../components/HeaderComponent";
 
 const data = [
    {
@@ -35,8 +36,8 @@ const data = [
    },
    {
       name: "my-reports",
-      label: "Mis Reporte",
-      title: "Reportes",
+      label: "Mis Reportes",
+      title: "Mis Reportes",
       headerShown: false,
       show: true,
       icon: {
@@ -49,7 +50,7 @@ const data = [
       label: "Mi Perfil",
       title: "Mi Perfil",
       headerShown: true,
-      show: true,
+      show: false,
       icon: {
          focus: "person",
          disfocus: "person-outline",
@@ -100,18 +101,20 @@ const DrawerGroup = () => {
                // backgroundColor: "yellow",
                // height: "10%",
             },
-            headerShown: false,
-            headerLeft: () => (
-               <ImagePressableComponent
-                  image={images.profile_manada}
-                  imageClassesStyle={`rounded-full ml-2`}
-               />
-            ),
-            headerRight: () => (
-               <View className={`mr-2`}>
-                  <LogoComponent />
-               </View>
-            ),
+            headerShown: true,
+            headerShadowVisible: true,
+            header: () => <HeaderComponent />,
+            // headerLeft: () => (
+            //    <ImagePressableComponent
+            //       image={images.profile_manada}
+            //       imageClassesStyle={`rounded-full ml-2`}
+            //    />
+            // ),
+            // headerRight: () => (
+            //    <View className={`mr-2`}>
+            //       <LogoComponent />
+            //    </View>
+            // ),
          }}>
          {data.map((item) => (
             <Drawer.Screen
@@ -121,7 +124,7 @@ const DrawerGroup = () => {
                   drawerItemStyle: {
                      display: !item.show ? "none" : "flex",
                   },
-                  headerShown: item.headerShown,
+                  // headerShown: item.headerShown,
                   drawerLabel: item.label,
                   headerTitle: item.title,
                   drawerIcon: ({ size, color, focused }) => {
@@ -153,16 +156,16 @@ const MainLayout = () => {
    const { isLoading } = useGlobalStore();
    const { auth, isLoggedIn } = useAuthStore();
 
-   useEffect(() => {
-      console.log("🚀 ~ MainLayout ~ auth:", auth);
-      // console.log("🚀 ~ MainLayout ~ isLoggedIn:", isLoggedIn);
-      // console.log("🚀 ~ MainLayout ~ isLoading:", isLoading);
-      if (!isLoading && !auth && !isLoggedIn) {
-         router.replace("(auth)");
-      }
-   }, [isLoggedIn]);
+   // useEffect(() => {
+   //    console.log("🚀 ~ MainLayout ~ auth:", auth);
+   //    // console.log("🚀 ~ MainLayout ~ isLoggedIn:", isLoggedIn);
+   //    // console.log("🚀 ~ MainLayout ~ isLoading:", isLoading);
+   //    if (!isLoading && !auth && !isLoggedIn) {
+   //       router.replace("(auth)");
+   //    }
+   // }, [isLoggedIn]);
 
-   // if (!isLoading && auth && isLoggedIn) return <Redirect href={"(auth)"} />;
+   // if (!isLoading && !auth && !isLoggedIn) return <Redirect href={"(auth)"} />;
 
    return (
       <GestureHandlerRootView style={{ flex: 1 }}>

@@ -1,4 +1,12 @@
-import { Image, ScrollView, Text, ToastAndroid, View } from "react-native";
+import {
+   Image,
+   KeyboardAvoidingView,
+   Platform,
+   ScrollView,
+   Text,
+   ToastAndroid,
+   View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
@@ -19,6 +27,7 @@ import {
 import { postReport } from "../../stores/reportStore";
 import { SimpleToast } from "../../utils/alerts";
 import { base64ToFile } from "../../utils/formats";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const Report = () => {
    const { affairId } = useLocalSearchParams();
@@ -49,21 +58,24 @@ const Report = () => {
       comentarios: Yup.string().required("Comentarios requeridos"),
    });
    const onSubmit = async (values) => {
-      return console.log("🚀 ~ onSubmit ~ values:", values);
+      // return console.log("🚀 ~ onSubmit ~ values:", values);
       try {
-         setIsLoading(true);
+         // setIsLoading(true);
+         values.fecha_reporte = new Date();
+
          formik.setSubmitting(true);
+         console.log("🚀 ~ onSubmit ~ values:", values);
 
-         const res = await postReport(values);
-         console.log("🚀 ~ onSubmit ~ res:", res);
-         SimpleToast(res.alert_text, "center");
-         SimpleToast(
-            `REPORTE DE [${affair.asunto}] LEVANTADO`.toUpperCase(),
-            "center",
-         );
+         await postReport(values);
+         // console.log("🚀 ~ onSubmit ~ res:", res);
+         // SimpleToast(res.alert_text, "center");
+         // SimpleToast(
+         //    `REPORTE DE [${affair.asunto}] LEVANTADO`.toUpperCase(),
+         //    "center",
+         // );
 
-         formik.setSubmitting(false);
-         formik.resetForm();
+         // formik.setSubmitting(false);
+         // formik.resetForm();
 
          setIsLoading(false);
          router.back();
@@ -80,19 +92,10 @@ const Report = () => {
       validationSchema: validationSchema,
    });
 
-   const handleGetPhoto = async (photo64) => {
-      formik.setFieldValue("imgFilePreview", photo64);
-      // const compressedFile = new File([photo64], "evidencia.jpg", {
-      //    type: "image/jpeg",
-      //    lastModified: Date.now(),
-      // });
-      console.log("🚀 ~ handleGetPhoto ~ photo64:", photo64);
-      // const file = await base64ToFile(
-      //    "data:image/jpg;base64," + photo64,
-      //    "evidencia.jpg",
-      // );
-      // console.log("🚀 ~ handleGetPhoto ~ compressedFile:", file);
-      // formik.setFieldValue("imgFile", file);
+   const handleGetPhoto = async (dataFile) => {
+      // console.log("🚀 ~ handleGetPhoto ~ dataFile:", dataFile);
+      formik.setFieldValue("imgFilePreview", dataFile.uri);
+      formik.setFieldValue("imgFile", dataFile.file);
    };
 
    const handleGetLocation = (data) => {
@@ -101,16 +104,29 @@ const Report = () => {
       formik.setFieldValue("longitud", data.coords.longitude.toString());
    };
 
+   useEffect(() => {
+      console.log("a ver si se resetea el fgomulario");
+      // formik.resetForm();
+   }, []);
+
    return (
-      <SafeAreaView className={"h-full"}>
+      <View className={"h-full"}>
+         {/* // <View className={"h-full"}> */}
          {/* Título */}
-         <HeaderComponent />
+         {/* // <HeaderComponent /> */}
          <View className={"w-full justify-center items-center mb-5 -mt-5"}>
             <Text className={"text-2xl font-mextrabold mt-10 text-primary-200"}>
-               Reporte <Text className={`text-black`}>{affair?.asunto}</Text>
+               Reporte: <Text className={`text-black`}>{affair?.asunto}</Text>
             </Text>
          </View>
-         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+         <KeyboardAwareScrollView
+            contentContainerStyle={{ flexGrow: 1 }}
+            keyboardShouldPersistTaps="handled"
+            alwaysBounceVertical={true}>
+            {/* <ScrollView
+            contentContainerStyle={{ flexGrow: 1 }}
+            keyboardShouldPersistTaps="handled"
+            automaticallyAdjustKeyboardInsets={true}> */}
             <FormikComponent
                formik={formik}
                textBtnSubmit={"REGISTRARME"}
@@ -133,9 +149,10 @@ const Report = () => {
                            formik.values.imgFilePreview === null
                               ? images.camera
                               : {
-                                   uri:
-                                      "data:image/jpg;base64," +
-                                      formik.values.imgFilePreview,
+                                   uri: formik.values.imgFilePreview,
+                                   //   uri:
+                                   //      "data:image/jpg;base64," +
+                                   //      formik.values.imgFilePreview,
                                 }
                         }
                         className={`w-[95%] h-40 rounded-3xl`}
@@ -148,7 +165,7 @@ const Report = () => {
                         Por favor captura la imagen con buena calidad
                      </Text>
                      <CameraComponent
-                        textButton="Capturar evidencia"
+                        textButton="Subir evidencia"
                         styleButton={`w-full bg-primary-200`}
                         getData={handleGetPhoto}
                      />
@@ -228,9 +245,10 @@ const Report = () => {
                   // keyboardType={"email-address"}
                />
             </FormikComponent>
+            {/* </ScrollView> */}
             <FooterComponent />
-         </ScrollView>
-      </SafeAreaView>
+         </KeyboardAwareScrollView>
+      </View>
    );
 };
 

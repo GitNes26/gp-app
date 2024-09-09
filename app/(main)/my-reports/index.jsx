@@ -1,145 +1,203 @@
-// import { Image, ScrollView, Text, ToastAndroid, View } from "react-native";
-// import React, { useState } from "react";
-// import { SafeAreaView } from "react-native-safe-area-context";
-// import FooterComponent from "../../../components/FooterComponent";
-// import HeaderComponent from "../../../components/HeaderComponent";
-// import InputComponent from "../../../components/InputComponent";
-// import { router } from "expo-router";
-// import ButtonCompnent from "../../../components/ButtonCompnent";
-// import images from "../../../constants/images";
+import { Image, RefreshControl, Text, ToastAndroid, View } from "react-native";
+import React, { useState } from "react";
+import FooterComponent from "../../../components/FooterComponent";
+import images from "../../../constants/images";
+import useAuthStore from "./../../../stores/authStore";
+import { FlatList } from "react-native-gesture-handler";
+import TouchableContentComponent from "../../../components/TouchableContentComponent";
+import EmptyComponent from "../../../components/EmptyComponent";
+import { SimpleToast } from "../../../utils/alerts";
 
-// const Report = () => {
-//    const [form, setForm] = useState({
-//       created_at: "",
-//       img_evidence: "",
-//       lat: "",
-//       lon: "",
-//       ref: "",
-//       comments: "",
-//    });
-//    const [isSubmitting, setIsSubmitting] = useState(false);
+const MyReports = () => {
+   const { auth, isLoggedIn } = useAuthStore();
 
-//    const onSubmit = ({ values }) => {
-//       try {
-//          setIsSubmitting(true);
-//          ToastAndroid.showWithGravity(
-//             `REPORTE LEVANTADO`,
-//             ToastAndroid.LONG,
-//             ToastAndroid.CENTER,
-//          );
-//          // setTimeout(() => {
-//          setIsSubmitting(false);
-//          router.back();
-//          // }, 1500);
-//       } catch (error) {
-//          console.log("🚀 ~ onSubmit ~ error:", error);
-//          throw Error(error);
-//       } finally {
-//          // setIsSubmitting(false);
-//       }
-//    };
+   const [refreshing, setRereshing] = useState(false);
 
-//    return (
-//       <SafeAreaView className={"h-full "}>
-//          <HeaderComponent />
-//          {/* Título */}
-//          <View className={"w-full justify-center items-center mb-5"}>
-//             <Text className={"text-3xl font-mblack mt-10 text-primary-200"}>
-//                Reporte <Text className={`text-black`}>Bacheo[asunto]</Text>
-//             </Text>
-//          </View>
-//          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-//             <View className="flex-1 px-5">
-//                <InputComponent
-//                   title={"Fecha y hora"}
-//                   value={form.created_at}
-//                   handlChangeText={(e) => setForm({ ...form, created_at: e })}
-//                   otherStyles={"mt-7"}
-//                   keyboardType={"datetime"}
-//                   placeholder={"12:00"}
-//                />
-//                <View className={`flex-row py-4 w-full`}>
-//                   <View className={`w-1/2 justify-center items-center`}>
-//                      <Image
-//                         source={images.camera}
-//                         className={`w-32 h-32`}
-//                         resizeMode="contain"
-//                      />
-//                   </View>
-//                   <View className={`w-1/2 justify-center items-center`}>
-//                      <Text
-//                         className={`text-gray-500 text-center font-mmedium italic mb-2`}>
-//                         Por favor captura la imagen con buena calidad
-//                      </Text>
-//                      <ButtonCompnent
-//                         title={"Capturar evidencia"}
-//                         containerStyles={`w-full bg-primary-200`}
-//                      />
-//                   </View>
-//                </View>
-//                <View className={`flex-row py-4 w-full`}>
-//                   <View className={`w-1/2 justify-center items-center`}>
-//                      <Image
-//                         source={images.ubi}
-//                         className={`w-32 h-32`}
-//                         resizeMode="contain"
-//                      />
-//                   </View>
-//                   <View className={`w-1/2 justify-center items-center`}>
-//                      <Text
-//                         className={`text-gray-500 text-center font-mmedium italic mb-2`}>
-//                         Muestra tu ubicacion actual
-//                      </Text>
-//                      <ButtonCompnent
-//                         title={"Estoy Aquí"}
-//                         containerStyles={`w-full bg-primary-200`}
-//                      />
-//                   </View>
-//                </View>
-//                <InputComponent
-//                   title={"Latitud"}
-//                   value={form.lat}
-//                   handlChangeText={(e) => setForm({ ...form, lat: e })}
-//                   otherStyles={"mt-7"}
-//                   keyboardType={"number"}
-//                   placeholder={"25.252525"}
-//                />
-//                <InputComponent
-//                   title={"Longitud"}
-//                   value={form.lon}
-//                   handlChangeText={(e) => setForm({ ...form, lon: e })}
-//                   otherStyles={"mt-7"}
-//                   keyboardType={"number"}
-//                   placeholder={"25.252525"}
-//                />
-//                <InputComponent
-//                   title={"Referncias"}
-//                   value={form.ref}
-//                   handlChangeText={(e) => setForm({ ...form, ref: e })}
-//                   otherStyles={"mt-7"}
-//                   // keyboardType={"text"}
-//                   placeholder={"Describa referencias del lugar"}
-//                />
-//                <InputComponent
-//                   title={"Comentarios/Reporte"}
-//                   value={form.comments}
-//                   handlChangeText={(e) => setForm({ ...form, Report: e })}
-//                   otherStyles={"mt-7"}
-//                   // keyboardType={"text"}
-//                   placeholder={"Comentarios y/o reporte"}
-//                />
-//                <ButtonCompnent
-//                   title={"reportar"}
-//                   handleOnPress={onSubmit}
-//                   containerStyles={"mt-7 mb-5"}
-//                   isLoading={isSubmitting}
-//                />
-//             </View>
-//          </ScrollView>
-//          <FooterComponent />
-//          {/* <StatusBar backgroundColor={colors.primary.DEFAULT} style="inverted"  /> */}
-//       </SafeAreaView>
-//    );
-// };
+   const myReports = [
+      {
+         id: 1,
+         folio: 1,
+         asunto: "Bacheo",
+         status: "ALTA",
+         comentarios:
+            "Este es un mensaje de prueba SAJKLASDHJKLSAHDKHSALJHDASKDSAHL ASDJAS AL SKJDAS DKAS DLSA KLJSA JDLK ASSJDKKAS L",
+         created_at: "2024-09-09",
+      },
+      {
+         id: 2,
+         folio: 2,
+         asunto: "ALumbrado",
+         status: "ALTA",
+         comentarios:
+            "Este es un mensaje de prueba SAJKLASDHJKLSAHDKHSALJHDASKDSAHL ASDJAS AL SKJDAS DKAS DLSA KLJSA JDLK ASSJDKKAS L",
+         created_at: "2024-09-09",
+      },
+      {
+         id: 3,
+         folio: 3,
+         asunto: "Bacheo",
+         status: "PROCESO",
+         comentarios:
+            "Este es un mensaje de prueba SAJKLASDHJKLSAHDKHSALJHDASKDSAHL ASDJAS AL SKJDAS DKAS DLSA KLJSA JDLK ASSJDKKAS L",
+         created_at: "2024-09-09",
+      },
+      {
+         id: 4,
+         folio: 4,
+         asunto: "Vigilancia",
+         status: "ALTA",
+         comentarios:
+            "Este es un mensaje de prueba SAJKLASDHJKLSAHDKHSALJHDASKDSAHL ASDJAS AL SKJDAS DKAS DLSA KLJSA JDLK ASSJDKKAS L",
+         created_at: "2024-09-09",
+      },
+      {
+         id: 5,
+         folio: 5,
+         asunto: "Basura",
+         status: "ALTA",
+         comentarios:
+            "Este es un mensaje de prueba SAJKLASDHJKLSAHDKHSALJHDASKDSAHL ASDJAS AL SKJDAS DKAS DLSA KLJSA JDLK ASSJDKKAS L",
+         created_at: "2024-09-09",
+      },
+      {
+         id: 6,
+         folio: 6,
+         asunto: "Bacheo",
+         status: "PROCESO",
+         comentarios:
+            "Este es un mensaje de prueba SAJKLASDHJKLSAHDKHSALJHDASKDSAHL ASDJAS AL SKJDAS DKAS DLSA KLJSA JDLK ASSJDKKAS L",
+         created_at: "2024-09-09",
+      },
+   ];
 
-// export default Report;
+   const onRefresh = async () => {
+      setRereshing(true);
+      // await refetchPhotos();
+      // await refetchUsers();
+      ToastAndroid.show("Se actualizo", ToastAndroid.SHORT);
+      setRereshing(false);
+   };
+
+   const handleOnPress = (item) => {
+      SimpleToast(
+         `Aqui se mostrará el detalle del folio #${item.folio}`,
+         "center",
+      );
+   };
+
+   if (!auth && !isLoggedIn) return <View></View>;
+
+   return (
+      <>
+         <View className={"h-full"}>
+            {/* <HeaderComponent /> */}
+            {/* <KeyboardAwareScrollView
+            contentContainerStyle={{ flexGrow: 1 }}
+            keyboardShouldPersistTaps="handled"
+            alwaysBounceVertical={true}> */}
+
+            <View className="flex-1 bg-white p-3">
+               {/* TITULO */}
+               <View className={"w-full justify-center items-center mt-5"}>
+                  <Text className={"text-3xl font-mblack text-primary-200"}>
+                     Mis <Text className={`text-black`}>Reportes</Text>
+                  </Text>
+               </View>
+               {/* Imagen de Perfil */}
+               <View className="items-center mt-2">
+                  <Image
+                     source={images.profile_manada}
+                     // source={ { uri: "https://example.com/profile-picture.jpg" }}
+                     className="w-28 h-28 rounded-full"
+                  />
+               </View>
+
+               {/* Nombre y Descripción */}
+               <View className="mt-4 items-center">
+                  <Text className=" text-2xl font-mbold text-gray-900">
+                     {auth.name} {auth.paternal_last_name}{" "}
+                     {auth.maternal_last_name}
+                  </Text>
+                  {/* <Text className="text-sm font-mregular text-gray-500">
+                     22 años, dev del Campo
+                  </Text> */}
+                  <Text className="text-xs font-mregular text-gray-500">
+                     a reportado {myReports.length} eventos
+                  </Text>
+               </View>
+
+               {/* Lista */}
+               <View className="flex-1 pt-5">
+                  {/* Grid de Categorías */}
+                  <FlatList
+                     data={myReports}
+                     keyExtractor={(item, index) => `${index}`}
+                     numColumns={1}
+                     renderItem={({ item }) => (
+                        <ItemContent
+                           key={`key-item-${item.id}`}
+                           folio={item.folio}
+                           asunto={item.asunto}
+                           fecha={item.created_at}
+                           status={item.status}
+                           comentarios={item.comentarios}
+                           // icon={}
+                           onPress={() => handleOnPress(item)}
+                        />
+                     )}
+                     ListEmptyComponent={() => (
+                        <EmptyComponent
+                           title={"No hay reportes"}
+                           subtitle={"Recarga la sección..."}
+                        />
+                     )}
+                     refreshControl={
+                        <RefreshControl
+                           refreshing={refreshing}
+                           onRefresh={onRefresh}
+                        />
+                     }
+                  />
+               </View>
+            </View>
+            {/* </KeyboardAwareScrollView> */}
+            <FooterComponent />
+            {/* <StatusBar backgroundColor={colors.primary.DEFAULT} style="inverted"  /> */}
+         </View>
+      </>
+   );
+};
+
+export default MyReports;
+
+const ItemContent = ({
+   iconName,
+   folio,
+   asunto,
+   status,
+   comentarios,
+   fecha,
+   onPress,
+}) => {
+   return (
+      <TouchableContentComponent
+         styleContet="flex my-2 p-2 bg-gray-100/50 rounded-lg"
+         onPress={onPress}>
+         <View className="flex-row items-center justify-between mb-1">
+            <Text className=" font-mbold text-gray-700">
+               #{folio} - {asunto}
+            </Text>
+            <Text className=" font-mblack text-gray-700">{status}</Text>
+         </View>
+         <Text className="m-1 text-xs font-mregular text-gray-600">
+            {comentarios.length > 10
+               ? `${comentarios.slice(0, 75)}...`
+               : comentarios}
+         </Text>
+
+         <View className={`flex items-end`}>
+            <Text className="font-msemibold text-gray-700">{fecha}</Text>
+         </View>
+      </TouchableContentComponent>
+   );
+};

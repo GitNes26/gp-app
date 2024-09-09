@@ -32,7 +32,7 @@ export const getAllReports = async () => {
 
          const reportsApp = await res.result.filter((item) => item.app === 1);
          res.result = reportsApp;
-         // console.log("🚀 ~ getAllReports ~ res:", res);
+         console.log("🚀 ~ getAllReports ~ res:", res);
          await setAllReports(res.result);
          return res;
       }
@@ -70,15 +70,18 @@ export const postReport = async (data) => {
       // await checkLoggedIn();
 
       if (auth) {
-         const req = await ApiUrlFiles("/app/reportes", {
+         console.log("a dejar la solicitud");
+         const req = await ApiUrl("/app/reportes", {
             method: "POST",
             data,
+            headers: { "Content-Type": "multipart/form-data" },
          });
-         console.log("🚀 ~ postReport ~ req:", req.data.res);
-         const res = req.data.data;
-         res.result = reportsApp;
+         console.log("🚀 ~ postReport ~ req:", req);
+         // console.log("🚀 ~ postReport ~ req.data.res:", req.data.res);
+         // const res = req.data.data;
+         // res.result = reportsApp;
          // console.log("🚀 ~ postReport ~ res:", res);
-         return res;
+         // return res;
       }
    } catch (error) {
       console.log("🚀 ~ postReport ~ error:", error);

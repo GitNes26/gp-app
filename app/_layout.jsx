@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { SplashScreen, Stack } from "expo-router";
+import { Redirect, SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { useColorScheme } from "nativewind";
 import { useColorScheme as useColorSchemeRN } from "react-native";
@@ -37,48 +37,56 @@ const RootLayout = () => {
    const currentTheme = useColorSchemeRN();
 
    useEffect(() => {
-      console.log("auth", auth);
-      console.log("isLoggedIn", isLoggedIn);
+      (async () => {
+         // console.log("auth", auth);
+         // console.log("isLoggedIn", isLoggedIn);
 
-      if (error) throw error;
-      if (fontsLoaded) SplashScreen.hideAsync();
+         if (error) throw error;
+         if (fontsLoaded) SplashScreen.hideAsync();
 
-      const requestPermissions = async () => {
-         // Solicitar permiso para la cámara
-         const { status: cameraStatus } =
-            await Camera.Camera.requestCameraPermissionsAsync();
-         const { status: locationStatus } =
-            await Location.requestForegroundPermissionsAsync();
-         const { status: mediaLibraryStatus } =
-            await MediaLibrary.requestPermissionsAsync();
+         await (async () => {
+            // Solicitar permiso para la cámara
+            const { status: cameraStatus } =
+               await Camera.Camera.requestCameraPermissionsAsync();
+            const { status: locationStatus } =
+               await Location.requestForegroundPermissionsAsync();
+            const { status: mediaLibraryStatus } =
+               await MediaLibrary.requestPermissionsAsync();
 
-         setPermissionsGranted({
-            camera: cameraStatus === "granted",
-            location: locationStatus === "granted",
-            mediaLibrary: mediaLibraryStatus === "granted",
-         });
-      };
-
-      requestPermissions();
+            setPermissionsGranted({
+               camera: cameraStatus === "granted",
+               location: locationStatus === "granted",
+               mediaLibrary: mediaLibraryStatus === "granted",
+            });
+         })();
+      })();
    }, [fontsLoaded, error]);
 
    if (!fontsLoaded && !error) return null;
 
-   if (!auth && !isLoggedIn) {
-      console.log("no tengo nada");
+   if (auth && isLoggedIn) {
+      console.log("lo tengo todo");
       return (
          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="index" />
-            <Stack.Screen name="(auth)" />
+            <Stack.Screen name="(main)" />
          </Stack>
       );
    }
 
    return (
       <Stack screenOptions={{ headerShown: false }}>
-         <Stack.Screen name="(main)" />
+         <Stack.Screen name="index" />
+         <Stack.Screen name="(auth)" />
       </Stack>
    );
+
+   // return (
+   //    <Stack screenOptions={{ headerShown: false }}>
+   //       <Stack.Screen name="index" />
+   //       <Stack.Screen name="(auth)" />
+   //       <Stack.Screen name="(main)" />
+   //    </Stack>
+   // );
 };
 
 export default RootLayout;

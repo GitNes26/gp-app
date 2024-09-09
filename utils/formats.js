@@ -407,6 +407,22 @@ export function setPropsOriginals(original, newArray) {
    }, {});
 }
 
+/**
+ * Función para convertir la imagen en un tipo "File-like"
+ * @param {string} uri  Url para obtenrer el contenido de la imagen
+ * @param {string} fileName   Nombre que se le asignara al File
+ * @param {string} mimeType   Tipo de mime de la imagen a exportar
+ * @returns
+ */
+export const convertImageToFile = async (uri, fileName, mimeType) => {
+   const response = await fetch(uri); // Obtener el contenido del archivo
+   const blob = await response.blob(); // Convertir la respuesta en un Blob (similar a File en web)
+
+   // Crear un "File-like" object (Blob) para usarlo en FormData
+   const file = new File([blob], fileName, { type: mimeType });
+   return file;
+};
+
 // export const RenderJsonComponent = ({ jsonData }) => {
 //    return (
 //       <div>

@@ -23,7 +23,7 @@ const ProfileLayout = () => {
                   options={{
                      headerShown: item.options.headerShown,
                      headerShadowVisible: false,
-                     presentation: "transparentModal",
+                     presentation: "modal",
                      contentStyle: {
                         // top: top - 1,
                      },

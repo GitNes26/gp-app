@@ -212,6 +212,7 @@ export const checkLoggedIn = async () => {
    }
    if (!auth && !isLoggedIn) {
       console.log("checkLoggedIn ~ DE PLANO NO TENGO SESIÓN");
+      // return <Redirect href={"(auth)"} />;
       router.canDismiss() ? router.dismissAll() : router.replace("(auth)");
    }
 };

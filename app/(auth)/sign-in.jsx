@@ -1,5 +1,5 @@
 import { Image, ScrollView, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../../constants/images";
 import colors from "../../constants/colors";
@@ -14,12 +14,13 @@ import {
 } from "../../components/FormikComonents";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { login } from "../../stores/authStore";
+import useAuthStore, { login } from "../../stores/authStore";
 import { validateLocation } from "../../utils/validations";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const SignIn = () => {
    const { isLoading, setIsLoading } = useGlobalStore();
-   // const { isLoading, setIsLoading } = useGlobalStore();
+   const { auth } = useAuthStore();
 
    const initialValues = {
       email: "",
@@ -57,10 +58,10 @@ const SignIn = () => {
          formik.setSubmitting(true);
 
          /** VALIDAR QUE ESTE EN TERRITORIO GOMEZPALATINO */
-         // if (!(await validateLocation())) {
-         //    setIsLoading(false);
-         //    // return;
-         // }
+         if (!(await validateLocation())) {
+            setIsLoading(false);
+            // return;
+         }
 
          // const {
          //    data: res,
@@ -88,9 +89,23 @@ const SignIn = () => {
       validationSchema: () => validationSchemas(),
    });
 
+   // useEffect(() => {
+   //    if (auth) {
+   //       console.log("hay auth señores");
+   //       const form = {
+   //          email: auth.email,
+   //          password: auth.password,
+   //       };
+   //       formik.setValues(form);
+   //    }
+   // }, []);
+
    return (
       <SafeAreaView className={"h-full"}>
-         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+         <KeyboardAwareScrollView
+            contentContainerStyle={{ flexGrow: 1 }}
+            keyboardShouldPersistTaps="handled"
+            alwaysBounceVertical={true}>
             <HeaderComponent isAuth={true} />
             <View className={"w-full justify-center px-4 flex-1"}>
                <Image
@@ -143,7 +158,7 @@ const SignIn = () => {
                </View>
             </View>
             <FooterComponent isAuth={true} />
-         </ScrollView>
+         </KeyboardAwareScrollView>
       </SafeAreaView>
    );
 };
