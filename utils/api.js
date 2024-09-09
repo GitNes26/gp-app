@@ -5,7 +5,7 @@ export const ApiUrl = axios.create({
    baseURL: API_URL,
    responseType: "json",
    withCredentials: true,
-   headers: { "Content-Type": "application/json" },
+   headers: { Accept: "application/json", "Content-Type": "application/json" },
    // headers: { common: { "Content-Type": "application/json" } },
 });
 
@@ -13,6 +13,9 @@ export const ApiUrlFiles = axios.create({
    baseURL: API_URL,
    responseType: "json",
    withCredentials: true,
-   headers: { "Content-Type": "multipart/form-data" },
+   headers: {
+      Accept: "application/json",
+      "Content-Type": "multipart/form-data",
+   },
    // headers: { common: { "Content-Type": "multipart/form-data" } },
 });

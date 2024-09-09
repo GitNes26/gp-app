@@ -415,12 +415,46 @@ export function setPropsOriginals(original, newArray) {
  * @returns
  */
 export const convertImageToFile = async (uri, fileName, mimeType) => {
-   const response = await fetch(uri); // Obtener el contenido del archivo
-   const blob = await response.blob(); // Convertir la respuesta en un Blob (similar a File en web)
-
    // Crear un "File-like" object (Blob) para usarlo en FormData
-   const file = new File([blob], fileName, { type: mimeType });
+   const file = {
+      uri, // El uri de la imagen para React Native
+      name: fileName, // Nombre del archivo
+      type: mimeType, // Tipo MIME (image/jpeg, image/png, etc.)
+
+      originalName: uri,
+      fileName: fileName,
+      mimeType: mimeType,
+   };
+
+   // const response = await fetch(uri); // Obtener el contenido del archivo
+   // const blob = await response.blob(); // Convertir la respuesta en un Blob (similar a File en web)
+   // const file = new File([blob], fileName, {
+   //    type: mimeType,
+   //    lastModified: new Date().toISOString(),
+   // });
+
+   // console.log("🚀 ~ convertImageToFile ~ file:", file);
    return file;
+};
+
+/**
+ * Esta función nos ayuda a convertir un objeto sencillo a un tipo FormData
+ * @param {{}} objForm Formulario con una estructura de objeto sencillo
+ * @returns
+ */
+export const convertToFormData = async (objForm) => {
+   const formData = new FormData();
+   Object.keys(objForm).map((key) => {
+      if (typeof objForm[key] === "object" && key !== "id") {
+         console.log("soy diferente", key);
+         formData.append(key, {
+            uri: objForm[key].uri,
+            name: objForm[key].name,
+            type: objForm[key].type,
+         });
+      } else formData.append(key, objForm[key]);
+   });
+   return formData;
 };
 
 // export const RenderJsonComponent = ({ jsonData }) => {

@@ -1,6 +1,6 @@
 import { styled } from "nativewind";
 import React from "react";
-import { Pressable } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 const StyledPressable = styled(Pressable);
 
@@ -18,3 +18,12 @@ export default function IconPressableComponent({
       </StyledPressable>
    );
 }
+
+export const ItemIconText = ({ icon, text }) => {
+   return (
+      <View className={`flex items-center justify-center min-w-[50px]`}>
+         {icon}
+         <Text className={`text-xs font-mmedium mt-1`}>{text}</Text>
+      </View>
+   );
+};

@@ -13,7 +13,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import HeaderComponent from "../../components/HeaderComponent";
 import images from "../../constants/images";
 import FooterComponent from "../../components/FooterComponent";
-import CameraComponent from "../../components/CameraComponent";
+import FileInputComponent from "../../components/FileInputComponent";
 import LocationComponent from "../../components/LocationComponent";
 import useAffairStore from "../../stores/affairStore";
 import useAuthStore from "../../stores/authStore";
@@ -26,8 +26,9 @@ import {
 } from "../../components/FormikComonents";
 import { postReport } from "../../stores/reportStore";
 import { SimpleToast } from "../../utils/alerts";
-import { base64ToFile } from "../../utils/formats";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { convertToFormData } from "../../utils/formats";
+import ClockComponent from "./../../components/ClockComponent";
 
 const Report = () => {
    const { affairId } = useLocalSearchParams();
@@ -60,22 +61,26 @@ const Report = () => {
    const onSubmit = async (values) => {
       // return console.log("🚀 ~ onSubmit ~ values:", values);
       try {
-         // setIsLoading(true);
-         values.fecha_reporte = new Date();
-
+         setIsLoading(true);
          formik.setSubmitting(true);
-         console.log("🚀 ~ onSubmit ~ values:", values);
+         if (!values.imgFile.uri)
+            return SimpleToast("La evidencia es requerida.");
 
-         await postReport(values);
-         // console.log("🚀 ~ onSubmit ~ res:", res);
-         // SimpleToast(res.alert_text, "center");
-         // SimpleToast(
-         //    `REPORTE DE [${affair.asunto}] LEVANTADO`.toUpperCase(),
-         //    "center",
-         // );
+         values.fecha_reporte = new Date().toISOString();
 
-         // formik.setSubmitting(false);
-         // formik.resetForm();
+         const formData = await convertToFormData(values);
+         // console.log("🚀 ~ onSubmit ~ formData:", formData);
+
+         const res = await postReport(formData);
+         console.log("🚀 ~ onSubmit ~ res:", res);
+         SimpleToast(res.alert_title, "center");
+         SimpleToast(
+            `REPORTE DE [${affair.asunto}] LEVANTADO`.toUpperCase(),
+            "center",
+         );
+
+         formik.setSubmitting(false);
+         formik.resetForm();
 
          setIsLoading(false);
          router.back();
@@ -92,10 +97,10 @@ const Report = () => {
       validationSchema: validationSchema,
    });
 
-   const handleGetPhoto = async (dataFile) => {
-      // console.log("🚀 ~ handleGetPhoto ~ dataFile:", dataFile);
-      formik.setFieldValue("imgFilePreview", dataFile.uri);
-      formik.setFieldValue("imgFile", dataFile.file);
+   const handleGetPhoto = async (file) => {
+      // console.log("🚀 ~ handleGetPhoto ~ file:", file);
+      formik.setFieldValue("imgFilePreview", file.uri);
+      formik.setFieldValue("imgFile", file);
    };
 
    const handleGetLocation = (data) => {
@@ -104,43 +109,41 @@ const Report = () => {
       formik.setFieldValue("longitud", data.coords.longitude.toString());
    };
 
-   useEffect(() => {
-      console.log("a ver si se resetea el fgomulario");
-      // formik.resetForm();
-   }, []);
+   // useEffect(() => {
+   // console.log("a ver si se resetea el fgomulario");
+   // formik.resetForm();
+   // }, []);
 
    return (
       <View className={"h-full"}>
          {/* // <View className={"h-full"}> */}
          {/* Título */}
          {/* // <HeaderComponent /> */}
-         <View className={"w-full justify-center items-center mb-5 -mt-5"}>
-            <Text className={"text-2xl font-mextrabold mt-10 text-primary-200"}>
-               Reporte: <Text className={`text-black`}>{affair?.asunto}</Text>
-            </Text>
-         </View>
          <KeyboardAwareScrollView
             contentContainerStyle={{ flexGrow: 1 }}
             keyboardShouldPersistTaps="handled"
+            automaticallyAdjustContentInsets={true}
+            automaticallyAdjustKeyboardInsets={true}
             alwaysBounceVertical={true}>
-            {/* <ScrollView
-            contentContainerStyle={{ flexGrow: 1 }}
-            keyboardShouldPersistTaps="handled"
-            automaticallyAdjustKeyboardInsets={true}> */}
+            <View
+               className={"w-full justify-center items-center mb-5 -mt-5 px-1"}>
+               <Text
+                  className={"text-xl font-mextrabold mt-10 text-primary-200"}>
+                  Reporte:{" "}
+                  <Text className={`text-black`}>{affair?.asunto}</Text>
+               </Text>
+               <View className={`mt-2`}>
+                  <Text
+                     className={`text-xs font-msemibold flex justify-center `}>
+                     Fecha del reporte:{" "}
+                     <ClockComponent stylesBox={`pt-2`} styleText={`text-xs`} />
+                  </Text>
+               </View>
+            </View>
             <FormikComponent
                formik={formik}
                textBtnSubmit={"REGISTRARME"}
-               containerStyles={`mx-5`}>
-               <InputComponent
-                  formik={formik}
-                  idName={"fecha_reporte"}
-                  label={"Fecha del reporte"}
-                  placeholder={"fecha actual"}
-                  // helperText={"texto de ayuda"}
-                  textStyleCase={false}
-                  // keyboardType={"email-address"}
-               />
-
+               containerStyles={`flex-1 mx-5`}>
                <View className={`flex-row py-4 w-full`}>
                   <View
                      className={`w-1/2 justify-center items-center border border-gray-300 rounded-2xl`}>
@@ -164,7 +167,7 @@ const Report = () => {
                         className={`text-gray-500 text-center font-mmedium italic mb-2`}>
                         Por favor captura la imagen con buena calidad
                      </Text>
-                     <CameraComponent
+                     <FileInputComponent
                         textButton="Subir evidencia"
                         styleButton={`w-full bg-primary-200`}
                         getData={handleGetPhoto}
@@ -245,7 +248,6 @@ const Report = () => {
                   // keyboardType={"email-address"}
                />
             </FormikComponent>
-            {/* </ScrollView> */}
             <FooterComponent />
          </KeyboardAwareScrollView>
       </View>

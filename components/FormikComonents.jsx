@@ -45,7 +45,7 @@ export const FormikComponent = ({
          onSubmit={handleSubmit}
          validationSchema={validationSchema}>
          {({ handleSubmit, setSubmitting, resetForm, errors }) => (
-            <View className={`my-2 ${containerStyles}`}>
+            <View className={`my-2 mt-5 ${containerStyles}`}>
                {children}
                <ButtonCompnent
                   title={textBtnSubmit}

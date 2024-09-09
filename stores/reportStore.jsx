@@ -41,6 +41,29 @@ export const getAllReports = async () => {
    }
 };
 
+export const getMyReports = async () => {
+   const auth = useAuthStore.getState().auth;
+   const setAllReports = useReportStore.getState().setAllReports;
+
+   try {
+      // await checkLoggedIn();
+
+      if (auth) {
+         const req = await ApiUrl("/app/reportes", {
+            method: "GET",
+         });
+         // console.log("🚀 ~ getMyReports ~ req:", req.data.res);
+         const res = req.data.data;
+
+         console.log("🚀 ~ getMyReports ~ res:", res);
+         await setAllReports(res.result);
+         return res;
+      }
+   } catch (error) {
+      console.log("🚀 ~ getMyReports ~ error:", error);
+   }
+};
+
 export const getReport = async () => {
    const report = useReportStore.getState().report;
    const removeReport = useReportStore.getState().removeReport;
@@ -67,21 +90,17 @@ export const postReport = async (data) => {
    const auth = useAuthStore.getState().auth;
 
    try {
-      // await checkLoggedIn();
+      await checkLoggedIn();
 
       if (auth) {
-         console.log("a dejar la solicitud");
-         const req = await ApiUrl("/app/reportes", {
+         const req = await ApiUrlFiles("/app/reportes", {
             method: "POST",
             data,
-            headers: { "Content-Type": "multipart/form-data" },
          });
-         console.log("🚀 ~ postReport ~ req:", req);
-         // console.log("🚀 ~ postReport ~ req.data.res:", req.data.res);
-         // const res = req.data.data;
-         // res.result = reportsApp;
+         // console.log("🚀 ~ postReport ~ req:", req);
+         const res = req.data.data;
          // console.log("🚀 ~ postReport ~ res:", res);
-         // return res;
+         return res;
       }
    } catch (error) {
       console.log("🚀 ~ postReport ~ error:", error);
