@@ -72,7 +72,7 @@ const Report = () => {
          // console.log("🚀 ~ onSubmit ~ formData:", formData);
 
          const res = await postReport(formData);
-         console.log("🚀 ~ onSubmit ~ res:", res);
+         // console.log("🚀 ~ onSubmit ~ res:", res);
          SimpleToast(res.alert_title, "center");
          SimpleToast(
             `REPORTE DE [${affair.asunto}] LEVANTADO`.toUpperCase(),
@@ -119,27 +119,23 @@ const Report = () => {
          {/* // <View className={"h-full"}> */}
          {/* Título */}
          {/* // <HeaderComponent /> */}
+         <View className={"w-full justify-center items-center mb-5 -mt-5 px-1"}>
+            <Text className={"text-xl font-mextrabold mt-10 text-primary-200"}>
+               Reporte: <Text className={`text-black`}>{affair?.asunto}</Text>
+            </Text>
+            <View className={`mt-2`}>
+               <Text className={`text-xs font-msemibold flex justify-center `}>
+                  Fecha del reporte:{" "}
+                  <ClockComponent stylesBox={`pt-2`} styleText={`text-xs`} />
+               </Text>
+            </View>
+         </View>
          <KeyboardAwareScrollView
             contentContainerStyle={{ flexGrow: 1 }}
             keyboardShouldPersistTaps="handled"
             automaticallyAdjustContentInsets={true}
             automaticallyAdjustKeyboardInsets={true}
             alwaysBounceVertical={true}>
-            <View
-               className={"w-full justify-center items-center mb-5 -mt-5 px-1"}>
-               <Text
-                  className={"text-xl font-mextrabold mt-10 text-primary-200"}>
-                  Reporte:{" "}
-                  <Text className={`text-black`}>{affair?.asunto}</Text>
-               </Text>
-               <View className={`mt-2`}>
-                  <Text
-                     className={`text-xs font-msemibold flex justify-center `}>
-                     Fecha del reporte:{" "}
-                     <ClockComponent stylesBox={`pt-2`} styleText={`text-xs`} />
-                  </Text>
-               </View>
-            </View>
             <FormikComponent
                formik={formik}
                textBtnSubmit={"REGISTRARME"}

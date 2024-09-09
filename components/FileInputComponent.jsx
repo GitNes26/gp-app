@@ -66,9 +66,7 @@ export default function FileInputComponent({
             containerStyles={styleButton}
             handleOnPress={() => setVisibleModal(true)}
          />
-         <ModalComponent
-            visible={visibleModal}
-            title={<Text>Selecciona una opción</Text>}>
+         <ModalComponent visible={visibleModal} title={"Selecciona una opción"}>
             <View className={`flex-row items-center justify-evenly`}>
                <IconPressableComponent
                   icon={
@@ -77,7 +75,7 @@ export default function FileInputComponent({
                         text={"Galeria"}
                      />
                   }
-                  styleContent={`m-1 p-1.5 bg-gray-100/30 rounded-xl`}
+                  styleContent={`m-1 mx-3 p-1.5 bg-gray-100/30 rounded-xl`}
                   handleOnPress={() => handlePick("image")}
                />
                <IconPressableComponent
@@ -87,7 +85,7 @@ export default function FileInputComponent({
                         text={"Foto"}
                      />
                   }
-                  styleContent={`m-1 p-1.5 bg-gray-100/30 rounded-xl`}
+                  styleContent={`m-1 mx-3 p-1.5 bg-gray-100/30 rounded-xl`}
                   handleOnPress={() => handlePick("photo")}
                />
                <IconPressableComponent
@@ -97,7 +95,7 @@ export default function FileInputComponent({
                         text={"Cerrar"}
                      />
                   }
-                  styleContent={`m-1 p-1.5 bg-gray-100/10 rounded-xl`}
+                  styleContent={`m-1 mx-3 p-1.5 bg-gray-100/10 rounded-xl`}
                   handleOnPress={() => setVisibleModal(false)}
                />
             </View>
