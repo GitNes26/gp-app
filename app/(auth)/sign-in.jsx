@@ -8,10 +8,7 @@ import { Foundation } from "@expo/vector-icons";
 import FooterComponent from "../../components/FooterComponent";
 import HeaderComponent from "../../components/HeaderComponent";
 import useGlobalStore from "../../stores/globalStore";
-import {
-   FormikComponent,
-   InputComponent,
-} from "../../components/FormikComonents";
+import { FormikComponent, InputComponent } from "../../components/FormikComonents";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import useAuthStore, { login } from "../../stores/authStore";
@@ -24,30 +21,20 @@ const SignIn = () => {
 
    const initialValues = {
       email: "",
-      password: "",
+      password: ""
    };
    const validationSchemas = () => {
       let validationSchema;
       // if (inputUsername)
       if (true)
          validationSchema = Yup.object().shape({
-            email: Yup.string()
-               .email("Formato de correo no valido")
-               .required("Nombre de usario o Correo requerido"),
-            password: Yup.string()
-               .trim()
-               .min(6, "Mínimo 6 caracteres")
-               .required("Contraseña requerida"),
+            email: Yup.string().email("Formato de correo no valido").required("Nombre de usario o Correo requerido"),
+            password: Yup.string().trim().min(6, "Mínimo 6 caracteres").required("Contraseña requerida")
          });
       else
          validationSchema = Yup.object().shape({
-            email: Yup.string()
-               .email("Formato de correo no valido")
-               .required("Nombre de usario o Correo requerido"),
-            password: Yup.string()
-               .trim()
-               .min(6, "Mínimo 6 caracteres")
-               .required("Contraseña requerida"),
+            email: Yup.string().email("Formato de correo no valido").required("Nombre de usario o Correo requerido"),
+            password: Yup.string().trim().min(6, "Mínimo 6 caracteres").required("Contraseña requerida")
          });
       return validationSchema;
    };
@@ -57,7 +44,7 @@ const SignIn = () => {
          setIsLoading(true);
          formik.setSubmitting(true);
 
-         /** VALIDAR QUE ESTE EN TERRITORIO GOMEZPALATINO */
+         // /** VALIDAR QUE ESTE EN TERRITORIO GOMEZPALATINO */
          // if (!(await validateLocation())) {
          //    setIsLoading(false);
          //    // return;
@@ -86,7 +73,7 @@ const SignIn = () => {
    const formik = useFormik({
       initialValues: initialValues,
       onSubmit: (values) => onSubmit(values),
-      validationSchema: () => validationSchemas(),
+      validationSchema: () => validationSchemas()
    });
 
    // useEffect(() => {
@@ -102,25 +89,14 @@ const SignIn = () => {
 
    return (
       <SafeAreaView className={"h-full"}>
-         <KeyboardAwareScrollView
-            contentContainerStyle={{ flexGrow: 1 }}
-            keyboardShouldPersistTaps="handled"
-            alwaysBounceVertical={true}>
+         <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled" alwaysBounceVertical={true}>
             <HeaderComponent isAuth={true} />
             <View className={"w-full justify-center px-4 flex-1"}>
-               <Image
-                  source={images.logo}
-                  className={"w-full h-14"}
-                  resizeMode="contain"
-               />
+               <Image source={images.logo} className={"w-full h-14"} resizeMode="contain" />
                <View className={"w-full justify-center items-center"}>
-                  <Text
-                     className={"text-3xl font-mbold mt-10 text-primary-200"}>
-                     Bienvenido!
-                  </Text>
+                  <Text className={"text-3xl font-mbold mt-10 text-primary-200"}>Bienvenido!</Text>
                   <Text className={"text-base font-mmedium text-gray-500"}>
-                     a la App con estrella{" "}
-                     <Foundation name="star" size={18} color={colors.primary} />
+                     a la App con estrella <Foundation name="star" size={18} color={colors.primary} />
                   </Text>
                </View>
 
@@ -149,9 +125,7 @@ const SignIn = () => {
                <View className={"justify-center pt-5 flex-row gap-2"}>
                   <Text className={"text-lg text-gray-700 font-mregular"}>
                      ¿Aun no tienes cuenta?{" "}
-                     <Link
-                        href={"/sign-up"}
-                        className="text-lg font-msemibold text-primary">
+                     <Link href={"/sign-up"} className="text-lg font-msemibold text-primary">
                         Registrate
                      </Link>
                   </Text>

@@ -24,8 +24,8 @@ const data = [
       header: () => <HeaderComponent />,
       icon: {
          focus: "home",
-         disfocus: "home-outline",
-      },
+         disfocus: "home-outline"
+      }
    },
    {
       name: "report",
@@ -36,8 +36,8 @@ const data = [
       show: false,
       icon: {
          focus: "newspaper",
-         disfocus: "newspaper-outline",
-      },
+         disfocus: "newspaper-outline"
+      }
    },
    {
       name: "my-reports",
@@ -47,8 +47,8 @@ const data = [
       show: true,
       icon: {
          focus: "reader",
-         disfocus: "reader-outline",
-      },
+         disfocus: "reader-outline"
+      }
    },
    // {
    //    name: "my-reports/details",
@@ -69,20 +69,20 @@ const data = [
       show: false,
       icon: {
          focus: "person",
-         disfocus: "person-outline",
-      },
+         disfocus: "person-outline"
+      }
    },
    {
       name: "demo",
       label: "Demo",
       title: "Demo",
       headerShown: true,
-      show: true,
+      show: false,
       icon: {
          focus: "settings",
-         disfocus: "settings-outline",
-      },
-   },
+         disfocus: "settings-outline"
+      }
+   }
 ];
 
 const DrawerGroup = () => {
@@ -95,19 +95,19 @@ const DrawerGroup = () => {
             drawerLabelStyle: { marginLeft: -20, fontWeight: "bold" },
             // drawerHideStatusBarOnOpen: true,
             headerTitleStyle: {
-               fontWeight: "800",
+               fontWeight: "800"
             },
             headerTitleContainerStyle: {
                // backgroundColor: "red",
                width: "100%",
-               alignItems: "center",
+               alignItems: "center"
             },
             headerStyle: {
                // backgroundColor: "yellow",
                // height: "10%",
             },
             headerShown: true,
-            headerShadowVisible: true,
+            headerShadowVisible: true
             // header: () => <HeaderComponent />,
             // headerLeft: () => (
             //    <ImagePressableComponent
@@ -120,14 +120,15 @@ const DrawerGroup = () => {
             //       <LogoComponent />
             //    </View>
             // ),
-         }}>
+         }}
+      >
          {data.map((item) => (
             <Drawer.Screen
                key={`key-drawer-screen-${item.name}`}
                name={item.name} // This is the name of the page and must match the url from root
                options={({ route }) => ({
                   drawerItemStyle: {
-                     display: !item.show ? "none" : "flex",
+                     display: !item.show ? "none" : "flex"
                   },
                   headerShown: item.headerShown,
                   header: item.header,
@@ -143,14 +144,8 @@ const DrawerGroup = () => {
                      //       : "notifications-outline";
                      // else if (route.name === "Settings")
                      //    iconName = focused ? "settings" : "settings-outline";
-                     return (
-                        <Ionicons
-                           name={focused ? item.icon.focus : item.icon.disfocus}
-                           size={size}
-                           color={color}
-                        />
-                     );
-                  },
+                     return <Ionicons name={focused ? item.icon.focus : item.icon.disfocus} size={size} color={color} />;
+                  }
                })}
             />
          ))}

@@ -98,7 +98,9 @@ const ItemContent = ({ title, value, img, horizontal = true }) => {
       <View className={`${horizontal ? "flex-row" : "flex"} items-center justify-between mb-1 p-3 bg-gray-100/50 rounded-lg`}>
          <Text className={`${horizontal ? "w-[40%]" : "mb-2"} font-mbold text-gray-500`}>{title}</Text>
          {value && (
-            <Text className={`font-mblack text-gray-700 flex-wrap ${horizontal ? "w-[60%] text-right " : "w-full max-h-[40vh] overflow-y-auto"}`}>{value}</Text>
+            <Text className={`font-mblack text-gray-700 flex-wrap ${horizontal ? "w-[60%] text-right " : "w-full text-justify max-h-64 overflow-y-auto"}`}>
+               {value}
+            </Text>
          )}
          {img && <Image source={{ uri: `${API_IMG}/${img}` }} className={`w-[100%] aspect-square rounded-md`} resizeMode={"center"} />}
       </View>

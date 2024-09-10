@@ -75,7 +75,7 @@ export const InputComponent = ({
       <View className={`mb-5 ${otherStyles}`}>
          <Text className={`text-base pl-3 ${isError ? "text-red-600" : "text-primary"} font-msemibold`}>{label}</Text>
          <View
-            className={`border-2 border-slate-200 w-full ${!rows ? "max-h-[75vh]" : "h-16"} px-4 bg-slate-50 rounded-2xl focus:border-primary-200 items-center flex-row ${isError && "border-red-600"} ${readOnly && "bg-slate-200"}`}
+            className={`border-2 border-slate-200 w-full ${!rows ? "h-16" : "max-h-64"} px-4 bg-slate-50 rounded-2xl focus:border-primary-200 items-center flex-row ${isError && "border-red-600"} ${readOnly && "bg-slate-200"}`}
          >
             <TextInput
                key={`key-${idName}`}

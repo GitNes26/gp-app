@@ -1,12 +1,4 @@
-import {
-   FlatList,
-   Image,
-   RefreshControl,
-   Text,
-   ToastAndroid,
-   TouchableOpacity,
-   View,
-} from "react-native";
+import { FlatList, Image, RefreshControl, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
@@ -15,8 +7,11 @@ import HeaderComponent from "../../components/HeaderComponent";
 import useAffairStore, { getAllAffairs } from "../../stores/affairStore";
 import { API_IMG } from "@env";
 import EmptyComponent from "../../components/EmptyComponent";
+import { validateLocation } from "../../utils/validations";
+import useGlobalStore from "../../stores/globalStore";
 
 const Index = () => {
+   const { isLoading, setIsLoading } = useGlobalStore();
    const { affairs, setAffair } = useAffairStore();
 
    // const {
@@ -35,7 +30,12 @@ const Index = () => {
       setRereshing(false);
    };
 
-   const handlePressCategory = (id) => {
+   const handlePressCategory = async (id) => {
+      /** VALIDAR QUE ESTE EN TERRITORIO GOMEZPALATINO */
+      if (!(await validateLocation())) {
+         setIsLoading(false);
+         // return;
+      }
       const item = affairs.find((item) => item.asunto_id === id);
       setAffair(item);
       router.push(`/report`);
@@ -71,18 +71,8 @@ const Index = () => {
                      onPress={() => handlePressCategory(item.asunto_id)}
                   />
                )}
-               ListEmptyComponent={() => (
-                  <EmptyComponent
-                     title={"No hay asuntos"}
-                     subtitle={"Recarga la sección..."}
-                  />
-               )}
-               refreshControl={
-                  <RefreshControl
-                     refreshing={refreshing}
-                     onRefresh={onRefresh}
-                  />
-               }
+               ListEmptyComponent={() => <EmptyComponent title={"No hay asuntos"} subtitle={"Recarga la sección..."} />}
+               refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
             />
          </View>
          {/* </ScrollView> */}
@@ -97,18 +87,9 @@ export default Index;
 const CategoryItem = ({ title, icon, uriIcon, onPress }) => {
    return (
       <View className={`flex-1 items-stretch mb-10`}>
-         <TouchableOpacity
-            className=" flex items-center justify-start m-2"
-            onPress={onPress}>
-            <Image
-               source={icon ? icon : { uri: `${API_IMG}/${uriIcon}` }}
-               className={"w-24 h-24 mb-1"}
-               resizeMode="cover"
-            />
-            <Text
-               className={"text-base font-mregular text-center text-gray-500"}>
-               {title}
-            </Text>
+         <TouchableOpacity className=" flex items-center justify-start m-2" onPress={onPress}>
+            <Image source={icon ? icon : { uri: `${API_IMG}/${uriIcon}` }} className={"w-24 h-24 mb-1"} resizeMode="cover" />
+            <Text className={"text-base font-mregular text-center text-gray-500"}>{title}</Text>
          </TouchableOpacity>
       </View>
    );

@@ -47,56 +47,54 @@ const MyReports = () => {
 
             <View className="flex-1 bg-white p-3">
                {/* Lista */}
-               <View className="flex-1 pt-5">
-                  <FlatList
-                     data={reports}
-                     keyExtractor={(item, index) => `${index}`}
-                     numColumns={1}
-                     ListHeaderComponent={() => (
-                        <>
-                           {/* TITULO */}
-                           <View className={"w-full justify-center items-center mt-3"}>
-                              <Text className={"text-3xl font-mblack text-primary-200"}>
-                                 Mis <Text className={`text-black`}>Reportes</Text>
-                              </Text>
-                           </View>
-                           {/* Imagen de Perfil */}
-                           <View className="items-center mt-2">
-                              <Image
-                                 source={images.profile_manada}
-                                 // source={ { uri: "https://example.com/profile-picture.jpg" }}
-                                 className="w-28 h-28 rounded-full"
-                              />
-                           </View>
+               <FlatList
+                  data={reports}
+                  keyExtractor={(item, index) => `${index}`}
+                  numColumns={1}
+                  ListHeaderComponent={() => (
+                     <>
+                        {/* TITULO */}
+                        <View className={"w-full justify-center items-center mt-3"}>
+                           <Text className={"text-3xl font-mblack text-primary-200"}>
+                              Mis <Text className={`text-black`}>Reportes</Text>
+                           </Text>
+                        </View>
+                        {/* Imagen de Perfil */}
+                        <View className="items-center mt-2">
+                           <Image
+                              source={images.profile_manada}
+                              // source={ { uri: "https://example.com/profile-picture.jpg" }}
+                              className="w-28 h-28 rounded-full"
+                           />
+                        </View>
 
-                           {/* Nombre y Descripción */}
-                           <View className="mt-4 items-center">
-                              <Text className=" text-2xl font-mbold text-gray-900">
-                                 {auth.name} {auth.paternal_last_name} {auth.maternal_last_name}
-                              </Text>
-                              {/* <Text className="text-sm font-mregular text-gray-500">
+                        {/* Nombre y Descripción */}
+                        <View className="mt-4 items-center mb-5">
+                           <Text className=" text-2xl font-mbold text-gray-900">
+                              {auth.name} {auth.paternal_last_name} {auth.maternal_last_name}
+                           </Text>
+                           {/* <Text className="text-sm font-mregular text-gray-500">
                      22 años, dev del Campo
                   </Text> */}
-                              <Text className="text-sm font-mregular text-gray-500">a reportado {reports.length} eventos</Text>
-                           </View>
-                        </>
-                     )}
-                     renderItem={({ item }) => (
-                        <ItemContent
-                           key={`key-item-${item.id}`}
-                           id={item.id}
-                           asunto={item.asunto}
-                           fecha_reporte={item.fecha_reporte}
-                           estatus={item.estatus}
-                           observaciones={item.observaciones}
-                           // icon={}
-                           onPress={() => handleOnPress(item.id)}
-                        />
-                     )}
-                     ListEmptyComponent={() => <EmptyComponent title={"No hay reportes"} subtitle={"Recarga la sección..."} />}
-                     refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-                  />
-               </View>
+                           <Text className="text-sm font-mregular text-gray-500">a reportado {reports.length} eventos</Text>
+                        </View>
+                     </>
+                  )}
+                  renderItem={({ item }) => (
+                     <ItemContent
+                        key={`key-item-${item.id}`}
+                        id={item.id}
+                        asunto={item.asunto}
+                        fecha_reporte={item.fecha_reporte}
+                        estatus={item.estatus}
+                        observaciones={item.observaciones}
+                        // icon={}
+                        onPress={() => handleOnPress(item.id)}
+                     />
+                  )}
+                  ListEmptyComponent={() => <EmptyComponent title={"No hay reportes"} subtitle={"Recarga la sección..."} />}
+                  refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+               />
             </View>
             {/* </KeyboardAwareScrollView> */}
             <FooterComponent />
