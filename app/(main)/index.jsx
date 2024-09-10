@@ -38,7 +38,7 @@ const Index = () => {
    const handlePressCategory = (id) => {
       const item = affairs.find((item) => item.asunto_id === id);
       setAffair(item);
-      router.push(`/${id}`);
+      router.push(`/report`);
    };
 
    useEffect(() => {

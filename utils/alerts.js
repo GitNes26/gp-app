@@ -6,14 +6,14 @@ import { ToastAndroid } from "react-native";
  * @param {string} gravity "center" | "bottom" | "top"
  * @returns
  */
-export const SimpleToast = (msg, gravity) => {
+export const SimpleToast = (msg, gravity = "center") => {
    return ToastAndroid.showWithGravity(
       msg,
       ToastAndroid.LONG,
-      gravity === "center"
-         ? ToastAndroid.CENTER
+      gravity === "top"
+         ? ToastAndroid.TOP
          : gravity === "bottom"
            ? ToastAndroid.BOTTOM
-           : ToastAndroid.TOP,
+           : ToastAndroid.CENTER,
    );
 };

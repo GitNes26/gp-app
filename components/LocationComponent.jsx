@@ -97,15 +97,13 @@ const LocationComponent = ({
       }
    };
 
-   useEffect(() => {
-      // console.log("soy el LocationComponent");
-      // requestPermision();
-   }, []);
+   // useEffect(() => {
+   // console.log("soy el LocationComponent");
+   // requestPermision();
+   // }, []);
 
    return (
       <>
-         {/* <LoadingComponent /> */}
-
          <ButtonCompnent
             isLoading={isLoading}
             colorisLoading="white"

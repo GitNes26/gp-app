@@ -1,16 +1,6 @@
-import {
-   Image,
-   KeyboardAvoidingView,
-   Platform,
-   ScrollView,
-   Text,
-   ToastAndroid,
-   View,
-} from "react-native";
-import React, { useEffect, useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { router, useLocalSearchParams } from "expo-router";
-import HeaderComponent from "../../components/HeaderComponent";
+import { Alert, Image, Text, View } from "react-native";
+import React, { useEffect } from "react";
+import { router, useNavigation } from "expo-router";
 import images from "../../constants/images";
 import FooterComponent from "../../components/FooterComponent";
 import FileInputComponent from "../../components/FileInputComponent";
@@ -28,10 +18,10 @@ import { postReport } from "../../stores/reportStore";
 import { SimpleToast } from "../../utils/alerts";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { convertToFormData } from "../../utils/formats";
-import ClockComponent from "./../../components/ClockComponent";
+import ClockComponent from "../../components/ClockComponent";
 
 const Report = () => {
-   const { affairId } = useLocalSearchParams();
+   const navigation = useNavigation();
    const { isLoading, setIsLoading } = useGlobalStore();
 
    const { auth } = useAuthStore();
@@ -41,7 +31,6 @@ const Report = () => {
       id: null,
       fecha_reporte: "",
       imgFile: null,
-      imgFilePreview: null,
       latitud: "",
       longitud: "",
       id_user: auth?.id,
@@ -51,6 +40,7 @@ const Report = () => {
       id_asunto: affair.asunto_id,
 
       address: "",
+      // dataLocation: null,
    };
    const validationSchema = Yup.object().shape({
       latitud: Yup.string().required("Latitud requerida"),
@@ -63,9 +53,12 @@ const Report = () => {
       try {
          setIsLoading(true);
          formik.setSubmitting(true);
-         if (!values.imgFile.uri)
-            return SimpleToast("La evidencia es requerida.");
 
+         if (!values.imgFile) {
+            setIsLoading(false);
+            formik.setSubmitting(false);
+            return SimpleToast("La evidencia es requerida.");
+         }
          values.fecha_reporte = new Date().toISOString();
 
          const formData = await convertToFormData(values);
@@ -85,6 +78,8 @@ const Report = () => {
          setIsLoading(false);
          router.back();
       } catch (error) {
+         setIsLoading(false);
+         formik.setSubmitting(false);
          console.log("🚀 ~ onSubmit ~ error:", error);
          throw Error(error);
       } finally {
@@ -99,11 +94,12 @@ const Report = () => {
 
    const handleGetPhoto = async (file) => {
       // console.log("🚀 ~ handleGetPhoto ~ file:", file);
-      formik.setFieldValue("imgFilePreview", file.uri);
       formik.setFieldValue("imgFile", file);
    };
 
    const handleGetLocation = (data) => {
+      // console.log("🚀 ~ handleGetLocation ~ data:", data);
+      // formik.setFieldValue("dataLocation", data);
       formik.setFieldValue("address", data.ubication.formattedAddress);
       formik.setFieldValue("latitud", data.coords.latitude.toString());
       formik.setFieldValue("longitud", data.coords.longitude.toString());
@@ -113,6 +109,50 @@ const Report = () => {
    // console.log("a ver si se resetea el fgomulario");
    // formik.resetForm();
    // }, []);
+
+   useEffect(
+      (e) => {
+         // console.log("🚀 ~ useEffect ~ e:", e);
+         // console.log("useEffect del report");
+
+         const unsubscribe = navigation.addListener("beforeRemove", (e) => {
+            console.log("asdasds");
+            console.log("🚀 ~ unsubscribe ~ e:", e);
+            // if (e.data.action.type === "GO_BACK") {
+            //    console.log("Usuario está navegando hacia atrás");
+            //    // Aquí puedes hacer otras acciones, como mostrar una alerta, guardar datos, etc.
+            // }
+            // Alert.alert("Salir", "¿Estás seguro que quieres salir?", [
+            //    { text: "Cancelar", style: "cancel", onPress: () => {} },
+            //    {
+            //       text: "Salir",
+            //       style: "destructive",
+            //       onPress: () => navigation.dispatch(e.data.action),
+            //    },
+            // ]);
+            // Opcionalmente puedes evitar que el usuario se salga, mostrando una alerta
+            // e.preventDefault();
+         });
+
+         const focusUnsubscribe = navigation.addListener("focus", (e) => {
+            // console.log("Pantalla enfocada");
+            // console.log("🚀 ~ focusUnsubscribe ~ e:", e);
+            formik.resetForm();
+         });
+
+         const blurUnsubscribe = navigation.addListener("blur", (e) => {
+            console.log("Pantalla desenfocada");
+            console.log("🚀 ~ blurUnsubscribe ~ e:", e);
+         });
+
+         return () => {
+            unsubscribe();
+            focusUnsubscribe();
+            blurUnsubscribe();
+         };
+      },
+      [navigation],
+   );
 
    return (
       <View className={"h-full"}>
@@ -124,9 +164,9 @@ const Report = () => {
                Reporte: <Text className={`text-black`}>{affair?.asunto}</Text>
             </Text>
             <View className={`mt-2`}>
-               <Text className={`text-xs font-msemibold flex justify-center `}>
-                  Fecha del reporte:{" "}
-                  <ClockComponent stylesBox={`pt-2`} styleText={`text-xs`} />
+               <Text
+                  className={`text-xs font-msemibold flex justify-center items-end`}>
+                  Fecha del reporte: <ClockComponent styleText={`text-xs`} />
                </Text>
             </View>
          </View>
@@ -140,15 +180,16 @@ const Report = () => {
                formik={formik}
                textBtnSubmit={"REGISTRARME"}
                containerStyles={`flex-1 mx-5`}>
+               {/* Componente Camera */}
                <View className={`flex-row py-4 w-full`}>
                   <View
                      className={`w-1/2 justify-center items-center border border-gray-300 rounded-2xl`}>
                      <Image
                         source={
-                           formik.values.imgFilePreview === null
+                           formik.values.imgFile === null
                               ? images.camera
                               : {
-                                   uri: formik.values.imgFilePreview,
+                                   uri: formik.values.imgFile.uri,
                                    //   uri:
                                    //      "data:image/jpg;base64," +
                                    //      formik.values.imgFilePreview,
@@ -171,6 +212,7 @@ const Report = () => {
                   </View>
                </View>
 
+               {/* Componente Ubicacion */}
                <View className={`flex-row py-4 w-full`}>
                   <View className={`w-1/2 justify-center items-center`}>
                      <Image

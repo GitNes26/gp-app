@@ -18,20 +18,25 @@ const data = [
    {
       name: "index",
       label: "Inicio",
-      headerShown: false,
+      headerShown: true,
       show: true,
-      title: () => (
-         <View className={`justify-center items-center `}>
-            <Image
-               source={images.logo}
-               className={"h-12"}
-               resizeMode="contain"
-            />
-         </View>
-      ),
+      title: "",
+      header: () => <HeaderComponent />,
       icon: {
          focus: "home",
          disfocus: "home-outline",
+      },
+   },
+   {
+      name: "report",
+      label: "Nuevo Reporte",
+      title: "Nuevo Reporte",
+      header: () => <HeaderComponent />,
+      headerShown: true,
+      show: false,
+      icon: {
+         focus: "newspaper",
+         disfocus: "newspaper-outline",
       },
    },
    {
@@ -45,8 +50,19 @@ const data = [
          disfocus: "reader-outline",
       },
    },
+   // {
+   //    name: "my-reports/details",
+   //    label: "Reporte [id]",
+   //    title: "Reporte [id]",
+   //    headerShown: true,
+   //    show: false,
+   //    icon: {
+   //       focus: "reader",
+   //       disfocus: "reader-outline",
+   //    },
+   // },
    {
-      name: "profile",
+      name: "profile/index",
       label: "Mi Perfil",
       title: "Mi Perfil",
       headerShown: true,
@@ -62,17 +78,6 @@ const data = [
       title: "Demo",
       headerShown: true,
       show: true,
-      icon: {
-         focus: "settings",
-         disfocus: "settings-outline",
-      },
-   },
-   {
-      name: "[affairId]",
-      label: "AffairId",
-      title: "Reporte reporte",
-      headerShown: false,
-      show: false,
       icon: {
          focus: "settings",
          disfocus: "settings-outline",
@@ -103,7 +108,7 @@ const DrawerGroup = () => {
             },
             headerShown: true,
             headerShadowVisible: true,
-            header: () => <HeaderComponent />,
+            // header: () => <HeaderComponent />,
             // headerLeft: () => (
             //    <ImagePressableComponent
             //       image={images.profile_manada}
@@ -124,7 +129,8 @@ const DrawerGroup = () => {
                   drawerItemStyle: {
                      display: !item.show ? "none" : "flex",
                   },
-                  // headerShown: item.headerShown,
+                  headerShown: item.headerShown,
+                  header: item.header,
                   drawerLabel: item.label,
                   headerTitle: item.title,
                   drawerIcon: ({ size, color, focused }) => {

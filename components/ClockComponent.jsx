@@ -14,11 +14,11 @@ const ClockComponent = ({ stylesBox, styleText }) => {
    }, []);
 
    return (
-      <View sx={stylesBox}>
-         <Text className={`font-msemibold text-gray-700 ${styleText}`}>
-            {formatDatetime(currentDatetime, true, "dddd DD/MM/YYYY h:mm:ss a")}
-         </Text>
-      </View>
+      // <View className={stylesBox}>
+      <Text className={`font-msemibold text-gray-700 ${styleText}`}>
+         {formatDatetime(currentDatetime, true, "dddd DD/MM/YYYY h:mm:ss a")}
+      </Text>
+      // </View>
    );
 };
 

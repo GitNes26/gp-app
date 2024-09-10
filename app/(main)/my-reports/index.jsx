@@ -1,5 +1,5 @@
 import { Image, RefreshControl, Text, ToastAndroid, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FooterComponent from "../../../components/FooterComponent";
 import images from "../../../constants/images";
 import useAuthStore from "./../../../stores/authStore";
@@ -7,83 +7,33 @@ import { FlatList } from "react-native-gesture-handler";
 import TouchableContentComponent from "../../../components/TouchableContentComponent";
 import EmptyComponent from "../../../components/EmptyComponent";
 import { SimpleToast } from "../../../utils/alerts";
+import useReportStore, { getMyReports } from "../../../stores/reportStore";
+import { Link, router } from "expo-router";
 
 const MyReports = () => {
    const { auth, isLoggedIn } = useAuthStore();
+   const { report, setReport, reports } = useReportStore();
 
    const [refreshing, setRereshing] = useState(false);
 
-   const myReports = [
-      {
-         id: 1,
-         folio: 1,
-         asunto: "Bacheo",
-         status: "ALTA",
-         comentarios:
-            "Este es un mensaje de prueba SAJKLASDHJKLSAHDKHSALJHDASKDSAHL ASDJAS AL SKJDAS DKAS DLSA KLJSA JDLK ASSJDKKAS L",
-         created_at: "2024-09-09",
-      },
-      {
-         id: 2,
-         folio: 2,
-         asunto: "ALumbrado",
-         status: "ALTA",
-         comentarios:
-            "Este es un mensaje de prueba SAJKLASDHJKLSAHDKHSALJHDASKDSAHL ASDJAS AL SKJDAS DKAS DLSA KLJSA JDLK ASSJDKKAS L",
-         created_at: "2024-09-09",
-      },
-      {
-         id: 3,
-         folio: 3,
-         asunto: "Bacheo",
-         status: "PROCESO",
-         comentarios:
-            "Este es un mensaje de prueba SAJKLASDHJKLSAHDKHSALJHDASKDSAHL ASDJAS AL SKJDAS DKAS DLSA KLJSA JDLK ASSJDKKAS L",
-         created_at: "2024-09-09",
-      },
-      {
-         id: 4,
-         folio: 4,
-         asunto: "Vigilancia",
-         status: "ALTA",
-         comentarios:
-            "Este es un mensaje de prueba SAJKLASDHJKLSAHDKHSALJHDASKDSAHL ASDJAS AL SKJDAS DKAS DLSA KLJSA JDLK ASSJDKKAS L",
-         created_at: "2024-09-09",
-      },
-      {
-         id: 5,
-         folio: 5,
-         asunto: "Basura",
-         status: "ALTA",
-         comentarios:
-            "Este es un mensaje de prueba SAJKLASDHJKLSAHDKHSALJHDASKDSAHL ASDJAS AL SKJDAS DKAS DLSA KLJSA JDLK ASSJDKKAS L",
-         created_at: "2024-09-09",
-      },
-      {
-         id: 6,
-         folio: 6,
-         asunto: "Bacheo",
-         status: "PROCESO",
-         comentarios:
-            "Este es un mensaje de prueba SAJKLASDHJKLSAHDKHSALJHDASKDSAHL ASDJAS AL SKJDAS DKAS DLSA KLJSA JDLK ASSJDKKAS L",
-         created_at: "2024-09-09",
-      },
-   ];
-
    const onRefresh = async () => {
       setRereshing(true);
-      // await refetchPhotos();
-      // await refetchUsers();
-      ToastAndroid.show("Se actualizo", ToastAndroid.SHORT);
+      await getMyReports();
+      SimpleToast("Se actualizo", "bottom");
       setRereshing(false);
    };
 
-   const handleOnPress = (item) => {
-      SimpleToast(
-         `Aqui se mostrará el detalle del folio #${item.folio}`,
-         "center",
-      );
+   const handleOnPress = (id) => {
+      SimpleToast(`Aqui se mostrará el detalle del folio #${id}`);
+      const item = reports.find((item) => item.id === id);
+      setReport(item);
+      router.push(`/my-reports/details`);
+      // router.push(`/my-reports/details/${id}`);
    };
+
+   useEffect(() => {
+      getMyReports();
+   }, []);
 
    if (!auth && !isLoggedIn) return <View></View>;
 
@@ -122,7 +72,7 @@ const MyReports = () => {
                      22 años, dev del Campo
                   </Text> */}
                   <Text className="text-xs font-mregular text-gray-500">
-                     a reportado {myReports.length} eventos
+                     a reportado {reports.length} eventos
                   </Text>
                </View>
 
@@ -130,19 +80,19 @@ const MyReports = () => {
                <View className="flex-1 pt-5">
                   {/* Grid de Categorías */}
                   <FlatList
-                     data={myReports}
+                     data={reports}
                      keyExtractor={(item, index) => `${index}`}
                      numColumns={1}
                      renderItem={({ item }) => (
                         <ItemContent
                            key={`key-item-${item.id}`}
-                           folio={item.folio}
+                           id={item.id}
                            asunto={item.asunto}
-                           fecha={item.created_at}
-                           status={item.status}
-                           comentarios={item.comentarios}
+                           fecha_reporte={item.fecha_reporte}
+                           estatus={item.estatus}
+                           observaciones={item.observaciones}
                            // icon={}
-                           onPress={() => handleOnPress(item)}
+                           onPress={() => handleOnPress(item.id)}
                         />
                      )}
                      ListEmptyComponent={() => (
@@ -171,33 +121,36 @@ const MyReports = () => {
 export default MyReports;
 
 const ItemContent = ({
-   iconName,
-   folio,
+   id,
    asunto,
-   status,
-   comentarios,
-   fecha,
+   estatus,
+   observaciones,
+   fecha_reporte,
    onPress,
 }) => {
    return (
-      <TouchableContentComponent
-         styleContet="flex my-2 p-2 bg-gray-100/50 rounded-lg"
-         onPress={onPress}>
-         <View className="flex-row items-center justify-between mb-1">
-            <Text className=" font-mbold text-gray-700">
-               #{folio} - {asunto}
+      <View className={`flex-1 items-stretch my-2`}>
+         <TouchableContentComponent
+            styleContet="flex  p-2 bg-gray-100/50 rounded-lg"
+            onPress={onPress}>
+            <View className="flex-row items-center justify-between mb-1">
+               <Text className=" font-mbold text-gray-700">
+                  #{id} - {asunto}
+               </Text>
+               <Text className=" font-mblack text-gray-700">{estatus}</Text>
+            </View>
+            <Text className="m-1 text-xs font-mregular text-gray-600">
+               {observaciones.length > 10
+                  ? `${observaciones.slice(0, 75)}...`
+                  : observaciones}
             </Text>
-            <Text className=" font-mblack text-gray-700">{status}</Text>
-         </View>
-         <Text className="m-1 text-xs font-mregular text-gray-600">
-            {comentarios.length > 10
-               ? `${comentarios.slice(0, 75)}...`
-               : comentarios}
-         </Text>
 
-         <View className={`flex items-end`}>
-            <Text className="font-msemibold text-gray-700">{fecha}</Text>
-         </View>
-      </TouchableContentComponent>
+            <View className={`flex items-end`}>
+               <Text className="font-msemibold text-gray-700">
+                  {fecha_reporte}
+               </Text>
+            </View>
+         </TouchableContentComponent>
+      </View>
    );
 };

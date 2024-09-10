@@ -1,8 +1,8 @@
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Redirect, router, useRouter } from "expo-router";
+import { router } from "expo-router";
 import useAuthStore, { logout } from "../../stores/authStore";
 import useGlobalStore from "../../stores/globalStore";
-import { Image, Pressable, Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 import {
    DrawerContentScrollView,
    DrawerItemList,
@@ -31,7 +31,7 @@ const CustomDrawerContent = async ({ ...props }) => {
          <DrawerContentScrollView
             {...props}
             contentContainerStyle={{ backgroundColor: colors.primary[200] }}>
-            <TouchableContentComponent onPress={() => router.push("/profile")}>
+            <TouchableContentComponent onPress={() => router.push("profile")}>
                <View className={`justify-center items-center py-6 `}>
                   <Image
                      source={images.profile_manada}

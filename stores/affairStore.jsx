@@ -21,8 +21,8 @@ export const getAllAffairs = async () => {
    const setAllAffairs = useAffairStore.getState().setAllAffairs;
 
    try {
-      // await checkLoggedIn();
-      console.log("a buscar los asuntos");
+      await checkLoggedIn();
+      // console.log("a buscar los asuntos");
 
       if (auth) {
          const req = await ApiUrl("/asuntosdep", {

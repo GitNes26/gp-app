@@ -445,8 +445,15 @@ export const convertImageToFile = async (uri, fileName, mimeType) => {
 export const convertToFormData = async (objForm) => {
    const formData = new FormData();
    Object.keys(objForm).map((key) => {
-      if (typeof objForm[key] === "object" && key !== "id") {
-         console.log("soy diferente", key);
+      if (
+         typeof objForm[key] === "object" &&
+         objForm[key] != null &&
+         includesInArray(
+            Object.keys(objForm[key]),
+            ["uri", "name", "type"],
+            true,
+         )
+      ) {
          formData.append(key, {
             uri: objForm[key].uri,
             name: objForm[key].name,
@@ -454,6 +461,7 @@ export const convertToFormData = async (objForm) => {
          });
       } else formData.append(key, objForm[key]);
    });
+
    return formData;
 };
 

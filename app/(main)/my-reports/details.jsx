@@ -1,0 +1,148 @@
+import { Image, RefreshControl, Text, ToastAndroid, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import FooterComponent from "../../../components/FooterComponent";
+import useAuthStore from "../../../stores/authStore";
+import images from "../../../constants/images";
+import { FlatList } from "react-native-gesture-handler";
+import TouchableContentComponent from "../../../components/TouchableContentComponent";
+import EmptyComponent from "../../../components/EmptyComponent";
+import { SimpleToast } from "../../../utils/alerts";
+import useReportStore, { getMyReports } from "../../../stores/reportStore";
+import { API_IMG } from "@env";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
+const ReportDetails = () => {
+   const { auth, isLoggedIn } = useAuthStore();
+   const { report, reports } = useReportStore();
+
+   const [refreshing, setRereshing] = useState(false);
+
+   const onRefresh = async () => {
+      setRereshing(true);
+      await getMyReports();
+      ToastAndroid.show("Se actualizo", ToastAndroid.SHORT);
+      setRereshing(false);
+   };
+
+   const handleOnPress = (item) => {
+      SimpleToast(
+         `Aqui se mostrará el detalle del folio #${item.folio}`,
+         "center",
+      );
+      // const item = affairs.find((item) => item.asunto_id === id);
+      // setAffair(item);
+      // router.push(`/report`);
+   };
+
+   useEffect(() => {
+      getMyReports();
+   }, []);
+
+   if (!auth && !isLoggedIn) return <View></View>;
+
+   return (
+      <>
+         <View className={"h-full"}>
+            {/* <HeaderComponent /> */}
+            <KeyboardAwareScrollView
+               contentContainerStyle={{ flexGrow: 1 }}
+               keyboardShouldPersistTaps="handled"
+               alwaysBounceVertical={true}>
+               <View className="flex-1 bg-white p-3">
+                  {/* TITULO */}
+                  {/* <View className={"w-full justify-center items-center mt-5"}>
+                  <Text className={"text-3xl font-mblack text-primary-200"}>
+                     Mis <Text className={`text-black`}>Reportes</Text>
+                  </Text>
+               </View> */}
+
+                  {/* AREA REPROTE */}
+                  <View className="flex mb-3 p-2">
+                     <Text className={`text-lg font-mblack text-center`}>
+                        REPORTE
+                     </Text>
+                     <View className="flex p-2 bg-gray-100/50 rounded-xl">
+                        <ItemContent title={"# FOLIO:"} value={report.id} />
+                        <ItemContent title={"ASUNTO:"} value={report.asunto} />
+                        <ItemContent
+                           title={"ESTATUS:"}
+                           value={report.estatus}
+                        />
+                        <ItemContent
+                           title={"FECHA:"}
+                           value={report.fecha_reporte}
+                        />
+                        <ItemContent
+                           title={"UBICACIÓN:"}
+                           value={report.localidad}
+                        />
+                        <ItemContent
+                           title={"REFERENCIAS:"}
+                           value={report.referencias}
+                           row={false}
+                        />
+                        <ItemContent
+                           title={"OBSERVACIONES/REPROTE:"}
+                           value={report.observaciones}
+                           row={false}
+                        />
+                        <ItemContent
+                           title={"EVIDENCIA:"}
+                           img={report.img_reporte}
+                           row={false}
+                        />
+                     </View>
+                  </View>
+
+                  {/* AREA RESPUESTA */}
+                  <View className="flex mb-3 p-2">
+                     <Text className={`text-lg font-mblack text-center`}>
+                        RESPUESTA
+                     </Text>
+                     <View className="flex p-2 bg-gray-100/50 rounded-xl">
+                        <ItemContent
+                           title={"DEPARTAMENTO:"}
+                           value={report.department}
+                        />
+                        <ItemContent
+                           title={"SERVICIO:"}
+                           value={report.servicio}
+                        />
+                        <ItemContent
+                           title={"RESPUESTA:"}
+                           value={report.respuesta}
+                        />
+                        <ItemContent
+                           title={"EVIDENCIA:"}
+                           // img={report.img_reporte}
+                           row={false}
+                        />
+                     </View>
+                  </View>
+               </View>
+            </KeyboardAwareScrollView>
+            <FooterComponent />
+            {/* <StatusBar backgroundColor={colors.primary.DEFAULT} style="inverted"  /> */}
+         </View>
+      </>
+   );
+};
+
+export default ReportDetails;
+
+const ItemContent = ({ title, value, img, row = true }) => {
+   return (
+      <View
+         className={`${row ? "flex-row" : "flex"} items-center justify-between mb-1 p-3 bg-gray-100/50 rounded-lg`}>
+         <Text className="font-mbold text-gray-500">{title}</Text>
+         {value && <Text className="font-mblack text-gray-700">{value}</Text>}
+         {img && (
+            <Image
+               source={{ uri: `${API_IMG}/${img}` }}
+               className={`w-[90%] aspect-square rounded-md`}
+               resizeMode={"stretch"}
+            />
+         )}
+      </View>
+   );
+};

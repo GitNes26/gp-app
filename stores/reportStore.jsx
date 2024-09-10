@@ -32,7 +32,7 @@ export const getAllReports = async () => {
 
          const reportsApp = await res.result.filter((item) => item.app === 1);
          res.result = reportsApp;
-         console.log("🚀 ~ getAllReports ~ res:", res);
+         // console.log("🚀 ~ getAllReports ~ res:", res);
          await setAllReports(res.result);
          return res;
       }
@@ -46,16 +46,16 @@ export const getMyReports = async () => {
    const setAllReports = useReportStore.getState().setAllReports;
 
    try {
-      // await checkLoggedIn();
+      await checkLoggedIn();
 
       if (auth) {
-         const req = await ApiUrl("/app/reportes", {
+         const req = await ApiUrl(`/reports/user/${auth.id}`, {
             method: "GET",
          });
          // console.log("🚀 ~ getMyReports ~ req:", req.data.res);
          const res = req.data.data;
 
-         console.log("🚀 ~ getMyReports ~ res:", res);
+         // console.log("🚀 ~ getMyReports ~ res:", res);
          await setAllReports(res.result);
          return res;
       }
@@ -87,6 +87,7 @@ export const getReport = async () => {
 };
 
 export const postReport = async (data) => {
+   // console.log("🚀 ~ postReport ~ data:", data);
    const auth = useAuthStore.getState().auth;
 
    try {

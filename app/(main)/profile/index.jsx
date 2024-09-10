@@ -15,10 +15,11 @@ import HeaderComponent from "../../../components/HeaderComponent";
 import { Ionicons } from "@expo/vector-icons";
 import images from "../../../constants/images";
 import colors from "../../../constants/colors";
-import useAuthStore from "./../../../stores/authStore";
-import IconPressableComponent from "./../../../components/IconPressableComponent";
+import useAuthStore from "../../../stores/authStore";
+import IconPressableComponent from "../../../components/IconPressableComponent";
 import { formatDatetime, formatPhone } from "../../../utils/formats";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { router } from "expo-router";
 
 const Profile = () => {
    const { auth, isLoggedIn } = useAuthStore();
@@ -34,7 +35,6 @@ const Profile = () => {
    };
 
    if (!auth && !isLoggedIn) return <View></View>;
-
    return (
       <>
          {/* <SafeAreaView className={"h-full"}> */}
