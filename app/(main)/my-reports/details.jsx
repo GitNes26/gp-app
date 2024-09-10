@@ -25,10 +25,10 @@ const ReportDetails = () => {
    };
 
    const handleOnPress = (item) => {
-      SimpleToast(
-         `Aqui se mostrará el detalle del folio #${item.folio}`,
-         "center",
-      );
+      // SimpleToast(
+      //    `Aqui se mostrará el detalle del folio #${item.folio}`,
+      //    "center",
+      // );
       // const item = affairs.find((item) => item.asunto_id === id);
       // setAffair(item);
       // router.push(`/report`);
@@ -44,10 +44,7 @@ const ReportDetails = () => {
       <>
          <View className={"h-full"}>
             {/* <HeaderComponent /> */}
-            <KeyboardAwareScrollView
-               contentContainerStyle={{ flexGrow: 1 }}
-               keyboardShouldPersistTaps="handled"
-               alwaysBounceVertical={true}>
+            <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled" alwaysBounceVertical={true}>
                <View className="flex-1 bg-white p-3">
                   {/* TITULO */}
                   {/* <View className={"w-full justify-center items-center mt-5"}>
@@ -58,65 +55,31 @@ const ReportDetails = () => {
 
                   {/* AREA REPROTE */}
                   <View className="flex mb-3 p-2">
-                     <Text className={`text-lg font-mblack text-center`}>
-                        REPORTE
-                     </Text>
+                     <Text className={`text-lg font-mblack text-center`}>REPORTE</Text>
                      <View className="flex p-2 bg-gray-100/50 rounded-xl">
                         <ItemContent title={"# FOLIO:"} value={report.id} />
                         <ItemContent title={"ASUNTO:"} value={report.asunto} />
-                        <ItemContent
-                           title={"ESTATUS:"}
-                           value={report.estatus}
-                        />
-                        <ItemContent
-                           title={"FECHA:"}
-                           value={report.fecha_reporte}
-                        />
-                        <ItemContent
-                           title={"UBICACIÓN:"}
-                           value={report.localidad}
-                        />
-                        <ItemContent
-                           title={"REFERENCIAS:"}
-                           value={report.referencias}
-                           row={false}
-                        />
-                        <ItemContent
-                           title={"OBSERVACIONES/REPROTE:"}
-                           value={report.observaciones}
-                           row={false}
-                        />
-                        <ItemContent
-                           title={"EVIDENCIA:"}
-                           img={report.img_reporte}
-                           row={false}
-                        />
+                        <ItemContent title={"ESTATUS:"} value={report.estatus} />
+                        <ItemContent title={"FECHA:"} value={report.fecha_reporte} />
+                        <ItemContent title={"UBICACIÓN:"} value={report.localidad} />
+                        <ItemContent title={"REFERENCIAS:"} value={report.referencias} horizontal={false} />
+                        <ItemContent title={"OBSERVACIONES/REPROTE:"} value={report.observaciones} horizontal={false} />
+                        <ItemContent title={"EVIDENCIA:"} img={report.img_reporte} horizontal={false} />
                      </View>
                   </View>
 
                   {/* AREA RESPUESTA */}
                   <View className="flex mb-3 p-2">
-                     <Text className={`text-lg font-mblack text-center`}>
-                        RESPUESTA
-                     </Text>
+                     <Text className={`text-lg font-mblack text-center`}>RESPUESTA</Text>
                      <View className="flex p-2 bg-gray-100/50 rounded-xl">
-                        <ItemContent
-                           title={"DEPARTAMENTO:"}
-                           value={report.department}
-                        />
-                        <ItemContent
-                           title={"SERVICIO:"}
-                           value={report.servicio}
-                        />
-                        <ItemContent
-                           title={"RESPUESTA:"}
-                           value={report.respuesta}
-                        />
-                        <ItemContent
-                           title={"EVIDENCIA:"}
-                           // img={report.img_reporte}
-                           row={false}
-                        />
+                        <ItemContent title={"DEPARTAMENTO:"} value={report.department} />
+                        <ItemContent title={"SERVICIO:"} value={report.servicio} />
+                        <ItemContent title={"RESPUESTA:"} value={report.respuesta} horizontal={false} />
+                        <ItemContent title={"EVIDENCIA 1:"} img={report.img_attach_1} horizontal={false} />
+                        <ItemContent title={"EVIDENCIA 2:"} img={report.img_attach_2} horizontal={false} />
+                        <ItemContent title={"EVIDENCIA 3:"} img={report.img_attach_3} horizontal={false} />
+                        <ItemContent title={"EVIDENCIA 4:"} img={report.img_attach_4} horizontal={false} />
+                        <ItemContent title={"EVIDENCIA 5:"} img={report.img_attach_5} horizontal={false} />
                      </View>
                   </View>
                </View>
@@ -130,19 +93,14 @@ const ReportDetails = () => {
 
 export default ReportDetails;
 
-const ItemContent = ({ title, value, img, row = true }) => {
+const ItemContent = ({ title, value, img, horizontal = true }) => {
    return (
-      <View
-         className={`${row ? "flex-row" : "flex"} items-center justify-between mb-1 p-3 bg-gray-100/50 rounded-lg`}>
-         <Text className="font-mbold text-gray-500">{title}</Text>
-         {value && <Text className="font-mblack text-gray-700">{value}</Text>}
-         {img && (
-            <Image
-               source={{ uri: `${API_IMG}/${img}` }}
-               className={`w-[90%] aspect-square rounded-md`}
-               resizeMode={"stretch"}
-            />
+      <View className={`${horizontal ? "flex-row" : "flex"} items-center justify-between mb-1 p-3 bg-gray-100/50 rounded-lg bg-green-300`}>
+         <Text className={`${horizontal ? "w-[40%]" : "mb-2"} font-mbold text-gray-500 bg-yellow-300`}>{title}</Text>
+         {value && (
+            <Text className={`font-mblack text-gray-700 flex-wrap ${horizontal ? "w-[60%] text-right " : "w-full max-h-40 overflow-y-auto"} bg-red-400`}>{value}</Text>
          )}
+         {img && <Image source={{ uri: `${API_IMG}/${img}` }} className={`w-[100%] aspect-square rounded-md`} resizeMode={"center"} />}
       </View>
    );
 };

@@ -10,10 +10,7 @@ import useAuthStore from "../../stores/authStore";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import useGlobalStore from "../../stores/globalStore";
-import {
-   FormikComponent,
-   InputComponent,
-} from "../../components/FormikComonents";
+import { FormikComponent, InputComponent } from "../../components/FormikComonents";
 import { postReport } from "../../stores/reportStore";
 import { SimpleToast } from "../../utils/alerts";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -31,8 +28,8 @@ const Report = () => {
       id: null,
       fecha_reporte: "",
       imgFile: null,
-      latitud: "",
-      longitud: "",
+      latitud: "25.5700128",
+      longitud: "-103.4963202",
       id_user: auth?.id,
       referencias: "",
       comentarios: "",
@@ -40,13 +37,29 @@ const Report = () => {
       id_asunto: affair.asunto_id,
 
       address: "",
-      // dataLocation: null,
+      dataLocation: null /* {
+         coords: { latitude: 25.5742159, longitude: -103.4324911 },
+         ubication: {
+            city: "Torreón",
+            country: "México",
+            district: "Alamedas",
+            formattedAddress: "Delio Hernández 82, Alamedas, 27110 Torreón, Coah., México",
+            isoCountryCode: "MX",
+            name: "82",
+            postalCode: "27110",
+            region: "Coahuila de Zaragoza",
+            street: "Delio Hernández",
+            streetNumber: "82",
+            subregion: null,
+            timezone: null
+         }
+      } */
    };
    const validationSchema = Yup.object().shape({
       latitud: Yup.string().required("Latitud requerida"),
       longitud: Yup.string().required("Longitud requerida"),
       referencias: Yup.string().required("Referencias requerida"),
-      comentarios: Yup.string().required("Comentarios requeridos"),
+      comentarios: Yup.string().required("Comentarios requeridos")
    });
    const onSubmit = async (values) => {
       // return console.log("🚀 ~ onSubmit ~ values:", values);
@@ -59,6 +72,8 @@ const Report = () => {
             formik.setSubmitting(false);
             return SimpleToast("La evidencia es requerida.");
          }
+         values.id_departamento = affair.department_id;
+         values.id_asunto = affair.asunto_id;
          values.fecha_reporte = new Date().toISOString();
 
          const formData = await convertToFormData(values);
@@ -67,10 +82,7 @@ const Report = () => {
          const res = await postReport(formData);
          // console.log("🚀 ~ onSubmit ~ res:", res);
          SimpleToast(res.alert_title, "center");
-         SimpleToast(
-            `REPORTE DE [${affair.asunto}] LEVANTADO`.toUpperCase(),
-            "center",
-         );
+         SimpleToast(`REPORTE DE [${affair.asunto}] LEVANTADO`.toUpperCase(), "center");
 
          formik.setSubmitting(false);
          formik.resetForm();
@@ -89,7 +101,7 @@ const Report = () => {
    const formik = useFormik({
       initialValues: initialValues,
       onSubmit: (values) => onSubmit(values),
-      validationSchema: validationSchema,
+      validationSchema: validationSchema
    });
 
    const handleGetPhoto = async (file) => {
@@ -99,7 +111,7 @@ const Report = () => {
 
    const handleGetLocation = (data) => {
       // console.log("🚀 ~ handleGetLocation ~ data:", data);
-      // formik.setFieldValue("dataLocation", data);
+      formik.setFieldValue("dataLocation", data);
       formik.setFieldValue("address", data.ubication.formattedAddress);
       formik.setFieldValue("latitud", data.coords.latitude.toString());
       formik.setFieldValue("longitud", data.coords.longitude.toString());
@@ -151,7 +163,7 @@ const Report = () => {
             blurUnsubscribe();
          };
       },
-      [navigation],
+      [navigation]
    );
 
    return (
@@ -164,8 +176,7 @@ const Report = () => {
                Reporte: <Text className={`text-black`}>{affair?.asunto}</Text>
             </Text>
             <View className={`mt-2`}>
-               <Text
-                  className={`text-xs font-msemibold flex justify-center items-end`}>
+               <Text className={`text-xs font-msemibold flex justify-center items-end`}>
                   Fecha del reporte: <ClockComponent styleText={`text-xs`} />
                </Text>
             </View>
@@ -175,21 +186,18 @@ const Report = () => {
             keyboardShouldPersistTaps="handled"
             automaticallyAdjustContentInsets={true}
             automaticallyAdjustKeyboardInsets={true}
-            alwaysBounceVertical={true}>
-            <FormikComponent
-               formik={formik}
-               textBtnSubmit={"REGISTRARME"}
-               containerStyles={`flex-1 mx-5`}>
+            alwaysBounceVertical={true}
+         >
+            <FormikComponent formik={formik} textBtnSubmit={"REGISTRARME"} containerStyles={`flex-1 mx-5`}>
                {/* Componente Camera */}
                <View className={`flex-row py-4 w-full`}>
-                  <View
-                     className={`w-1/2 justify-center items-center border border-gray-300 rounded-2xl`}>
+                  <View className={`w-1/2 justify-center items-center border border-gray-300 rounded-2xl`}>
                      <Image
                         source={
                            formik.values.imgFile === null
                               ? images.camera
                               : {
-                                   uri: formik.values.imgFile.uri,
+                                   uri: formik.values.imgFile.uri
                                    //   uri:
                                    //      "data:image/jpg;base64," +
                                    //      formik.values.imgFilePreview,
@@ -200,44 +208,22 @@ const Report = () => {
                      />
                   </View>
                   <View className={`w-1/2 justify-center items-center pl-2`}>
-                     <Text
-                        className={`text-gray-500 text-center font-mmedium italic mb-2`}>
-                        Por favor captura la imagen con buena calidad
-                     </Text>
-                     <FileInputComponent
-                        textButton="Subir evidencia"
-                        styleButton={`w-full bg-primary-200`}
-                        getData={handleGetPhoto}
-                     />
+                     <Text className={`text-gray-500 text-center font-mmedium italic mb-2`}>Por favor captura la imagen con buena calidad</Text>
+                     <FileInputComponent textButton="Subir evidencia" styleButton={`w-full bg-primary-200`} getData={handleGetPhoto} />
                   </View>
                </View>
 
                {/* Componente Ubicacion */}
                <View className={`flex-row py-4 w-full`}>
                   <View className={`w-1/2 justify-center items-center`}>
-                     <Image
-                        source={images.ubi}
-                        className={`w-[95%] h-28 rounded-3xl`}
-                        resizeMode="contain"
-                     />
-                     <Text
-                        className={`text-gray-500 text-center font-mregular italic mb-2 px-1`}>
-                        Ubicación detectada (aprox):{" "}
-                        <Text className={`font-mmedium`}>
-                           {formik.values.address}
-                        </Text>
+                     <Image source={images.ubi} className={`w-[95%] h-28 rounded-3xl`} resizeMode="contain" />
+                     <Text className={`text-gray-500 text-center font-mregular italic mb-2 px-1`}>
+                        Ubicación detectada (aprox): <Text className={`font-mmedium`}>{formik.values.address}</Text>
                      </Text>
                   </View>
                   <View className={`w-1/2 justify-center items-center pl-2`}>
-                     <Text
-                        className={`text-gray-500 text-center font-mmedium italic mb-2`}>
-                        Muestra tu ubicacion actual
-                     </Text>
-                     <LocationComponent
-                        textButton="Estoy Aquí"
-                        styleButton={`w-full bg-primary-200`}
-                        getData={handleGetLocation}
-                     />
+                     <Text className={`text-gray-500 text-center font-mmedium italic mb-2`}>Muestra tu ubicacion actual</Text>
+                     <LocationComponent textButton="Estoy Aquí" styleButton={`w-full bg-primary-200`} getData={handleGetLocation} />
                   </View>
                </View>
 
@@ -266,9 +252,7 @@ const Report = () => {
                   formik={formik}
                   idName={"referencias"}
                   label={"Referencias"}
-                  placeholder={
-                     "Describe el entorno para ubicar mejor el lugar..."
-                  }
+                  placeholder={"Describe el entorno para ubicar mejor el lugar..."}
                   // helperText={"texto de ayuda"}
                   textStyleCase={false}
                   rows={5}

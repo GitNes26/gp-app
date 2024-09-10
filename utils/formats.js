@@ -55,11 +55,7 @@ export function formatDatetime(the_date, long_format = true, format = null) {
    }
 
    date = new Date(the_date);
-   const formato = !format
-      ? long_format
-         ? "DD-MM-YYYY h:mm:ss a"
-         : "DD-MM-YYYY"
-      : format;
+   const formato = !format ? (long_format ? "DD-MM-YYYY h:mm:ss a" : "DD-MM-YYYY") : format;
    return (datetime = dayjs(date).format(formato));
 }
 
@@ -108,16 +104,9 @@ export function formatToUpperCase(event) {
    return newText;
 }
 
-export const handleInputFormik = async (
-   e,
-   setFieldValue,
-   input,
-   toUpper = true,
-) => {
+export const handleInputFormik = async (e, setFieldValue, input, toUpper = true) => {
    try {
-      const newText = toUpper
-         ? await formatToUpperCase(e)
-         : await formatToLowerCase(e);
+      const newText = toUpper ? await formatToUpperCase(e) : await formatToLowerCase(e);
       setFieldValue(input, newText);
    } catch (error) {
       console.log(error);
@@ -126,9 +115,7 @@ export const handleInputFormik = async (
 };
 export const handleInputStringCase = async (e, setState, toUpper = true) => {
    try {
-      const newText = toUpper
-         ? await formatToUpperCase(e)
-         : await formatToLowerCase(e);
+      const newText = toUpper ? await formatToUpperCase(e) : await formatToLowerCase(e);
       setState(newText);
    } catch (error) {
       console.log(error);
@@ -161,9 +148,7 @@ export const groupBy = (data, key, returnArray, consoleLogResult = false) => {
       const keys = key.includes(".") && key.split(".");
 
       // Extraer el valor clave
-      const keyValue = keys
-         ? currentValue[keys[0]][keys[1]]
-         : currentValue[key];
+      const keyValue = keys ? currentValue[keys[0]][keys[1]] : currentValue[key];
 
       // Si el valor clave no existe en el objeto de resultado, cree datos para él
       if (!result[keyValue]) {
@@ -177,11 +162,7 @@ export const groupBy = (data, key, returnArray, consoleLogResult = false) => {
    }, {});
    if (returnArray) result = Object.entries(result);
 
-   if (consoleLogResult)
-      console.log(
-         `🚀 ~ groupBy ~ result ${returnArray ? "array" : "object"}:`,
-         result,
-      );
+   if (consoleLogResult) console.log(`🚀 ~ groupBy ~ result ${returnArray ? "array" : "object"}:`, result);
    return result;
 };
 
@@ -210,54 +191,10 @@ export const cutLinesPDF = (text, lengthRow = 100) => {
    return rows;
 };
 
-const unidades = [
-   "",
-   "uno",
-   "dos",
-   "tres",
-   "cuatro",
-   "cinco",
-   "seis",
-   "siete",
-   "ocho",
-   "nueve",
-];
-const especiales = [
-   "diez",
-   "once",
-   "doce",
-   "trece",
-   "catorce",
-   "quince",
-   "dieciséis",
-   "diecisiete",
-   "dieciocho",
-   "diecinueve",
-];
-const decenas = [
-   "",
-   "diez",
-   "veinte",
-   "treinta",
-   "cuarenta",
-   "cincuenta",
-   "sesenta",
-   "setenta",
-   "ochenta",
-   "noventa",
-];
-const centenas = [
-   "",
-   "cien",
-   "doscientos",
-   "trescientos",
-   "cuatrocientos",
-   "quinientos",
-   "seiscientos",
-   "setecientos",
-   "ochocientos",
-   "novecientos",
-];
+const unidades = ["", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"];
+const especiales = ["diez", "once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete", "dieciocho", "diecinueve"];
+const decenas = ["", "diez", "veinte", "treinta", "cuarenta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa"];
+const centenas = ["", "cien", "doscientos", "trescientos", "cuatrocientos", "quinientos", "seiscientos", "setecientos", "ochocientos", "novecientos"];
 /**
  * @param {number} number
  */
@@ -287,16 +224,11 @@ export const numberToText = (number) => {
          // console.log("🚀 ~ convertirParteEntera ~ num:", num);
 
          if (num >= 10000 && num < 20000) {
-            partes.push(
-               `${especiales[parseInt(num.toString().slice(0, 2)) - 10]} mil`,
-            );
+            partes.push(`${especiales[parseInt(num.toString().slice(0, 2)) - 10]} mil`);
             num = num % 1000;
          } else if (num >= 20000 && num <= 100000) {
             const miles = Math.floor(num / 1000);
-            if (miles >= 30)
-               partes.push(
-                  `${decenas[Math.floor(parseInt(num.toString().slice(0, 2)) / 10)]}`,
-               );
+            if (miles >= 30) partes.push(`${decenas[Math.floor(parseInt(num.toString().slice(0, 2)) / 10)]}`);
             num = num % 10000;
 
             if (miles === 20) {
@@ -343,11 +275,7 @@ export const numberToText = (number) => {
             } else {
                num = num % 10;
                if (dec >= 3 && num > 0) partes.push("y");
-               if (
-                  includesInArray(partes, ["cien", "ciento", "mil"]) &&
-                  num === 1
-               )
-                  partes.push("un");
+               if (includesInArray(partes, ["cien", "ciento", "mil"]) && num === 1) partes.push("un");
                else partes.push(unidades[num]);
             }
          }
@@ -423,7 +351,7 @@ export const convertImageToFile = async (uri, fileName, mimeType) => {
 
       originalName: uri,
       fileName: fileName,
-      mimeType: mimeType,
+      mimeType: mimeType
    };
 
    // const response = await fetch(uri); // Obtener el contenido del archivo
@@ -445,20 +373,14 @@ export const convertImageToFile = async (uri, fileName, mimeType) => {
 export const convertToFormData = async (objForm) => {
    const formData = new FormData();
    Object.keys(objForm).map((key) => {
-      if (
-         typeof objForm[key] === "object" &&
-         objForm[key] != null &&
-         includesInArray(
-            Object.keys(objForm[key]),
-            ["uri", "name", "type"],
-            true,
-         )
-      ) {
-         formData.append(key, {
-            uri: objForm[key].uri,
-            name: objForm[key].name,
-            type: objForm[key].type,
-         });
+      if (typeof objForm[key] === "object" && objForm[key] != null) {
+         if (includesInArray(Object.keys(objForm[key]), ["uri", "name", "type"], true))
+            formData.append(key, {
+               uri: objForm[key].uri,
+               name: objForm[key].name,
+               type: objForm[key].type
+            });
+         else formData.append(key, JSON.stringify(objForm[key]));
       } else formData.append(key, objForm[key]);
    });
 

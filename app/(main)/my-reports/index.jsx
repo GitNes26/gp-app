@@ -24,7 +24,6 @@ const MyReports = () => {
    };
 
    const handleOnPress = (id) => {
-      SimpleToast(`Aqui se mostrará el detalle del folio #${id}`);
       const item = reports.find((item) => item.id === id);
       setReport(item);
       router.push(`/my-reports/details`);
@@ -47,42 +46,41 @@ const MyReports = () => {
             alwaysBounceVertical={true}> */}
 
             <View className="flex-1 bg-white p-3">
-               {/* TITULO */}
-               <View className={"w-full justify-center items-center mt-5"}>
-                  <Text className={"text-3xl font-mblack text-primary-200"}>
-                     Mis <Text className={`text-black`}>Reportes</Text>
-                  </Text>
-               </View>
-               {/* Imagen de Perfil */}
-               <View className="items-center mt-2">
-                  <Image
-                     source={images.profile_manada}
-                     // source={ { uri: "https://example.com/profile-picture.jpg" }}
-                     className="w-28 h-28 rounded-full"
-                  />
-               </View>
-
-               {/* Nombre y Descripción */}
-               <View className="mt-4 items-center">
-                  <Text className=" text-2xl font-mbold text-gray-900">
-                     {auth.name} {auth.paternal_last_name}{" "}
-                     {auth.maternal_last_name}
-                  </Text>
-                  {/* <Text className="text-sm font-mregular text-gray-500">
-                     22 años, dev del Campo
-                  </Text> */}
-                  <Text className="text-xs font-mregular text-gray-500">
-                     a reportado {reports.length} eventos
-                  </Text>
-               </View>
-
                {/* Lista */}
                <View className="flex-1 pt-5">
-                  {/* Grid de Categorías */}
                   <FlatList
                      data={reports}
                      keyExtractor={(item, index) => `${index}`}
                      numColumns={1}
+                     ListHeaderComponent={() => (
+                        <>
+                           {/* TITULO */}
+                           <View className={"w-full justify-center items-center mt-3"}>
+                              <Text className={"text-3xl font-mblack text-primary-200"}>
+                                 Mis <Text className={`text-black`}>Reportes</Text>
+                              </Text>
+                           </View>
+                           {/* Imagen de Perfil */}
+                           <View className="items-center mt-2">
+                              <Image
+                                 source={images.profile_manada}
+                                 // source={ { uri: "https://example.com/profile-picture.jpg" }}
+                                 className="w-28 h-28 rounded-full"
+                              />
+                           </View>
+
+                           {/* Nombre y Descripción */}
+                           <View className="mt-4 items-center">
+                              <Text className=" text-2xl font-mbold text-gray-900">
+                                 {auth.name} {auth.paternal_last_name} {auth.maternal_last_name}
+                              </Text>
+                              {/* <Text className="text-sm font-mregular text-gray-500">
+                     22 años, dev del Campo
+                  </Text> */}
+                              <Text className="text-xs font-mregular text-gray-500">a reportado {reports.length} eventos</Text>
+                           </View>
+                        </>
+                     )}
                      renderItem={({ item }) => (
                         <ItemContent
                            key={`key-item-${item.id}`}
@@ -95,18 +93,8 @@ const MyReports = () => {
                            onPress={() => handleOnPress(item.id)}
                         />
                      )}
-                     ListEmptyComponent={() => (
-                        <EmptyComponent
-                           title={"No hay reportes"}
-                           subtitle={"Recarga la sección..."}
-                        />
-                     )}
-                     refreshControl={
-                        <RefreshControl
-                           refreshing={refreshing}
-                           onRefresh={onRefresh}
-                        />
-                     }
+                     ListEmptyComponent={() => <EmptyComponent title={"No hay reportes"} subtitle={"Recarga la sección..."} />}
+                     refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                   />
                </View>
             </View>
@@ -120,35 +108,23 @@ const MyReports = () => {
 
 export default MyReports;
 
-const ItemContent = ({
-   id,
-   asunto,
-   estatus,
-   observaciones,
-   fecha_reporte,
-   onPress,
-}) => {
+const ItemContent = ({ id, asunto, estatus, observaciones, fecha_reporte, onPress }) => {
+   // EVIDENCIAS: ALTA = AZUL , EN TRAMITE = AMARILLO , TERMINADO = VERDE
+   const bgColor =
+      estatus === "ALTA" ? "bg-blue-600/50" : estatus === "EN TRAMITE" ? "bg-yellow-600/50" : estatus === "TERMINADO" ? "bg-green-600/50" : "bg-gray-100/50";
    return (
       <View className={`flex-1 items-stretch my-2`}>
-         <TouchableContentComponent
-            styleContet="flex  p-2 bg-gray-100/50 rounded-lg"
-            onPress={onPress}>
+         <TouchableContentComponent styleContet={`flex p-2 ${bgColor} rounded-lg`} onPress={onPress}>
             <View className="flex-row items-center justify-between mb-1">
                <Text className=" font-mbold text-gray-700">
                   #{id} - {asunto}
                </Text>
                <Text className=" font-mblack text-gray-700">{estatus}</Text>
             </View>
-            <Text className="m-1 text-xs font-mregular text-gray-600">
-               {observaciones.length > 10
-                  ? `${observaciones.slice(0, 75)}...`
-                  : observaciones}
-            </Text>
+            <Text className="m-1 text-xs font-mregular text-gray-600">{observaciones.length > 10 ? `${observaciones.slice(0, 45)}...` : observaciones}</Text>
 
             <View className={`flex items-end`}>
-               <Text className="font-msemibold text-gray-700">
-                  {fecha_reporte}
-               </Text>
+               <Text className="font-msemibold text-gray-700">{fecha_reporte}</Text>
             </View>
          </TouchableContentComponent>
       </View>

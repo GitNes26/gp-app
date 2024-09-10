@@ -1,13 +1,6 @@
 // Formik x React Native example
 import React, { forwardRef, useEffect, useRef, useState } from "react";
-import {
-   ActivityIndicator,
-   Button,
-   Text,
-   TextInput,
-   TouchableOpacity,
-   View,
-} from "react-native";
+import { ActivityIndicator, Button, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Form, Formik, useFormikContext } from "formik";
 import ButtonCompnent from "./ButtonCompnent";
 import { Ionicons } from "@expo/vector-icons";
@@ -16,43 +9,19 @@ import colors from "../constants/colors";
 import { styled } from "nativewind";
 
 //#region FORMIK COMPONENT
-export const FormikComponent = ({
-   formik,
-   children,
-   textBtnSubmit = "ENVIAR",
-   containerStyles,
-}) => {
-   const {
-      handleChange,
-      handleBlur,
-      values,
-      validationSchema,
-      errors,
-      touched,
-      handleSubmit,
-      isSubmitting,
-      setSubmitting,
-      initialValues,
-   } = formik;
+export const FormikComponent = ({ formik, children, textBtnSubmit = "ENVIAR", containerStyles }) => {
+   const { handleChange, handleBlur, values, validationSchema, errors, touched, handleSubmit, isSubmitting, setSubmitting, initialValues } = formik;
 
    useEffect(() => {
       setSubmitting(false);
    }, []);
 
    return (
-      <Formik
-         initialValues={initialValues}
-         onSubmit={handleSubmit}
-         validationSchema={validationSchema}>
+      <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
          {({ handleSubmit, setSubmitting, resetForm, errors }) => (
             <View className={`my-2 mt-5 ${containerStyles}`}>
                {children}
-               <ButtonCompnent
-                  title={textBtnSubmit}
-                  handleOnPress={handleSubmit}
-                  containerStyles={"mt-7"}
-                  isLoading={isSubmitting}
-               />
+               <ButtonCompnent title={textBtnSubmit} handleOnPress={handleSubmit} containerStyles={"mt-7"} isLoading={isSubmitting} />
             </View>
          )}
       </Formik>
@@ -93,24 +62,21 @@ export const InputComponent = ({
 }) => {
    const [showPassword, setShowPassword] = useState(isPassword);
    // const formik = useFormikContext();
-   const { values, touched, errors, handleChange, handleBlur, setFieldValue } =
-      formik;
+   const { values, touched, errors, handleChange, handleBlur, setFieldValue } = formik;
    const error = touched[idName] && errors[idName] ? errors[idName] : null;
    const isError = error == null ? false : true;
    const inputRef = useRef(null);
 
-   useEffect(() => {
-      // console.log("isError", isError);
-   }, [idName, values[idName]]);
+   // useEffect(() => {
+   //    // console.log("isError", isError);
+   // }, [idName, values[idName]]);
 
    return (
       <View className={`mb-5 ${otherStyles}`}>
-         <Text
-            className={`text-base pl-3 ${isError ? "text-red-600" : "text-primary"} font-msemibold`}>
-            {label}
-         </Text>
+         <Text className={`text-base pl-3 ${isError ? "text-red-600" : "text-primary"} font-msemibold`}>{label}</Text>
          <View
-            className={`border-2 border-slate-200 w-full ${!rows && "h-16"} px-4 bg-slate-50 rounded-2xl focus:border-primary-200 items-center flex-row ${isError && "border-red-600"} ${readOnly && "bg-slate-200"}`}>
+            className={`border-2 border-slate-200 w-full ${!rows ? "max-h-[75vh]" : "h-16"} px-4 bg-slate-50 rounded-2xl focus:border-primary-200 items-center flex-row ${isError && "border-red-600"} ${readOnly && "bg-slate-200"}`}
+         >
             <TextInput
                key={`key-${idName}`}
                id={idName}
@@ -140,11 +106,7 @@ export const InputComponent = ({
             />
             {isPassword && (
                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                  {!showPassword ? (
-                     <Ionicons name="eye-sharp" size={24} color={"black"} />
-                  ) : (
-                     <Ionicons name="eye-off-sharp" size={24} color={"black"} />
-                  )}
+                  {!showPassword ? <Ionicons name="eye-sharp" size={24} color={"black"} /> : <Ionicons name="eye-off-sharp" size={24} color={"black"} />}
                </TouchableOpacity>
             )}
             {isLoading && (
@@ -156,10 +118,7 @@ export const InputComponent = ({
                />
             )}
          </View>
-         <Text
-            className={`text-sm italic px-2 ${isError ? "text-red-600" : "text-gray-400"} font-mlight`}>
-            {isError ? error : helperText}
-         </Text>
+         <Text className={`text-sm italic px-2 ${isError ? "text-red-600" : "text-gray-400"} font-mlight`}>{isError ? error : helperText}</Text>
       </View>
    );
 };
@@ -176,29 +135,13 @@ export const InputComponent = ({
 // import { View, Text } from 'react-native';
 // import RadioGroup from './RadioGroup';
 
-const RadioButton = ({
-   label,
-   value,
-   selected,
-   onPress,
-   horizontal,
-   readOnly,
-}) => {
+const RadioButton = ({ label, value, selected, onPress, horizontal, readOnly }) => {
    return (
-      <TouchableOpacity
-         onPress={() => onPress(value)}
-         className={`flex-row items-center my-2 ${horizontal && "mx-3"}`}
-         disabled={readOnly}>
-         <View
-            className={`w-6 h-6 rounded-full border-2 border-gray-400 ${selected ? "border-primary-200" : ""} justify-center items-center`}>
-            {selected && (
-               <View className={`w-3 h-3 rounded-full bg-primary-200`} />
-            )}
+      <TouchableOpacity onPress={() => onPress(value)} className={`flex-row items-center my-2 ${horizontal && "mx-3"}`} disabled={readOnly}>
+         <View className={`w-6 h-6 rounded-full border-2 border-gray-400 ${selected ? "border-primary-200" : ""} justify-center items-center`}>
+            {selected && <View className={`w-3 h-3 rounded-full bg-primary-200`} />}
          </View>
-         <Text
-            className={`ml-2 font-mregular text-gray-800 ${selected && "font-msemibold"} `}>
-            {label}
-         </Text>
+         <Text className={`ml-2 font-mregular text-gray-800 ${selected && "font-msemibold"} `}>{label}</Text>
       </TouchableOpacity>
    );
 };
@@ -232,23 +175,10 @@ const RadioGroup = ({ options, onValueChange, horizontal, readOnly }) => {
 // const options = [
 //    { label: "Opción 1", value: "option1" },
 // ];
-export const RadioButtonComponent = ({
-   idName,
-   label,
-   options,
-   placeholder,
-   helperText,
-   isLoading,
-   readOnly,
-   otherStyles,
-   horizontal = true,
-   formik,
-   ...props
-}) => {
+export const RadioButtonComponent = ({ idName, label, options, placeholder, helperText, isLoading, readOnly, otherStyles, horizontal = true, formik, ...props }) => {
    // const formik = useFormikContext();
    // console.log("🚀 ~ formik:", formik);
-   const { values, touched, errors, handleChange, handleBlur, setFieldValue } =
-      formik;
+   const { values, touched, errors, handleChange, handleBlur, setFieldValue } = formik;
    const error = touched[idName] && errors[idName] ? errors[idName] : null;
    const isError = error == null ? false : true;
    const inputRef = useRef(null);
@@ -264,18 +194,11 @@ export const RadioButtonComponent = ({
 
    return (
       <View className="mb-3 flex-1 justify-center">
-         <Text
-            className={`text-base pl-3 ${isError ? "text-red-600" : "text-primary"} font-msemibold`}>
-            {label}
-         </Text>
+         <Text className={`text-base pl-3 ${isError ? "text-red-600" : "text-primary"} font-msemibold`}>{label}</Text>
          <View
-            className={`border-2 border-slate-200 w-full h-auto p-3 bg-slate-50 rounded-2xl focus:border-primary-200 justify-center items-center  ${isError && "border-red-600"} ${readOnly && "bg-slate-200"}`}>
-            <RadioGroup
-               options={options}
-               onValueChange={handleValueChange}
-               horizontal={horizontal}
-               readOnly={readOnly}
-            />
+            className={`border-2 border-slate-200 w-full h-auto p-3 bg-slate-50 rounded-2xl focus:border-primary-200 justify-center items-center  ${isError && "border-red-600"} ${readOnly && "bg-slate-200"}`}
+         >
+            <RadioGroup options={options} onValueChange={handleValueChange} horizontal={horizontal} readOnly={readOnly} />
             {isLoading && (
                <ActivityIndicator
                   size={"large"}
@@ -285,10 +208,7 @@ export const RadioButtonComponent = ({
                />
             )}
          </View>
-         <Text
-            className={`text-sm italic px-2 ${isError ? "text-red-600" : "text-gray-400"} font-mlight`}>
-            {isError ? error : helperText}
-         </Text>
+         <Text className={`text-sm italic px-2 ${isError ? "text-red-600" : "text-gray-400"} font-mlight`}>{isError ? error : helperText}</Text>
       </View>
    );
 };
