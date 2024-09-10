@@ -77,7 +77,7 @@ const MyReports = () => {
                               {/* <Text className="text-sm font-mregular text-gray-500">
                      22 años, dev del Campo
                   </Text> */}
-                              <Text className="text-xs font-mregular text-gray-500">a reportado {reports.length} eventos</Text>
+                              <Text className="text-sm font-mregular text-gray-500">a reportado {reports.length} eventos</Text>
                            </View>
                         </>
                      )}

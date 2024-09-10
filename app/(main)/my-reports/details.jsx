@@ -95,10 +95,10 @@ export default ReportDetails;
 
 const ItemContent = ({ title, value, img, horizontal = true }) => {
    return (
-      <View className={`${horizontal ? "flex-row" : "flex"} items-center justify-between mb-1 p-3 bg-gray-100/50 rounded-lg bg-green-300`}>
-         <Text className={`${horizontal ? "w-[40%]" : "mb-2"} font-mbold text-gray-500 bg-yellow-300`}>{title}</Text>
+      <View className={`${horizontal ? "flex-row" : "flex"} items-center justify-between mb-1 p-3 bg-gray-100/50 rounded-lg`}>
+         <Text className={`${horizontal ? "w-[40%]" : "mb-2"} font-mbold text-gray-500`}>{title}</Text>
          {value && (
-            <Text className={`font-mblack text-gray-700 flex-wrap ${horizontal ? "w-[60%] text-right " : "w-full max-h-40 overflow-y-auto"} bg-red-400`}>{value}</Text>
+            <Text className={`font-mblack text-gray-700 flex-wrap ${horizontal ? "w-[60%] text-right " : "w-full max-h-[40vh] overflow-y-auto"}`}>{value}</Text>
          )}
          {img && <Image source={{ uri: `${API_IMG}/${img}` }} className={`w-[100%] aspect-square rounded-md`} resizeMode={"center"} />}
       </View>
