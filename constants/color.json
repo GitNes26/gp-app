@@ -15,6 +15,9 @@
          "DEFAULT": "#E8E8F52D",
          "100": "#CDCDE0",
          "500": "#6b7280"
+      },
+      "error": {
+         "DEFAULT": "#dc2626"
       }
    },
    "dark": {
@@ -31,6 +34,9 @@
       },
       "gray": {
          "100": "#CDCDE0"
+      },
+      "error": {
+         "DEFAULT": "#dc2626"
       }
    }
 }

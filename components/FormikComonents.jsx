@@ -1,7 +1,7 @@
 // Formik x React Native example
 import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Button, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { Form, Formik, useFormikContext } from "formik";
+import { Formik } from "formik";
 import ButtonCompnent from "./ButtonCompnent";
 import { Ionicons } from "@expo/vector-icons";
 import { handleInputFormik } from "../utils/formats";
@@ -12,9 +12,9 @@ import { styled } from "nativewind";
 export const FormikComponent = ({ formik, children, textBtnSubmit = "ENVIAR", containerStyles }) => {
    const { handleChange, handleBlur, values, validationSchema, errors, touched, handleSubmit, isSubmitting, setSubmitting, initialValues } = formik;
 
-   useEffect(() => {
-      setSubmitting(false);
-   }, []);
+   // useEffect(() => {
+   //    setSubmitting(false);
+   // }, []);
 
    return (
       <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
@@ -45,6 +45,7 @@ export const FormikComponent = ({ formik, children, textBtnSubmit = "ENVIAR", co
 
 export const InputComponent = ({
    idName,
+   ref,
    label,
    placeholder,
    // handlChangeText,
@@ -55,7 +56,8 @@ export const InputComponent = ({
    readOnly,
    textStyleCase = null,
    otherStyles,
-   keyboardType,
+   keyboardType = "default",
+   returnKeyType = "next",
    maxLength,
    formik,
    ...props
@@ -80,6 +82,7 @@ export const InputComponent = ({
             <TextInput
                key={`key-${idName}`}
                id={idName}
+               // ref={ref}
                className={"flex-1 text-black-100 font-msemibold text-base"}
                value={values && values[idName] ? values[idName] : ""}
                placeholder={placeholder}
@@ -103,6 +106,9 @@ export const InputComponent = ({
                multiline={rows > 0 ? true : false}
                numberOfLines={rows}
                readOnly={readOnly}
+               cursorColor={isError ? colors.error.DEFAULT : colors.primary[200]}
+               returnKeyType={returnKeyType} //"done" | "send"
+               // blurOnSubmit={false}
             />
             {isPassword && (
                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
@@ -188,9 +194,9 @@ export const RadioButtonComponent = ({ idName, label, options, placeholder, help
       formik.setFieldValue(idName, value);
    };
 
-   useEffect(() => {
-      // console.log("isError", isError);
-   }, [idName, values[idName]]);
+   // useEffect(() => {
+   //    // console.log("isError", isError);
+   // }, [idName, values[idName]]);
 
    return (
       <View className="mb-3 flex-1 justify-center">

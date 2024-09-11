@@ -1,13 +1,5 @@
-import {
-   Image,
-   KeyboardAvoidingView,
-   Platform,
-   ScrollView,
-   StyleSheet,
-   Text,
-   View,
-} from "react-native";
-import React from "react";
+import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useRef } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../../constants/images";
 import colors from "../../constants/colors";
@@ -15,19 +7,21 @@ import { Link, router } from "expo-router";
 import { Foundation } from "@expo/vector-icons";
 import HeaderComponent from "../../components/HeaderComponent";
 import FooterComponent from "../../components/FooterComponent";
-import {
-   FormikComponent,
-   InputComponent,
-   RadioButtonComponent,
-} from "../../components/FormikComonents";
+import { FormikComponent, InputComponent, RadioButtonComponent } from "../../components/FormikComonents";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import useGlobalStore from "../../stores/globalStore";
 import { signup } from "../../stores/authStore";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { validateCURP } from "../../utils/validations";
+import ScrollContentComponent from "../../components/ScrollContentComponent";
 
 const SignUp = () => {
    const { setIsLoading } = useGlobalStore();
+   const input2Ref = useRef(null);
+   const input3Ref = useRef(null);
+   const input4Ref = useRef(null);
+   const input5Ref = useRef(null);
 
    const initialValues = {
       id: null,
@@ -39,29 +33,20 @@ const SignUp = () => {
       paternal_last_name: "",
       maternal_last_name: "",
       curp: "",
-      sexo: "",
+      sexo: ""
    };
    const validationSchema = Yup.object().shape({
-      email: Yup.string()
-         .email("Formato de correo no valido")
-         .required("Correo requerido"),
-      password: Yup.string()
-         .trim()
-         .min(6, "Mínimo 6 caracteres")
-         .required("Contraseña requerida"),
-      phone: Yup.string()
-         .min(10, "El número telefónico debe ser a 10 digitos")
-         .required("Teléfono requerido"),
+      email: Yup.string().email("Formato de correo no valido").required("Correo requerido"),
+      password: Yup.string().trim().min(6, "Mínimo 6 caracteres").required("Contraseña requerida"),
+      phone: Yup.string().min(10, "El número telefónico debe ser a 10 digitos").required("Teléfono requerido"),
       name: Yup.string().required("Nombre(s) requerido(s)"),
       paternal_last_name: Yup.string().required("Apellido Paterno requerido"),
       maternal_last_name: Yup.string().required("Apellido Materno requerido"),
       curp: Yup.string()
-         .matches(
-            /^[A-Z]{4}[0-9]{6}[HM][A-Z]{2}[A-Z0-9]{4}[0-9]{1}$/,
-            "Formato de CURP invalido",
-         )
+         .matches(/^[A-Z]{4}[0-9]{6}[HM][A-Z]{2}[A-Z0-9]{4}[0-9]{1}$/, "Formato de CURP invalido")
+         .test("validateCURP", "La CURP no existe", (value) => validateCURP(value))
          .required("CURP requerido"),
-      sexo: Yup.string().trim().required("Género requerido"),
+      sexo: Yup.string().trim().required("Género requerido")
    });
    const onSubmit = async (values) => {
       // console.log("🚀 ~ onSubmit ~ values:", values);
@@ -86,34 +71,23 @@ const SignUp = () => {
    const formik = useFormik({
       initialValues: initialValues,
       onSubmit: (values) => onSubmit(values),
-      validationSchema: validationSchema,
+      validationSchema: validationSchema
    });
 
    return (
       <SafeAreaView className={"h-full"}>
-         <KeyboardAwareScrollView
-            contentContainerStyle={{ flexGrow: 1 }}
-            keyboardShouldPersistTaps="handled"
-            alwaysBounceVertical={true}>
+         <ScrollContentComponent>
             <HeaderComponent isAuth={true} />
             {/* <ScrollView
                contentContainerStyle={{ flexGrow: 1 }}
                keyboardShouldPersistTaps="handled"
                automaticallyAdjustKeyboardInsets={true}> */}
             <View className={"w-full justify-center px-4 py-2 flex-1"}>
-               <Image
-                  source={images.logo}
-                  className={"w-full h-14"}
-                  resizeMode="contain"
-               />
+               <Image source={images.logo} className={"w-full h-14"} resizeMode="contain" />
                <View className={"w-full justify-center items-center"}>
-                  <Text
-                     className={"text-3xl font-mbold mt-10 text-primary-200"}>
-                     Bienvenido!
-                  </Text>
+                  <Text className={"text-3xl font-mbold mt-10 text-primary-200"}>Bienvenido!</Text>
                   <Text className={"text-base font-mmedium text-gray-500"}>
-                     a la App con estrella{" "}
-                     <Foundation name="star" size={18} color={colors.primary} />
+                     a la App con estrella <Foundation name="star" size={18} color={colors.primary} />
                   </Text>
                </View>
 
@@ -130,6 +104,7 @@ const SignUp = () => {
                   <InputComponent
                      formik={formik}
                      idName={"password"}
+                     // ref={input2Ref}
                      label={"Contraseña"}
                      placeholder={"Ingresa tu contraseña"}
                      helperText={"mínimo 6 caracteres"}
@@ -189,7 +164,7 @@ const SignUp = () => {
                      label={"Género"}
                      options={[
                         { label: "Hombre", value: "M" },
-                        { label: "Mujer", value: "F" },
+                        { label: "Mujer", value: "F" }
                      ]}
                      // helperText={""}
                      // horizontal={true}
@@ -201,9 +176,7 @@ const SignUp = () => {
                <View className={"justify-center pt-5 flex-row gap-2"}>
                   <Text className={"text-lg text-gray-700 font-mregular"}>
                      Si ya tienes cuenta,{" "}
-                     <Link
-                        href={"/sign-in"}
-                        className="text-lg font-msemibold text-primary">
+                     <Link href={"/sign-in"} className="text-lg font-msemibold text-primary">
                         Inicia Sesión
                      </Link>
                   </Text>
@@ -211,7 +184,7 @@ const SignUp = () => {
             </View>
             {/* </ScrollView> */}
             <FooterComponent isAuth={true} />
-         </KeyboardAwareScrollView>
+         </ScrollContentComponent>
       </SafeAreaView>
    );
 };

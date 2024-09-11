@@ -1,6 +1,6 @@
-import { Alert, Image, Text, View } from "react-native";
-import React, { useEffect } from "react";
-import { router, useNavigation } from "expo-router";
+import { Alert, Image, ScrollView, Text, View } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { router, useFocusEffect, useLocalSearchParams, useNavigation } from "expo-router";
 import images from "../../constants/images";
 import FooterComponent from "../../components/FooterComponent";
 import FileInputComponent from "../../components/FileInputComponent";
@@ -16,9 +16,14 @@ import { SimpleToast } from "../../utils/alerts";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { convertToFormData } from "../../utils/formats";
 import ClockComponent from "../../components/ClockComponent";
+import ScrollContentComponent from "../../components/ScrollContentComponent";
+import { usePreventRemoveContext } from "@react-navigation/native";
 
 const Report = () => {
    const navigation = useNavigation();
+   const { reportname } = useLocalSearchParams();
+
+   const { preventRemove, setPreventRemove } = usePreventRemoveContext();
    const { isLoading, setIsLoading } = useGlobalStore();
 
    const { auth } = useAuthStore();
@@ -117,53 +122,40 @@ const Report = () => {
       formik.setFieldValue("longitud", data.coords.longitude.toString());
    };
 
-   // useEffect(() => {
-   // console.log("a ver si se resetea el fgomulario");
-   // formik.resetForm();
-   // }, []);
+   useEffect(() => {
+      console.log("Código useEffect Sensisho");
+      navigation.setOptions({});
+      setPreventRemove(true);
 
-   useEffect(
-      (e) => {
-         // console.log("🚀 ~ useEffect ~ e:", e);
-         // console.log("useEffect del report");
+      return () => {
+         // Limpia la prevención al desmontar
+         setPreventRemove(false);
+      };
+   }, [navigation, reportname]);
 
-         const unsubscribe = navigation.addListener("beforeRemove", (e) => {
-            console.log("asdasds");
-            console.log("🚀 ~ unsubscribe ~ e:", e);
-            // if (e.data.action.type === "GO_BACK") {
-            //    console.log("Usuario está navegando hacia atrás");
-            //    // Aquí puedes hacer otras acciones, como mostrar una alerta, guardar datos, etc.
-            // }
-            // Alert.alert("Salir", "¿Estás seguro que quieres salir?", [
-            //    { text: "Cancelar", style: "cancel", onPress: () => {} },
+   useFocusEffect(
+      useCallback(() => {
+         // Código que deseas ejecutar cuando la ruta cambie a esta pantalla
+         console.log("Código que deseas ejecutar cuando la ruta cambie a esta pantalla");
+         formik.resetForm();
+         setPreventRemove(true);
+
+         return () => {
+            // Código que se ejecuta cuando la pantalla pierde el foco
+            // console.log("Ruta inactiva");
+            // Alert.alert("Cambios no guardados", "Tienes cambios sin guardar, ¿quieres salir sin guardar?", [
+            //    { text: "Cancelar", style: "cancel" },
             //    {
             //       text: "Salir",
             //       style: "destructive",
-            //       onPress: () => navigation.dispatch(e.data.action),
-            //    },
+            //       onPress: () => {
+            //          setPreventRemove(false);
+            //          navigation.goBack(); // O navega a otra pantalla
+            //       }
+            //    }
             // ]);
-            // Opcionalmente puedes evitar que el usuario se salga, mostrando una alerta
-            // e.preventDefault();
-         });
-
-         const focusUnsubscribe = navigation.addListener("focus", (e) => {
-            // console.log("Pantalla enfocada");
-            // console.log("🚀 ~ focusUnsubscribe ~ e:", e);
-            formik.resetForm();
-         });
-
-         const blurUnsubscribe = navigation.addListener("blur", (e) => {
-            console.log("Pantalla desenfocada");
-            console.log("🚀 ~ blurUnsubscribe ~ e:", e);
-         });
-
-         return () => {
-            unsubscribe();
-            focusUnsubscribe();
-            blurUnsubscribe();
          };
-      },
-      [navigation]
+      }, [])
    );
 
    return (
@@ -181,14 +173,8 @@ const Report = () => {
                </Text>
             </View>
          </View>
-         <KeyboardAwareScrollView
-            contentContainerStyle={{ flexGrow: 1 }}
-            keyboardShouldPersistTaps="handled"
-            automaticallyAdjustContentInsets={true}
-            automaticallyAdjustKeyboardInsets={true}
-            alwaysBounceVertical={true}
-         >
-            <FormikComponent formik={formik} textBtnSubmit={"REGISTRARME"} containerStyles={`flex-1 mx-5`}>
+         <ScrollContentComponent>
+            <FormikComponent formik={formik} textBtnSubmit={"ENVIAR REPORTE"} containerStyles={`flex-1 mx-5`}>
                {/* Componente Camera */}
                <View className={`flex-row py-4 w-full`}>
                   <View className={`w-1/2 justify-center items-center border border-gray-300 rounded-2xl`}>
@@ -271,7 +257,7 @@ const Report = () => {
                />
             </FormikComponent>
             <FooterComponent />
-         </KeyboardAwareScrollView>
+         </ScrollContentComponent>
       </View>
    );
 };

@@ -38,7 +38,7 @@ const Index = () => {
       }
       const item = affairs.find((item) => item.asunto_id === id);
       setAffair(item);
-      router.push(`/report`);
+      router.push(`/${item.asunto}`);
    };
 
    useEffect(() => {

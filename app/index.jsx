@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { useColorScheme } from "nativewind";
 import { useColorScheme as useColorSchemeRN } from "react-native";
 import useGlobalStore from "../stores/globalStore";
-import useAuthStore from "../stores/authStore";
+import useAuthStore, { checkLoggedIn } from "../stores/authStore";
 
 export default function App() {
    const { colorScheme } = useColorScheme();
@@ -24,43 +24,37 @@ export default function App() {
       console.log("currentTheme", currentTheme);
    }, [useColorScheme]);
 
-   // useEffect(() => {
-   //    console.log("🚀 ~ MainLayout ~ auth:", auth);
-   //    console.log("🚀 ~ MainLayout ~ isLoggedIn:", isLoggedIn);
-   //    console.log("🚀 ~ MainLayout ~ isLoading:", isLoading);
-   //    if (!isLoading && auth && isLoggedIn) {
-   //       console.log("no hay nadita");
-   //       router.replace("(main)");
-   //    }
-   // }, []);
+   useEffect(() => {
+      // console.log("🚀 ~ MainLayout ~ auth:", auth);
+      // console.log("🚀 ~ MainLayout ~ isLoggedIn:", isLoggedIn);
+      // console.log("🚀 ~ MainLayout ~ isLoading:", isLoading);
+      // // checkLoggedIn();
+      // // if (!isLoading && auth && isLoggedIn) {
+      // //    console.log("no hay nadita");
+      // //     router.replace("(main)");
+      // // }
+   }, []);
 
-   // if (!isLoading && auth && isLoggedIn) {
-   //    // router.push("(main)");
-   //    return <Redirect href={"(main)"} />;
-   // }
+   if (!isLoading && auth && isLoggedIn) {
+      // router.replace("(main)");
+      // return <Redirect href={"(main)"} />;
+   }
 
    return (
       <SafeAreaView className={"h-full"}>
-         <ImageBackground
-            source={images.bgAuth}
-            className={"w-full h-full"}
-            resizeMode="cover">
+         <ImageBackground source={images.bgAuth} className={"w-full h-full"} resizeMode="cover">
             <ScrollView
                contentContainerStyle={{
-                  flexGrow: 1,
-               }}>
+                  flexGrow: 1
+               }}
+            >
                {/* <Image
                   source={images.bgAuthUp}
                   className={"w-full h-40"}
                   resizeMode="cover"
                /> */}
-               <View
-                  className={"w-full justify-center items-center px-4 flex-1"}>
-                  <Image
-                     source={images.logo}
-                     className={"w-full h-20 mb-5"}
-                     resizeMode="contain"
-                  />
+               <View className={"w-full justify-center items-center px-4 flex-1"}>
+                  <Image source={images.logo} className={"w-full h-20 mb-5"} resizeMode="contain" />
                   {/* <Image
                      source={images.cards}
                      className={"max-w-[380px] w-full h-[100px]"}
@@ -69,27 +63,11 @@ export default function App() {
 
                   <View className={"relative mt-5 mx-5"}>
                      <Text className={"text-3xl font-mbold text-center"}>
-                        La app con estrella{" "}
-                        <Foundation
-                           name="star"
-                           size={28}
-                           color={colors.primary[200]}
-                        />
+                        La app con estrella <Foundation name="star" size={28} color={colors.primary[200]} />
                      </Text>
-                     <Image
-                        source={images.path}
-                        className={
-                           "w-[136px] h-[15px] absolute -bottom-2 -right-8"
-                        }
-                        resizeMode="contain"
-                     />
+                     <Image source={images.path} className={"w-[136px] h-[15px] absolute -bottom-2 -right-8"} resizeMode="contain" />
                   </View>
-                  <Text
-                     className={
-                        "text-sm font-regular text-gray-700 mt-1 text-center"
-                     }>
-                     Mejoremos nuestra ciudad
-                  </Text>
+                  <Text className={"text-sm font-regular text-gray-700 mt-1 text-center"}>Mejoremos nuestra ciudad</Text>
 
                   <ButtonCompnent
                      title={"Comencemos"}
@@ -102,11 +80,7 @@ export default function App() {
             </ScrollView>
          </ImageBackground>
 
-         <StatusBar
-            backgroundColor={colors.primary[200]}
-            style={colorScheme === "dark" ? "light" : "dark"}
-            animated
-         />
+         <StatusBar backgroundColor={colors.primary[200]} style={colorScheme === "dark" ? "light" : "dark"} animated />
       </SafeAreaView>
    );
 }

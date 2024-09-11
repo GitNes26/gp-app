@@ -13,13 +13,13 @@ const useAuthStore = create(
          isLoggedIn: false,
          setAuth: (auth) => set((state) => ({ auth })),
          // set((state) => ({ auth: state.auth !== auth ? auth : state.auth })),
-         setIsLoggedIn: (isLoggedIn) => set((state) => ({ isLoggedIn })),
+         setIsLoggedIn: (isLoggedIn) => set((state) => ({ isLoggedIn }))
       }),
       {
          name: "auth",
-         storage: createJSONStorage(() => AsyncStorage),
-      },
-   ),
+         storage: createJSONStorage(() => AsyncStorage)
+      }
+   )
 );
 export default useAuthStore;
 
@@ -31,7 +31,7 @@ export const login = async (data) => {
    try {
       const req = await ApiUrl("/login", {
          method: "POST",
-         data,
+         data
       });
       // console.log("🚀 ~ login ~ req:", req);
       if (!req.data.data) {
@@ -39,7 +39,7 @@ export const login = async (data) => {
          ToastAndroid.showWithGravity(
             "CREDENCIALES INCORRECTAS, VERIFICA TUS DATOS", //req.data,
             ToastAndroid.LONG,
-            ToastAndroid.BOTTOM,
+            ToastAndroid.BOTTOM
          );
          return;
       }
@@ -47,11 +47,7 @@ export const login = async (data) => {
       // console.log("🚀 ~ login ~ res:", res);
       if (!res.status) {
          setIsLoading(false);
-         ToastAndroid.showWithGravity(
-            res.message,
-            ToastAndroid.LONG,
-            ToastAndroid.BOTTOM,
-         );
+         ToastAndroid.showWithGravity(res.message, ToastAndroid.LONG, ToastAndroid.BOTTOM);
          return;
       }
       // console.log("🚀 ~ login ~ res:", res);
@@ -66,11 +62,7 @@ export const login = async (data) => {
    } catch (error) {
       console.log("🚀 ~ login ~ error:", error);
       setIsLoading(false);
-      ToastAndroid.showWithGravity(
-         "Datos Incorrectos o Cuenta no Registrada",
-         ToastAndroid.LONG,
-         ToastAndroid.BOTTOM,
-      );
+      ToastAndroid.showWithGravity("Datos Incorrectos o Cuenta no Registrada", ToastAndroid.LONG, ToastAndroid.BOTTOM);
    }
 };
 
@@ -87,17 +79,13 @@ export const logout = async () => {
 
       if (auth) {
          const req = await ApiUrl(`/logout/${auth.id}`, {
-            method: "POST",
+            method: "POST"
          });
          // console.log("🚀 ~ login ~ req:", req);
          res = req.data.data;
          if (!res.status) {
             setIsLoading(false);
-            ToastAndroid.showWithGravity(
-               res.message,
-               ToastAndroid.LONG,
-               ToastAndroid.BOTTOM,
-            );
+            ToastAndroid.showWithGravity(res.message, ToastAndroid.LONG, ToastAndroid.BOTTOM);
             return;
          }
       }
@@ -112,11 +100,7 @@ export const logout = async () => {
       await setAuth(null);
       await setIsLoggedIn(false);
       setIsLoading(false);
-      ToastAndroid.showWithGravity(
-         "Error en el servidor",
-         ToastAndroid.LONG,
-         ToastAndroid.BOTTOM,
-      );
+      ToastAndroid.showWithGravity("Error en el servidor", ToastAndroid.LONG, ToastAndroid.BOTTOM);
       return;
    }
 };
@@ -128,7 +112,7 @@ export const signup = async (data) => {
    try {
       const req = await ApiUrl("/users", {
          method: "POST",
-         data,
+         data
       });
       // console.log("🚀 ~ signup ~ req:", req);
       if (!req.data.data) {
@@ -136,17 +120,13 @@ export const signup = async (data) => {
          ToastAndroid.showWithGravity(
             "ERROR INESPERADO", //req.data,
             ToastAndroid.LONG,
-            ToastAndroid.BOTTOM,
+            ToastAndroid.BOTTOM
          );
          return;
       }
       const res = req.data.data;
       // console.log("🚀 ~ signup ~ res:", res);
-      ToastAndroid.showWithGravity(
-         res.alert_text,
-         ToastAndroid.LONG,
-         ToastAndroid.BOTTOM,
-      );
+      ToastAndroid.showWithGravity(res.alert_text, ToastAndroid.LONG, ToastAndroid.BOTTOM);
       // console.log("🚀 ~ signup ~ res:", res);
 
       await setIsLoggedIn(false);
@@ -154,11 +134,7 @@ export const signup = async (data) => {
    } catch (error) {
       console.log("🚀 ~ signup ~ error:", error);
       setIsLoading(false);
-      ToastAndroid.showWithGravity(
-         error,
-         ToastAndroid.LONG,
-         ToastAndroid.BOTTOM,
-      );
+      ToastAndroid.showWithGravity(error, ToastAndroid.LONG, ToastAndroid.BOTTOM);
    }
 };
 
@@ -167,8 +143,9 @@ export const getProfile = async () => {
 
    try {
       if (auth) {
+         // console.log("🚀 ~ getProfile ~ auth:", auth);
          const req = await ApiUrl(`/users/${auth.id}`, {
-            method: "GET",
+            method: "GET"
          });
          // return console.log("🚀 ~ getProfile ~ req:", req.data.res);
          const res = req.data.data;
@@ -189,30 +166,37 @@ export const checkLoggedIn = async () => {
 
    // console.log("🚀 ~ checkLoggedIn ~ auth:", auth);
 
-   if (!auth) {
-      console.log("checkLoggedIn ~ no tengo auth");
-      await setAuth(null);
-      await setIsLoggedIn(false);
-   } else {
-      console.log("checkLoggedIn ~ SI tengo auth");
-      const authValidate = await getProfile();
-      if (!authValidate) {
-         console.log("checkLoggedIn ~ pero no ya no es valido");
+   try {
+      if (!auth) {
+         console.log("checkLoggedIn ~ no tengo auth");
          await setAuth(null);
          await setIsLoggedIn(false);
       } else {
-         if (auth.token) {
-            ApiUrl.defaults.headers.common["Authorization"] =
-               `Bearer ${auth.token}`;
-            ApiUrlFiles.defaults.headers.common["Authorization"] =
-               `Bearer ${auth.token}`;
+         console.log("checkLoggedIn ~ SI tengo auth");
+         const authValidate = await getProfile();
+         console.log("🚀 ~ checkLoggedIn ~ authValidate:", authValidate);
+         if (!authValidate) {
+            console.log("checkLoggedIn ~ pero no ya no es valido");
+            await setAuth(null);
+            await setIsLoggedIn(false);
+         } else {
+            if (auth.token) {
+               ApiUrl.defaults.headers.common["Authorization"] = `Bearer ${auth.token}`;
+               ApiUrlFiles.defaults.headers.common["Authorization"] = `Bearer ${auth.token}`;
+            }
+            setIsLoggedIn(true);
          }
-         setIsLoggedIn(true);
       }
-   }
-   if (!auth && !isLoggedIn) {
-      console.log("checkLoggedIn ~ DE PLANO NO TENGO SESIÓN");
-      // return <Redirect href={"(auth)"} />;
-      router.canDismiss() ? router.dismissAll() : router.replace("(auth)");
+      if (!auth && !isLoggedIn) {
+         console.log("checkLoggedIn ~ DE PLANO NO TENGO SESIÓN");
+         // return <Redirect href={"(auth)"} />;
+         if (router.canDismiss()) router.dismissAll();
+         else return <Redirect href={"/"} /> /* router.replace("auth") */;
+      } else {
+         return <Redirect href={"(main)"} />; // router.replace("(main)");
+      }
+   } catch (error) {
+      console.log("🚀 ~ checkLoggedIn ~ error:", error);
+      return <Redirect href={"/"} />;
    }
 };

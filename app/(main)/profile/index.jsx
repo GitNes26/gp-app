@@ -1,17 +1,6 @@
-import {
-   Image,
-   ScrollView,
-   Text,
-   ToastAndroid,
-   TouchableOpacity,
-   View,
-} from "react-native";
+import { Image, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import useFetch from "../../../hooks/useFetch";
-import { getAllPhotos } from "../../../contexts/GlobalContext";
 import FooterComponent from "../../../components/FooterComponent";
-import HeaderComponent from "../../../components/HeaderComponent";
 import { Ionicons } from "@expo/vector-icons";
 import images from "../../../constants/images";
 import colors from "../../../constants/colors";
@@ -19,7 +8,7 @@ import useAuthStore from "../../../stores/authStore";
 import IconPressableComponent from "../../../components/IconPressableComponent";
 import { formatDatetime, formatPhone } from "../../../utils/formats";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { router } from "expo-router";
+import AvatarComponent from "../../../components/AvatarComponent";
 
 const Profile = () => {
    const { auth, isLoggedIn } = useAuthStore();
@@ -39,78 +28,48 @@ const Profile = () => {
       <>
          {/* <SafeAreaView className={"h-full"}> */}
          {/* <HeaderComponent /> */}
-         <KeyboardAwareScrollView
-            contentContainerStyle={{ flexGrow: 1 }}
-            keyboardShouldPersistTaps="handled"
-            alwaysBounceVertical={true}>
+         <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled" alwaysBounceVertical={true}>
             <View className="flex-1 bg-white p-4">
                {/* Imagen de Perfil */}
-               <View className="items-center mt-2">
+               <AvatarComponent
+                  size="lg"
+                  caption={
+                     <View className="mt-4 items-center">
+                        <Text className=" text-2xl font-mbold text-gray-900">
+                           {auth.name} {auth.paternal_last_name} {auth.maternal_last_name}
+                        </Text>
+                        {/* <Text className="text-sm font-mregular text-gray-500">
+                     22 años, dev del Campo
+                  </Text> */}
+                        <Text className="text-xs font-mregular text-gray-500">Miembro desde - {formatDatetime(auth.created_at, null, "DD [de] MMM [de] YYYY")}</Text>
+                     </View>
+                  }
+               />
+               {/* <View className="items-center mt-2">
                   <Image
                      source={images.profile_manada}
                      // source={ { uri: "https://example.com/profile-picture.jpg" }}
                      className="w-36 h-36 rounded-full"
                   />
                   <IconPressableComponent
-                     icon={
-                        <Ionicons
-                           name="camera"
-                           size={20}
-                           color={colors.primary[200]}
-                        />
-                     }
+                     icon={<Ionicons name="camera" size={20} color={colors.primary[200]} />}
                      styleContent={`absolute bottom-0 left-[57%] bg-gray-200 p-2 rounded-full`}
                   />
-               </View>
-
-               {/* Nombre y Descripción */}
-               <View className="mt-4 items-center">
-                  <Text className=" text-2xl font-mbold text-gray-900">
-                     {auth.name} {auth.paternal_last_name}{" "}
-                     {auth.maternal_last_name}
-                  </Text>
-                  {/* <Text className="text-sm font-mregular text-gray-500">
-                     22 años, dev del Campo
-                  </Text> */}
-                  <Text className="text-xs font-mregular text-gray-500">
-                     Miembro desde -{" "}
-                     {formatDatetime(
-                        auth.created_at,
-                        null,
-                        "DD [de] MMM [de] YYYY",
-                     )}
-                  </Text>
-               </View>
+               </View> */}
 
                {/* Información Personal */}
                <View className="mt-12">
                   <View className="flex-row items-center justify-between">
-                     <Text className="text-lg font-msemibold text-gray-700">
-                        Información Personal
-                     </Text>
+                     <Text className="text-lg font-msemibold text-gray-700">Información Personal</Text>
                      <TouchableOpacity>
-                        <Text className="font-msemibold text-primary-200">
-                           Editar
-                        </Text>
+                        <Text className="font-msemibold text-primary-200">Editar</Text>
                      </TouchableOpacity>
                   </View>
 
                   <View className="bg-gray-100/25 p-4 rounded-lg mt-4 space-y-8">
-                     <ItemContent
-                        iconName={"mail"}
-                        title={"Correo"}
-                        value={auth.email}
-                     />
-                     <ItemContent
-                        iconName={"phone-portrait"}
-                        title={"Teléfono"}
-                        value={formatPhone(auth.phone)}
-                     />
-                     <ItemContent
-                        iconName={"finger-print"}
-                        title={"CURP"}
-                        value={auth.curp}
-                     />
+                     <ItemContent iconName={"mail"} title={"Correo"} value={auth.email} />
+                     <ItemContent iconName={"phone-portrait"} title={"Teléfono"} value={formatPhone(auth.phone)} />
+                     <ItemContent iconName={"finger-print"} title={"CURP"} value={auth.curp} />
                   </View>
                </View>
 

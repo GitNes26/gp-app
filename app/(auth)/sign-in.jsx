@@ -20,8 +20,8 @@ const SignIn = () => {
    const { auth } = useAuthStore();
 
    const initialValues = {
-      email: "",
-      password: ""
+      email: "manada@digital.com",
+      password: "123456"
    };
    const validationSchemas = () => {
       let validationSchema;

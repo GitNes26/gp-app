@@ -1,5 +1,5 @@
 import { Image, RefreshControl, Text, ToastAndroid, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import FooterComponent from "../../../components/FooterComponent";
 import images from "../../../constants/images";
 import useAuthStore from "./../../../stores/authStore";
@@ -8,7 +8,9 @@ import TouchableContentComponent from "../../../components/TouchableContentCompo
 import EmptyComponent from "../../../components/EmptyComponent";
 import { SimpleToast } from "../../../utils/alerts";
 import useReportStore, { getMyReports } from "../../../stores/reportStore";
-import { Link, router } from "expo-router";
+import { Link, router, useFocusEffect } from "expo-router";
+import AvatarComponent from "../../../components/AvatarComponent";
+import { usePreventRemoveContext } from "@react-navigation/native";
 
 const MyReports = () => {
    const { auth, isLoggedIn } = useAuthStore();
@@ -27,12 +29,24 @@ const MyReports = () => {
       const item = reports.find((item) => item.id === id);
       setReport(item);
       router.push(`/my-reports/details`);
-      // router.push(`/my-reports/details/${id}`);
    };
 
-   useEffect(() => {
-      getMyReports();
-   }, []);
+   // useEffect(() => {
+   //    console.log("🚀 ~ useEffect ~ useEffect:");
+   //    getMyReports();
+   // }, []);
+
+   useFocusEffect(
+      useCallback(() => {
+         // Código que deseas ejecutar cuando la ruta cambie a esta pantalla
+         getMyReports();
+
+         return () => {
+            // Código que se ejecuta cuando la pantalla pierde el foco
+            // console.log("Ruta inactiva");
+         };
+      }, [])
+   );
 
    if (!auth && !isLoggedIn) return <View></View>;
 
@@ -60,24 +74,17 @@ const MyReports = () => {
                            </Text>
                         </View>
                         {/* Imagen de Perfil */}
-                        <View className="items-center mt-2">
-                           <Image
-                              source={images.profile_manada}
-                              // source={ { uri: "https://example.com/profile-picture.jpg" }}
-                              className="w-28 h-28 rounded-full"
-                           />
-                        </View>
-
-                        {/* Nombre y Descripción */}
-                        <View className="mt-4 items-center mb-5">
-                           <Text className=" text-2xl font-mbold text-gray-900">
-                              {auth.name} {auth.paternal_last_name} {auth.maternal_last_name}
-                           </Text>
-                           {/* <Text className="text-sm font-mregular text-gray-500">
-                     22 años, dev del Campo
-                  </Text> */}
-                           <Text className="text-sm font-mregular text-gray-500">a reportado {reports.length} eventos</Text>
-                        </View>
+                        <AvatarComponent
+                           size="md"
+                           caption={
+                              <View className="items-center mb-5">
+                                 <Text className=" text-2xl font-mbold text-gray-900">
+                                    {auth.name} {auth.paternal_last_name} {auth.maternal_last_name}
+                                 </Text>
+                                 <Text className="text-sm font-m text-gray-500">a reportado {reports.length} eventos</Text>
+                              </View>
+                           }
+                        />
                      </>
                   )}
                   renderItem={({ item }) => (
@@ -109,7 +116,15 @@ export default MyReports;
 const ItemContent = ({ id, asunto, estatus, observaciones, fecha_reporte, onPress }) => {
    // EVIDENCIAS: ALTA = AZUL , EN TRAMITE = AMARILLO , TERMINADO = VERDE
    const bgColor =
-      estatus === "ALTA" ? "bg-blue-600/50" : estatus === "EN TRAMITE" ? "bg-yellow-600/50" : estatus === "TERMINADO" ? "bg-green-600/50" : "bg-gray-100/50";
+      estatus === "ALTA"
+         ? "bg-blue-600/50"
+         : estatus === "EN TRAMITE"
+           ? "bg-yellow-600/50"
+           : estatus === "TERMINADO"
+             ? "bg-green-600/50"
+             : estatus === "NO PROCEDE"
+               ? "bg-red-600/50"
+               : "bg-gray-100/50";
    return (
       <View className={`flex-1 items-stretch my-2`}>
          <TouchableContentComponent styleContet={`flex p-2 ${bgColor} rounded-lg`} onPress={onPress}>

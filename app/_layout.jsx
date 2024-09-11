@@ -24,13 +24,13 @@ const RootLayout = () => {
       "Montserrat-Medium": require("../assets/fonts/Montserrat-Medium.ttf"),
       "Montserrat-Regular": require("../assets/fonts/Montserrat-Regular.ttf"),
       "Montserrat-SemiBold": require("../assets/fonts/Montserrat-SemiBold.ttf"),
-      "Montserrat-Thin": require("../assets/fonts/Montserrat-Thin.ttf"),
+      "Montserrat-Thin": require("../assets/fonts/Montserrat-Thin.ttf")
    });
 
    const [permissionsGranted, setPermissionsGranted] = useState({
       camera: false,
       mediaLibrary: false,
-      location: false,
+      location: false
    });
 
    const { colorScheme } = useColorScheme();
@@ -46,17 +46,14 @@ const RootLayout = () => {
 
          await (async () => {
             // Solicitar permiso para la cámara
-            const { status: cameraStatus } =
-               await Camera.Camera.requestCameraPermissionsAsync();
-            const { status: locationStatus } =
-               await Location.requestForegroundPermissionsAsync();
-            const { status: mediaLibraryStatus } =
-               await MediaLibrary.requestPermissionsAsync();
+            const { status: cameraStatus } = await Camera.Camera.requestCameraPermissionsAsync();
+            const { status: locationStatus } = await Location.requestForegroundPermissionsAsync();
+            const { status: mediaLibraryStatus } = await MediaLibrary.requestPermissionsAsync();
 
             setPermissionsGranted({
                camera: cameraStatus === "granted",
                location: locationStatus === "granted",
-               mediaLibrary: mediaLibraryStatus === "granted",
+               mediaLibrary: mediaLibraryStatus === "granted"
             });
          })();
       })();
@@ -64,27 +61,27 @@ const RootLayout = () => {
 
    if (!fontsLoaded && !error) return null;
 
-   if (auth && isLoggedIn) {
-      console.log("lo tengo todo");
-      return (
-         <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(main)" />
-         </Stack>
-      );
-   }
-
    return (
       <Stack screenOptions={{ headerShown: false }}>
          <Stack.Screen name="index" />
          <Stack.Screen name="(auth)" />
+         <Stack.Screen name="(main)" />
       </Stack>
    );
+
+   // if (auth && isLoggedIn) {
+   //    console.log("lo tengo todo");
+   //    return (
+   //       <Stack screenOptions={{ headerShown: false }}>
+   //          <Stack.Screen name="(main)" />
+   //       </Stack>
+   //    );
+   // }
 
    // return (
    //    <Stack screenOptions={{ headerShown: false }}>
    //       <Stack.Screen name="index" />
    //       <Stack.Screen name="(auth)" />
-   //       <Stack.Screen name="(main)" />
    //    </Stack>
    // );
 };
