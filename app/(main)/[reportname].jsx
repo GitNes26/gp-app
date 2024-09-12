@@ -10,7 +10,7 @@ import useAuthStore from "../../stores/authStore";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import useGlobalStore from "../../stores/globalStore";
-import { FormikComponent, InputComponent } from "../../components/FormikComonents";
+import { FormikComponent, InputComponent } from "../../components/FormikComponents";
 import { postReport } from "../../stores/reportStore";
 import { SimpleToast } from "../../utils/alerts";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";

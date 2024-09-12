@@ -8,7 +8,7 @@ import { Foundation } from "@expo/vector-icons";
 import FooterComponent from "../../components/FooterComponent";
 import HeaderComponent from "../../components/HeaderComponent";
 import useGlobalStore from "../../stores/globalStore";
-import { FormikComponent, InputComponent } from "../../components/FormikComonents";
+import { FormikComponent, InputComponent } from "../../components/FormikComponents";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import useAuthStore, { login } from "../../stores/authStore";

@@ -7,7 +7,7 @@ import { Link, router } from "expo-router";
 import { Foundation } from "@expo/vector-icons";
 import HeaderComponent from "../../components/HeaderComponent";
 import FooterComponent from "../../components/FooterComponent";
-import { FormikComponent, InputComponent, RadioButtonComponent } from "../../components/FormikComonents";
+import { FormikComponent, InputComponent, RadioButtonComponent } from "../../components/FormikComponents";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import useGlobalStore from "../../stores/globalStore";

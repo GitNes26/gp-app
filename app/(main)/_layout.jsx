@@ -23,7 +23,7 @@ const data = [
       name: "[reportname]",
       label: "Nuevo Reporte",
       title: "Nuevo Reporte",
-      // header: () => <HeaderComponent />,
+      header: () => <HeaderComponent />,
       headerShown: true,
       show: false,
       icon: {

@@ -138,6 +138,40 @@ export const signup = async (data) => {
    }
 };
 
+export const updatePassword = async () => {
+   const setIsLoading = useGlobalStore.getState().setIsLoading;
+   const auth = useAuthStore.getState().auth;
+
+   try {
+      await checkLoggedIn();
+      // console.log("🚀 ~ updatePassword ~ auth:", auth);
+      let res = null;
+
+      if (auth) {
+         const req = await ApiUrl(`/users/updatepassword/${auth.id}`, {
+            method: "POST"
+         });
+         // console.log("🚀 ~ updatePassword ~ req:", req);
+         res = req.data.data;
+         console.log("🚀 ~ updatePassword ~ res:", res);
+         if (!res.status) {
+            setIsLoading(false);
+            ToastAndroid.showWithGravity(res.message, ToastAndroid.LONG, ToastAndroid.BOTTOM);
+            return;
+         }
+      }
+      ApiUrl.defaults.headers.common["Authorization"] = null;
+      ApiUrlFiles.defaults.headers.common["Authorization"] = null;
+      // console.log("Todas las cabeceras:", ApiUrl.defaults.headers);
+      return res;
+   } catch (error) {
+      console.log("🚀 ~ updatePassword ~ error:", error);
+      setIsLoading(false);
+      ToastAndroid.showWithGravity("Error en el servidor", ToastAndroid.LONG, ToastAndroid.BOTTOM);
+      return;
+   }
+};
+
 export const getProfile = async () => {
    const auth = useAuthStore.getState().auth;
 
