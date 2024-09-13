@@ -138,7 +138,7 @@ export const signup = async (data) => {
    }
 };
 
-export const updatePassword = async () => {
+export const updatePassword = async (data) => {
    const setIsLoading = useGlobalStore.getState().setIsLoading;
    const auth = useAuthStore.getState().auth;
 
@@ -149,7 +149,8 @@ export const updatePassword = async () => {
 
       if (auth) {
          const req = await ApiUrl(`/users/updatepassword/${auth.id}`, {
-            method: "POST"
+            method: "POST",
+            data
          });
          // console.log("🚀 ~ updatePassword ~ req:", req);
          res = req.data.data;

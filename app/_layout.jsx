@@ -34,8 +34,8 @@ const RootLayout = () => {
    });
 
    const { colorScheme } = useColorScheme();
-   console.log("🚀 ~ RootLayout ~ colorScheme:", colorScheme);
    const currentTheme = useColorSchemeRN();
+   console.log("🚀 ~ RootLayout ~ colorScheme:", colorScheme);
    console.log("🚀 ~ RootLayout ~ currentTheme:", currentTheme);
 
    // Estado para almacenar el tema actual del sistema

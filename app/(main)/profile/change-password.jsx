@@ -3,10 +3,11 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { FormikComponent, InputComponent } from "../../../components/FormikComponents";
 import FooterComponent from "../../../components/FooterComponent";
 import * as Yup from "yup";
-import useAuthStore, { updatePassword } from "../../../stores/authStore";
+import useAuthStore, { logout, updatePassword } from "../../../stores/authStore";
 import { SimpleToast } from "../../../utils/alerts";
 import { useFormik } from "formik";
 import useGlobalStore from "../../../stores/globalStore";
+import { router } from "expo-router";
 
 const ChangePassword = () => {
    const { setIsLoading } = useGlobalStore();
@@ -34,12 +35,15 @@ const ChangePassword = () => {
 
          const res = await updatePassword(values);
          console.log("🚀 ~ onSubmit ~ res:", res);
-         SimpleToast(res.message);
+         SimpleToast(res.alert_text);
 
          formik.setSubmitting(false);
          setIsLoading(false);
 
-         if (res.status && res.alert_icon == "success") router.dismissAll();
+         if (res.status && res.alert_icon == "success") {
+            // await logout();
+            // router.dismissAll();
+         }
 
          // router.replace("(main)");
       } catch (error) {
