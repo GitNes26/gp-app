@@ -34,7 +34,7 @@ const ChangePassword = () => {
          formik.setSubmitting(true);
 
          const res = await updatePassword(values);
-         console.log("🚀 ~ onSubmit ~ res:", res);
+         // console.log("🚀 ~ onSubmit ~ res:", res);
          SimpleToast(res.alert_text);
 
          formik.setSubmitting(false);
