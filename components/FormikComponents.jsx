@@ -54,6 +54,7 @@ export const InputComponent = ({
    isPassword = false,
    rows = null,
    readOnly,
+   hidden,
    textStyleCase = null,
    otherStyles,
    keyboardType = "default",
@@ -69,12 +70,16 @@ export const InputComponent = ({
    const isError = error == null ? false : true;
    const inputRef = useRef(null);
 
-   // useEffect(() => {
-   //    // console.log("isError", isError);
-   // }, [idName, values[idName]]);
+   const handleTextInput = (val) => {
+      console.log("🚀 ~ handleTextInput ~ val:", val);
+   };
+
+   useEffect(() => {
+      // console.log("isError", isError);
+   }, [idName, values[idName]]);
 
    return (
-      <View className={`mb-5 ${otherStyles}`}>
+      <View className={`mb-5 ${hidden && "hidden"} ${otherStyles}`}>
          <Text className={`text-base pl-3 ${isError ? "text-red-600" : "text-primary"} font-msemibold`}>{label}</Text>
          <View
             className={`border-2 border-slate-200 w-full ${!rows ? "h-16" : "max-h-64"} px-4 bg-slate-50 rounded-2xl focus:border-primary-200 items-center flex-row ${isError && "border-red-600"} ${readOnly && "bg-slate-200"}`}
@@ -88,6 +93,7 @@ export const InputComponent = ({
                placeholder={placeholder}
                placeholderTextColor={colors.gray[100]}
                onChangeText={handleChange(idName)}
+               // onTextInput={handleTextInput(idName)}
                onBlur={handleBlur(idName)}
                // onTextInput={(e) => {
                //    textStyleCase != null

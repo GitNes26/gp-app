@@ -9,6 +9,7 @@ import { API_IMG } from "@env";
 import EmptyComponent from "../../components/EmptyComponent";
 import { validateLocation } from "../../utils/validations";
 import useGlobalStore from "../../stores/globalStore";
+import { requesPermissionLocation } from "../../components/LocationComponent";
 
 const Index = () => {
    const { isLoading, setIsLoading } = useGlobalStore();
@@ -32,6 +33,8 @@ const Index = () => {
 
    const handlePressCategory = async (id) => {
       /** VALIDAR QUE ESTE EN TERRITORIO GOMEZPALATINO */
+      if (!(await requesPermissionLocation())) return;
+
       if (!(await validateLocation())) {
          setIsLoading(false);
          // return;

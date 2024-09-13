@@ -61,7 +61,7 @@ const Report = () => {
       } */
    };
    const validationSchema = Yup.object().shape({
-      latitud: Yup.string().required("Latitud requerida"),
+      latitud: Yup.string().required("Ubicación requerida, da clic en el botón ''ESTOY AQUI''"),
       longitud: Yup.string().required("Longitud requerida"),
       referencias: Yup.string().required("Referencias requerida"),
       comentarios: Yup.string().required("Comentarios requeridos")
@@ -208,8 +208,15 @@ const Report = () => {
                      </Text>
                   </View>
                   <View className={`w-1/2 justify-center items-center pl-2`}>
-                     <Text className={`text-gray-500 text-center font-mmedium italic mb-2`}>Muestra tu ubicacion actual</Text>
-                     <LocationComponent textButton="Estoy Aquí" styleButton={`w-full bg-primary-200`} getData={handleGetLocation} />
+                     <Text className={`text-gray-500 text-center font-mmedium italic mb-2`}>Muestra tu ubicacion actual dando clic al botón</Text>
+                     <LocationComponent
+                        textButton="Estoy Aquí"
+                        styleButton={`w-full bg-primary-200 ${formik.errors["latitud"] && "bg-red-600"}`}
+                        getData={handleGetLocation}
+                     />
+                     <Text className={`text-sm italic px-2 ${formik.errors["latitud"] ? "text-red-600" : "text-gray-400"} font-mlight`}>
+                        {formik.errors["latitud"] && formik.errors["latitud"]}
+                     </Text>
                   </View>
                </View>
 
@@ -221,6 +228,7 @@ const Report = () => {
                   // helperText={"texto de ayuda"}
                   textStyleCase={false}
                   readOnly={true}
+                  hidden={true}
                   // keyboardType={"email-address"}
                />
                <InputComponent
@@ -231,6 +239,7 @@ const Report = () => {
                   // helperText={"texto de ayuda"}
                   textStyleCase={false}
                   readOnly={true}
+                  hidden={true}
                   // keyboardType={"email-address"}
                />
 
