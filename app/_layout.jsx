@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Redirect, SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { useColorScheme } from "nativewind";
-import { useColorScheme as useColorSchemeRN } from "react-native";
+import { Appearance, useColorScheme as useColorSchemeRN } from "react-native";
 
 import * as Camera from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
@@ -34,7 +34,23 @@ const RootLayout = () => {
    });
 
    const { colorScheme } = useColorScheme();
+   console.log("🚀 ~ RootLayout ~ colorScheme:", colorScheme);
    const currentTheme = useColorSchemeRN();
+   console.log("🚀 ~ RootLayout ~ currentTheme:", currentTheme);
+
+   // Estado para almacenar el tema actual del sistema
+   const [theme, setTheme] = useState(Appearance.getColorScheme());
+
+   useEffect(() => {
+      // Listener para detectar cambios en el esquema de colores del sistema
+      const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+         setTheme(colorScheme);
+      });
+      console.log("🚀 ~ subscription ~ colorScheme:", theme);
+
+      // Limpieza del listener cuando el componente se desmonta
+      return () => subscription.remove();
+   }, []);
 
    useEffect(() => {
       (async () => {

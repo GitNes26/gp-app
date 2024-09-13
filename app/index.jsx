@@ -24,16 +24,16 @@ export default function App() {
       console.log("currentTheme", currentTheme);
    }, [useColorScheme]);
 
-   useEffect(() => {
-      // console.log("🚀 ~ MainLayout ~ auth:", auth);
-      // console.log("🚀 ~ MainLayout ~ isLoggedIn:", isLoggedIn);
-      // console.log("🚀 ~ MainLayout ~ isLoading:", isLoading);
-      // // checkLoggedIn();
-      // // if (!isLoading && auth && isLoggedIn) {
-      // //    console.log("no hay nadita");
-      // //     router.replace("(main)");
-      // // }
-   }, []);
+   // useEffect(() => {
+   // console.log("🚀 ~ MainLayout ~ auth:", auth);
+   // console.log("🚀 ~ MainLayout ~ isLoggedIn:", isLoggedIn);
+   // console.log("🚀 ~ MainLayout ~ isLoading:", isLoading);
+   // // checkLoggedIn();
+   // // if (!isLoading && auth && isLoggedIn) {
+   // //    console.log("no hay nadita");
+   // //     router.replace("(main)");
+   // // }
+   // }, []);
 
    if (!isLoading && auth && isLoggedIn) {
       // router.replace("(main)");

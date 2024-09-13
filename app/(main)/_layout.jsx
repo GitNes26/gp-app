@@ -42,22 +42,11 @@ const data = [
          disfocus: "reader-outline"
       }
    },
-   // {
-   //    name: "my-reports/details",
-   //    label: "Reporte [id]",
-   //    title: "Reporte [id]",
-   //    headerShown: true,
-   //    show: false,
-   //    icon: {
-   //       focus: "reader",
-   //       disfocus: "reader-outline",
-   //    },
-   // },
    {
-      name: "profile/index",
+      name: "profile",
       label: "Mi Perfil",
       title: "Mi Perfil",
-      headerShown: true,
+      headerShown: false,
       show: false,
       icon: {
          focus: "person",

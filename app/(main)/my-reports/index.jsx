@@ -28,7 +28,7 @@ const MyReports = () => {
    const handleOnPress = (id) => {
       const item = reports.find((item) => item.id === id);
       setReport(item);
-      router.push(`/my-reports/details`);
+      router.push(`/my-reports/${id}`);
    };
 
    // useEffect(() => {

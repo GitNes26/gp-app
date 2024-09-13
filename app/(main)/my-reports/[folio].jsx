@@ -1,12 +1,8 @@
-import { Image, RefreshControl, Text, ToastAndroid, View } from "react-native";
+import { Image, Text, ToastAndroid, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import FooterComponent from "../../../components/FooterComponent";
 import useAuthStore from "../../../stores/authStore";
-import images from "../../../constants/images";
 import { FlatList } from "react-native-gesture-handler";
-import TouchableContentComponent from "../../../components/TouchableContentComponent";
-import EmptyComponent from "../../../components/EmptyComponent";
-import { SimpleToast } from "../../../utils/alerts";
 import useReportStore, { getMyReports } from "../../../stores/reportStore";
 import { API_IMG } from "@env";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";

@@ -1,18 +1,17 @@
 import React from "react";
-import { Stack, useGlobalSearchParams, useLocalSearchParams } from "expo-router";
+import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HeaderComponent from "../../../components/HeaderComponent";
 import colors from "../../../constants/colors";
 
-const MyReportsLayout = () => {
+const ProfileLayout = () => {
    const { top, bottom } = useSafeAreaInsets();
-   const { folio } = useGlobalSearchParams();
 
    const data = [
       {
          name: "index",
-         title: "Detalle de reporte",
+         title: "Mi Perfil",
          header: () => <HeaderComponent />,
          headerShown: true,
          icon: {
@@ -22,9 +21,9 @@ const MyReportsLayout = () => {
          presentation: "modal"
       },
       {
-         name: "[folio]",
-         label: "",
-         title: `Detalle de Reporte #${folio}`,
+         name: "change-password",
+         label: "Cambiar contraseña",
+         title: "Cambiar contraseña",
          // header: () => <HeaderComponent />,
          headerShown: true,
          icon: {
@@ -38,21 +37,16 @@ const MyReportsLayout = () => {
       <>
          <Stack
             screenOptions={{
-               drawerActiveBackgroundColor: colors.primary.DEFAULT,
-               drawerActiveTintColor: colors.primary[100],
-               drawerLabelStyle: { marginLeft: -20, fontWeight: "bold" },
-               // drawerHideStatusBarOnOpen: true,
                headerTitleStyle: {
                   fontWeight: "800"
-               },
-               headerTitleContainerStyle: {
-                  // backgroundColor: "red",
-                  width: "100%",
-                  alignItems: "center"
+                  // color: "white"
                },
                headerStyle: {
                   backgroundColor: colors.primary[200]
-                  // height: "10%",
+               },
+               contentStyle: {
+                  width: "100%",
+                  alignItems: "center"
                },
                headerShown: true,
                headerShadowVisible: true
@@ -69,7 +63,7 @@ const MyReportsLayout = () => {
                      headerShadowVisible: true,
                      presentation: "modal",
                      contentStyle: {
-                        // top: top - 1,
+                        // top: top - 1
                      }
                   }}
                />
@@ -80,4 +74,4 @@ const MyReportsLayout = () => {
    );
 };
 
-export default MyReportsLayout;
+export default ProfileLayout;

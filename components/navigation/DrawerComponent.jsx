@@ -57,7 +57,7 @@ const DrawerGroup = ({ data }) => {
          screenOptions={{
             drawerActiveBackgroundColor: colors.primary.DEFAULT,
             drawerActiveTintColor: colors.primary[100],
-            drawerLabelStyle: { marginLeft: -20, fontWeight: "bold" },
+            drawerLabelStyle: { marginLeft: -20, fontWeight: "bold", justifyContent: "center" },
             // drawerHideStatusBarOnOpen: true,
             headerTitleStyle: {
                fontWeight: "800"
@@ -100,15 +100,6 @@ const DrawerGroup = ({ data }) => {
                   drawerLabel: item.label,
                   headerTitle: item.title,
                   drawerIcon: ({ size, color, focused }) => {
-                     // let iconName = "";
-                     // if (route.name === "home")
-                     //    iconName = focused ? "home" : "home-outline";
-                     // else if (route.name === "index")
-                     //    iconName = focused
-                     //       ? "notifications"
-                     //       : "notifications-outline";
-                     // else if (route.name === "Settings")
-                     //    iconName = focused ? "settings" : "settings-outline";
                      return <Ionicons name={focused ? item.icon.focus : item.icon.disfocus} size={size} color={color} />;
                   }
                })}
