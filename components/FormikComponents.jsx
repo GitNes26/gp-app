@@ -71,7 +71,10 @@ export const InputComponent = ({
    const inputRef = useRef(null);
 
    const handleTextInput = (val) => {
-      console.log("🚀 ~ handleTextInput ~ val:", val);
+      // const handleTextChange = (input) => {
+      //    const capitalizedText = input.replace(/\b\w/g, (char) => char.toUpperCase());
+      //    setText(capitalizedText);
+      //  };
    };
 
    useEffect(() => {
