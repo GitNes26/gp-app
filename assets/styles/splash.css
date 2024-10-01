@@ -1,0 +1,100 @@
+/* ANIMACION DEL LOGO CARGANDO */
+.container-loader {
+   width: 100%;
+   height: 105%;
+   position: fixed;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background-color: rgba(4, 26, 7, 0.808) /* green */;
+   top: -105%;
+}
+.container-blur {
+   height: 100%;
+   width: 100%;
+   backdrop-filter: blur(10px);
+   /* background-color: rgba(0, 128, 0, 0.5); */
+}
+.container-loader-action {
+   width: 100%;
+   height: 105%;
+   position: fixed;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   /* background-color: rgba(0, 128, 0, 0.5); */
+   top: -105%;
+}
+
+.entrada {
+   animation: animacionPersiana 0.6s ease-in-out forwards;
+}
+
+.salida {
+   animation: forwards animacionPersianaSalida 1.2s cubic-bezier(0.83, -0.36, 0.05, 0.99);
+}
+
+.box-logo {
+   /* background-color: red; */
+   text-align: center;
+   width: fit-content;
+   animation:
+      animacionLogo 1.5s ease-in-out infinite,
+      animacionLogo2 1.5s ease-in-out infinite alternate;
+   /* animation:
+      flotar 3s infinite linear,
+      oscilar 2s infinite alternate; */
+}
+
+@keyframes animacionPersiana {
+   to {
+      top: 0;
+   }
+
+   from {
+      top: -105%;
+   }
+}
+@keyframes animacionPersianaSalida {
+   to {
+      top: -105%;
+   }
+
+   from {
+      top: 0%;
+   }
+}
+
+@keyframes animacionLogo {
+   0% {
+      transform: translateX(50px) translateY(-10px) rotate(5deg);
+   }
+   50% {
+      transform: translateX(-50px) rotate(0deg);
+   }
+   100% {
+      transform: translateX(50px) translateY(10px) rotate(5deg);
+   }
+}
+@keyframes animacionLogo2 {
+   0% {
+      transform: translateX(50px) translateY(10px) rotate(-5deg);
+   }
+   50% {
+      transform: translateX(-50px) rotate(0deg);
+   }
+   100% {
+      transform: translateX(50px) translateY(-10px) rotate(-5deg);
+   }
+}
+
+@keyframes animacionGiro {
+   to {
+      transform: rotate(0deg);
+   }
+
+   from {
+      transform: rotate(720deg);
+   }
+}
+/* ANIMACION DEL LOGO CARGANDO */

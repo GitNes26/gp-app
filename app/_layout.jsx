@@ -8,12 +8,13 @@ import * as Camera from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
 import useAuthStore from "../stores/authStore";
+import SplashComponent from "../components/SplashComponent";
 
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
+   const [appIsReady, setAppIsReady] = useState(true);
    const { auth, isLoggedIn } = useAuthStore();
-   // const { isLoading } = useGlobalContext();
 
    const [fontsLoaded, error] = useFonts({
       "Montserrat-Black": require("../assets/fonts/Montserrat-Black.ttf"),
@@ -33,18 +34,25 @@ const RootLayout = () => {
       location: false
    });
 
-   const { colorScheme } = useColorScheme();
-   const currentTheme = useColorSchemeRN();
+   // const { colorScheme } = useColorScheme();
+   // const currentTheme = useColorSchemeRN();
+   // Hook para detectar si el sistema operativo está en modo oscuro o claro
+   const colorScheme = useColorSchemeRN();
+   // Hook de nativewind para aplicar estilos con TailwindCSS
+   const { colorScheme: nativeWindColorScheme } = useColorScheme();
    console.log("🚀 ~ RootLayout ~ colorScheme:", colorScheme);
-   console.log("🚀 ~ RootLayout ~ currentTheme:", currentTheme);
+   console.log("🚀 ~ RootLayout ~ nativeWindColorScheme:", nativeWindColorScheme);
 
    // Estado para almacenar el tema actual del sistema
    const [theme, setTheme] = useState(Appearance.getColorScheme());
 
    useEffect(() => {
+      SplashScreen.hideAsync();
+      setAppIsReady(true);
+
       // Listener para detectar cambios en el esquema de colores del sistema
       const subscription = Appearance.addChangeListener(({ colorScheme }) => {
-         setTheme(colorScheme);
+         setTheme(theme);
       });
       console.log("🚀 ~ subscription ~ colorScheme:", theme);
 
@@ -53,6 +61,7 @@ const RootLayout = () => {
    }, []);
 
    useEffect(() => {
+      console.log("🚀 ~ useEffect ~ useEffect: segundo");
       (async () => {
          // console.log("auth", auth);
          // console.log("isLoggedIn", isLoggedIn);
@@ -72,17 +81,23 @@ const RootLayout = () => {
                mediaLibrary: mediaLibraryStatus === "granted"
             });
          })();
+         setTimeout(() => {
+            setAppIsReady(false);
+         }, 1500);
       })();
    }, [fontsLoaded, error]);
 
    if (!fontsLoaded && !error) return null;
 
    return (
-      <Stack screenOptions={{ headerShown: false }}>
-         <Stack.Screen name="index" />
-         <Stack.Screen name="(auth)" />
-         <Stack.Screen name="(main)" />
-      </Stack>
+      <>
+         <SplashComponent visible={appIsReady} bgTrasnparent={false} />
+         <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="index" />
+            <Stack.Screen name="(auth)" />
+            <Stack.Screen name="(main)" />
+         </Stack>
+      </>
    );
 
    // if (auth && isLoggedIn) {

@@ -14,9 +14,11 @@ import * as Yup from "yup";
 import useAuthStore, { login } from "../../stores/authStore";
 import { validateLocation } from "../../utils/validations";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import Constant from "expo-constants";
 
 const SignIn = () => {
-   const { isLoading, setIsLoading } = useGlobalStore();
+   const { isLoading, setIsLoading, bgTransparent } = useGlobalStore();
+   const setBgTransparent = useGlobalStore((state) => state.setBgTransparent);
    const { auth } = useAuthStore();
 
    const initialValues = {
@@ -39,6 +41,8 @@ const SignIn = () => {
       return validationSchema;
    };
    const onSubmit = async (values) => {
+      console.log("🚀 ~ onSubmit ~ bgTransparent:", bgTransparent);
+      setBgTransparent(true);
       // return console.log("🚀 ~ onSubmit ~ values:", values);
       try {
          setIsLoading(true);

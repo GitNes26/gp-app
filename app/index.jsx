@@ -11,6 +11,8 @@ import { useColorScheme } from "nativewind";
 import { useColorScheme as useColorSchemeRN } from "react-native";
 import useGlobalStore from "../stores/globalStore";
 import useAuthStore, { checkLoggedIn } from "../stores/authStore";
+import SplashComponent from "../components/SplashComponent";
+import { VERSION_APP } from "../constants/globals";
 
 export default function App() {
    const { colorScheme } = useColorScheme();
@@ -42,6 +44,7 @@ export default function App() {
 
    return (
       <SafeAreaView className={"h-full"}>
+         {/* <SplashComponent visible={isLoading} bgTrasnparent={true} /> */}
          <ImageBackground source={images.bgAuth} className={"w-full h-full"} resizeMode="cover">
             <ScrollView
                contentContainerStyle={{
@@ -78,6 +81,7 @@ export default function App() {
                   />
                </View>
             </ScrollView>
+            <Text className={`absolute bottom-5 right-5 font-mregular text-primary`}>v. {VERSION_APP}</Text>
          </ImageBackground>
 
          <StatusBar backgroundColor={colors.primary[200]} style={colorScheme === "dark" ? "light" : "dark"} animated />

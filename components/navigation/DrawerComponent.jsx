@@ -31,7 +31,19 @@ const CustomDrawerContent = ({ ...props }) => {
       <View className={"flex-1"}>
          <DrawerContentScrollView {...props} contentContainerStyle={{ backgroundColor: colors.primary[200] }}>
             <TouchableContentComponent onPress={() => router.push("profile")}>
-               <AvatarComponent size={"md"} caption={<Text className={`font-msemibold text-primary-100 text-[15px]`}>{auth?.email}</Text>} styleContainer={`py-5`} />
+               <AvatarComponent
+                  size={"md"}
+                  caption={
+                     <View>
+                        <Text className={`font-msemibold text-primary-100 text-[15px]`}>{auth?.email}</Text>
+                        <Text className={`font-mmedium text-primary-100 text-[15px] text-center mt-2`}>
+                           <Ionicons name="arrow-forward-outline" className={`my-auto`} size={13} color={colors.primary[100]} />
+                           &nbsp; Ir a mi perfil
+                        </Text>
+                     </View>
+                  }
+                  styleContainer={`py-5`}
+               />
             </TouchableContentComponent>
             <View className={`bg-white pt-1`}>
                <DrawerItemList {...props} />

@@ -1,4 +1,5 @@
 # Welcome to your Expo app 👋
+
 1. Crear Proyecto (Blank JS)
 
    ```bash
@@ -6,8 +7,6 @@
    ```
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
-
-
 
 ## Get started
 
@@ -23,10 +22,10 @@ npm install
 npx expo start
 ```
 
-
 ## Installacion de dependencias Basicas
 
-2. librerias expo y react-native
+##### 2. librerias expo y react-native
+
 
 ```bash
 npm install react-dom --force
@@ -35,12 +34,13 @@ npx expo install expo-router react-native-safe-area-context react-native-screens
 ```
 
 Si se utilizara una navegacion de Drawer...
+
 ```bash
 npx expo install @react-navigation/drawer react-native-gesture-handler react-native-reanimated
 ```
 
+##### 2. Tailwind con expo
 
-2. Tailwind con expo
 
 ```bash
 npm install nativewind
@@ -48,112 +48,133 @@ npm install --save-dev tailwindcss@3.3.2
 npx tailwindcss init
 ```
 
-4. Formateador de Fechas
+##### 4. Formateador de Fechas
+
 
 ```bash
 npm install dayjs
-   ```
+```
 
+##### 3. Iconos - se ven lindos los de AntDesign
 
-3. Iconos - se ven lindos los de AntDesign
 
 ```bash
 npm install @expo/vector-icons
-   ```
-   
+```
 
-4. Animaciones - expo av, se comenta que significa audio y video
+##### 4. Animaciones - expo av, se comenta que significa audio y video
+
 
 ```bash
    npm install react-native-animatable expo-av
-   ```
+```
 
-   si quieremos agregar animaciones en las View y para crear Skeleton, recomiendan Moti (https://moti.fyi/)
-  
-  ```bash
-   npm i moti --legacy-peer-deps 
-   npm i expo-linear-gradient
-   ``` 
-   
-   asegurarse de tener instalado...
-   import **'react-native-reanimated'**
-   import **'react-native-gesture-handler'**
-   
+si quieremos agregar animaciones en las View y para crear Skeleton, recomiendan Moti (https://moti.fyi/)
 
-5. Instalar es lint -- para aviso de errores de sintaxis (teniendo instalado las extensiones de 'EsLint' y 'Prettier-Code Formater')
+```bash
+ npm i moti --legacy-peer-deps 
+ npm i expo-linear-gradient
+```
+
+asegurarse de tener instalado...
+import **'react-native-reanimated'**
+import **'react-native-gesture-handler'**
+
+##### 5. Instalar es lint -- para aviso de errores de sintaxis (teniendo instalado las extensiones de 'EsLint' y 'Prettier-Code Formater')
+
 
 ```bash
 npx expo lint
 npm install --save --save-dev --force prettier eslint-config-prettier eslint-plugin-prettier
 ```
 
-6. Utilizar la cámara
+##### 6. Utilizar la cámara
 
- ```bash
-   npx expo install expo-media-library
-   npx expo install expo-camera || npx expo install expo-image-picker # Me parece que sera mejor el expo-image-picker
-   ```
 
-   <!-- SI SE INSTALA EL EXPO-IMAGE-PICKER -->
-   y en el archivo **app.json** agregar en plugins, lo siguiente 
+```bash
+  npx expo install expo-media-library
+  npx expo install expo-camera || npx expo install expo-image-picker # Me parece que sera mejor el expo-image-picker
+```
 
-   ```json
-   [
-      "expo-image-picker",
-      {
-         "photosPermission": "Permitir que $(PRODUCT_NAME) acceda a tus fotos. La aplicación accede a tus fotos para permitirte compartirlas con tus amigos.",
-         "cameraPermission": "Permitir que $(PRODUCT_NAME) acceda a la cámara."
-      }
-   ]
-   ```
-   
-   
-   
-   
-   
+<!-- SI SE INSTALA EL EXPO-IMAGE-PICKER -->
 
-7. Utilizar Localización del dispositivo (https://docs.expo.dev/versions/latest/sdk/location/)
+y en el archivo **app.json** agregar en plugins, lo siguiente
 
- ```bash
-   npx expo install expo-location
-   ```
+```json
+[
+   "expo-image-picker",
+   {
+      "photosPermission": "Permitir que $(PRODUCT_NAME) acceda a tus fotos. La aplicación accede a tus fotos para permitirte compartirlas con tus amigos.",
+      "cameraPermission": "Permitir que $(PRODUCT_NAME) acceda a la cámara."
+   }
+]
+```
 
-   y en el archivo **app.json** agregar en plugins, lo siguiente
+##### 7. Utilizar Localización del dispositivo (https://docs.expo.dev/versions/latest/sdk/location/)
 
-   ```json
-   [
-      "expo-location",
-      {
-         "locationAlwaysAndWhenInUsePermission": "Permitir que $(PRODUCT_NAME) use su ubicación."
-      }
-   ]
-   ```
 
-7. Instalacion de Formik, 
-   keyboard-scroll-view nos ayuda a mantener el area del input al salir el teclado
+```bash
+  npx expo install expo-location
+```
+
+y en el archivo **app.json** agregar en plugins, lo siguiente
+
+```json
+[
+   "expo-location",
+   {
+      "locationAlwaysAndWhenInUsePermission": "Permitir que $(PRODUCT_NAME) use su ubicación."
+   }
+]
+```
+
+##### 7. Instalacion de Formik,
+
+keyboard-scroll-view nos ayuda a mantener el area del input al salir el teclado
 
 ```bash
 npm install formik yup --save
 npm i react-native-keyboard-aware-scroll-view --save
 ```
 
-
-7. ZUSTAND - para el manejo de estados globales
-
- ```bash
-   npm install zustand
-   ```
-
-8. AXIOS - para el manejo de peticiones y junto con dotEnv para poder guardar vaiables de entorno en el proyecto
-
- ```bash
-   npm install axios
-   npm i react-native-dotenv
-   npx expo install @react-native-async-storage/async-storage pod-install
-   ```
+##### 7. ZUSTAND - para el manejo de estados globales
 
 
+```bash
+  npm install zustand
+```
 
+##### 8. AXIOS - para el manejo de peticiones y junto con dotEnv para poder guardar vaiables de entorno en el proyecto
+
+
+```bash
+  npm install axios
+  npm i react-native-dotenv
+  npx expo install @react-native-async-storage/async-storage pod-install
+```
+
+
+##### Instalar Libreria para Notificaciones y Toast
+
+```bash
+npx expo install burnt expo-build-properties
+```
+
+
+Y agregamos la configuracion al archivo `app.json`
+
+
+
+```json
+[
+  "expo-build-properties",
+  {
+      "ios": {
+        "deploymentTarget": "13.0"
+      }
+  }
+]
+```
 
 ## Configuraciones
 
@@ -233,7 +254,6 @@ module.exports = {
 };
 ```
 
-
 #### En el archivo de .eslintrc.js
 
 ```js
@@ -245,7 +265,6 @@ module.exports = {
 };
 
 ```
-
 
 ## Buildear App APK con EAS ([documentacion paso a paso](https://dev.to/chinmaymhatre/how-to-generate-apk-using-react-native-expo-kae))
 
