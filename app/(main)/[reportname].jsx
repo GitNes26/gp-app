@@ -61,12 +61,14 @@ const Report = () => {
       } */
    };
    const validationSchema = Yup.object().shape({
+      imgFile: Yup.object().required("Evidencia requerida, da clic en el botón ''SUBIR EVIDENCIA''"),
       latitud: Yup.string().required("Ubicación requerida, da clic en el botón ''ESTOY AQUI''"),
       longitud: Yup.string().required("Longitud requerida"),
       referencias: Yup.string().required("Referencias requerida"),
       comentarios: Yup.string().required("Comentarios requeridos")
    });
    const onSubmit = async (values) => {
+      // return console.log("🚀 ~ onSubmit ~ imgFile:", values.imgFile);
       // return console.log("🚀 ~ onSubmit ~ values:", values);
       try {
          setIsLoading(true);
@@ -123,7 +125,7 @@ const Report = () => {
    };
 
    useEffect(() => {
-      console.log("Código useEffect Sensisho");
+      // console.log("Código useEffect Sensisho");
       navigation.setOptions({});
       setPreventRemove(true);
 
@@ -195,7 +197,14 @@ const Report = () => {
                   </View>
                   <View className={`w-1/2 justify-center items-center pl-2`}>
                      <Text className={`text-gray-500 text-center font-mmedium italic mb-2`}>Por favor captura la imagen con buena calidad</Text>
-                     <FileInputComponent textButton="Subir evidencia" styleButton={`w-full bg-primary-200`} getData={handleGetPhoto} />
+                     <FileInputComponent
+                        textButton="Subir evidencia"
+                        styleButton={`w-full bg-primary-200 ${formik.errors["latitud"] && "bg-red-600"}`}
+                        getData={handleGetPhoto}
+                     />
+                     <Text className={`text-sm italic px-2 ${formik.errors["imgFile"] ? "text-red-600" : "text-gray-400"} font-mlight`}>
+                        {formik.errors["imgFile"] && formik.errors["imgFile"]}
+                     </Text>
                   </View>
                </View>
 

@@ -7,8 +7,8 @@ export const validateLocation = async () => {
    const location = await getLocation();
    let go = true;
    if (location.ubication.city !== ALLOWED_CITY) {
-      ToastAndroid.showWithGravity(`Location: city:${location.ubication.city} | region:${location.ubication.region}`, ToastAndroid.LONG, ToastAndroid.CENTER);
-      ToastAndroid.showWithGravity(`Lo sentimos, esta App solo esta disponible en la ciudad de ${ALLOWED_CITY}`, ToastAndroid.LONG, ToastAndroid.CENTER);
+      // ToastAndroid.showWithGravity(`Location: city:${location.ubication.city} | region:${location.ubication.region}`, ToastAndroid.LONG, ToastAndroid.CENTER);
+      ToastAndroid.showWithGravity(`Lo sentimos, esta App solo permite reportar en la ciudad de ${ALLOWED_CITY}`, ToastAndroid.LONG, ToastAndroid.CENTER);
       go = false;
    }
    return go;

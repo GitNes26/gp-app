@@ -37,7 +37,7 @@ const Index = () => {
 
       if (!(await validateLocation())) {
          setIsLoading(false);
-         // return;
+         return;
       }
       const item = affairs.find((item) => item.asunto_id === id);
       setAffair(item);

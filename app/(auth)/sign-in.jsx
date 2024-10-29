@@ -22,8 +22,8 @@ const SignIn = () => {
    const { auth } = useAuthStore();
 
    const initialValues = {
-      email: "manada@digital.com",
-      password: "123456"
+      email: "",
+      password: ""
    };
    const validationSchemas = () => {
       let validationSchema;
@@ -41,7 +41,7 @@ const SignIn = () => {
       return validationSchema;
    };
    const onSubmit = async (values) => {
-      console.log("🚀 ~ onSubmit ~ bgTransparent:", bgTransparent);
+      // console.log("🚀 ~ onSubmit ~ bgTransparent:", bgTransparent);
       setBgTransparent(true);
       // return console.log("🚀 ~ onSubmit ~ values:", values);
       try {
