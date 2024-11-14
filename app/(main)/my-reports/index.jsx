@@ -81,7 +81,7 @@ const MyReports = () => {
                                  <Text className=" text-2xl font-mbold text-gray-900">
                                     {auth.name} {auth.paternal_last_name} {auth.maternal_last_name}
                                  </Text>
-                                 <Text className="text-sm font-m text-gray-500">a reportado {reports.length} eventos</Text>
+                                 <Text className="text-sm font-m text-gray-500">ha reportado {reports.length} eventos</Text>
                               </View>
                            }
                         />

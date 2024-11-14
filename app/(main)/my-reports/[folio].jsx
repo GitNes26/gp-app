@@ -49,7 +49,7 @@ const ReportDetails = () => {
                   </Text>
                </View> */}
 
-                  {/* AREA REPROTE */}
+                  {/* AREA REPORTE */}
                   <View className="flex mb-3 p-2">
                      <Text className={`text-lg font-mblack text-center`}>REPORTE</Text>
                      <View className="flex p-2 bg-gray-100/50 rounded-xl">
@@ -59,7 +59,7 @@ const ReportDetails = () => {
                         <ItemContent title={"FECHA:"} value={report.fecha_reporte} />
                         <ItemContent title={"UBICACIÓN:"} value={report.localidad} />
                         <ItemContent title={"REFERENCIAS:"} value={report.referencias} horizontal={false} />
-                        <ItemContent title={"OBSERVACIONES/REPROTE:"} value={report.observaciones} horizontal={false} />
+                        <ItemContent title={"OBSERVACIONES/REPORTE:"} value={report.observaciones} horizontal={false} />
                         <ItemContent title={"EVIDENCIA:"} img={report.img_reporte} horizontal={false} />
                      </View>
                   </View>
