@@ -1,5 +1,5 @@
 # Welcome to your Expo app 👋
-
+EMPEZAMOS CON MAC
 1. Crear Proyecto (Blank JS)
 
    ```bash
