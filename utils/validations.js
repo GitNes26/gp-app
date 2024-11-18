@@ -1,4 +1,4 @@
-import { ToastAndroid } from "react-native";
+import { Alert, Platform, ToastAndroid } from "react-native";
 import { getLocation } from "../components/LocationComponent";
 import { ALLOWED_CITY } from "../constants/globals";
 // import Toast from "./Toast";
@@ -8,8 +8,13 @@ export const validateLocation = async () => {
    let go = true;
    if (location.ubication.city !== ALLOWED_CITY) {
       // ToastAndroid.showWithGravity(`Location: city:${location.ubication.city} | region:${location.ubication.region}`, ToastAndroid.LONG, ToastAndroid.CENTER);
-      ToastAndroid.showWithGravity(`Lo sentimos, esta App solo permite reportar en la ciudad de ${ALLOWED_CITY}`, ToastAndroid.LONG, ToastAndroid.CENTER);
-      go = false;
+      if (Platform.OS === "android") {
+         ToastAndroid.showWithGravity(`Lo sentimos, esta App solo permite reportar en la ciudad de ${ALLOWED_CITY}`, ToastAndroid.LONG, ToastAndroid.CENTER);
+         go = false;
+      } else {
+         Alert.alert(`Lo sentimos, esta App solo permite reportar en la ciudad de ${ALLOWED_CITY}`);
+         go = false;
+      }
    }
    return go;
 };

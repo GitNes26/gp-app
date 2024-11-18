@@ -3,7 +3,7 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import { ApiUrl, ApiUrlFiles } from "../utils/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Redirect, router } from "expo-router";
-import { ToastAndroid } from "react-native";
+import { Alert, Platform, ToastAndroid } from "react-native";
 import useGlobalStore from "./globalStore";
 
 const useAuthStore = create(
@@ -36,18 +36,29 @@ export const login = async (data) => {
       // console.log("🚀 ~ login ~ req:", req);
       if (!req.data.data) {
          setIsLoading(false);
-         ToastAndroid.showWithGravity(
-            "CREDENCIALES INCORRECTAS, VERIFICA TUS DATOS", //req.data,
-            ToastAndroid.LONG,
-            ToastAndroid.BOTTOM
-         );
-         return;
+         if (Platform.OS === 'android') {
+            ToastAndroid.showWithGravity(
+               "CREDENCIALES INCORRECTAS, VERIFICA TUS DATOS", //req.data,
+               ToastAndroid.LONG,
+               ToastAndroid.BOTTOM
+            );
+            return;
+         } else {
+            Alert.alert("CREDENCIALES INCORRECTAS, VERIFICA TUS DATOS");
+            return;
+         }
+
       }
       const res = req.data.data;
       // console.log("🚀 ~ login ~ res:", res);
       if (!res.status) {
          setIsLoading(false);
-         ToastAndroid.showWithGravity(res.message, ToastAndroid.LONG, ToastAndroid.BOTTOM);
+         if (Platform.OS === 'android') {
+            ToastAndroid.showWithGravity(res.message, ToastAndroid.LONG, ToastAndroid.BOTTOM);
+         } else {
+            Alert.alert(res.message);
+         }
+
          return;
       }
       // console.log("🚀 ~ login ~ res:", res);
@@ -62,7 +73,12 @@ export const login = async (data) => {
    } catch (error) {
       console.log("🚀 ~ login ~ error:", error);
       setIsLoading(false);
-      ToastAndroid.showWithGravity("Datos Incorrectos o Cuenta no Registrada", ToastAndroid.LONG, ToastAndroid.BOTTOM);
+      if (Platform.OS === 'android') {
+         ToastAndroid.showWithGravity("Datos Incorrectos o Cuenta no Registrada", ToastAndroid.LONG, ToastAndroid.BOTTOM);
+      } else {
+         Alert.alert("Datos Incorrectos o Cuenta no Registrada");
+      }
+
    }
 };
 
@@ -85,8 +101,14 @@ export const logout = async () => {
          res = req.data.data;
          if (!res.status) {
             setIsLoading(false);
-            ToastAndroid.showWithGravity(res.message, ToastAndroid.LONG, ToastAndroid.BOTTOM);
-            return;
+            if (Platform.OS === 'android') {
+               ToastAndroid.showWithGravity(res.message, ToastAndroid.LONG, ToastAndroid.BOTTOM);
+               return;
+            } else {
+               Alert.alert(res.message);
+               return;
+            }
+
          }
       }
       ApiUrl.defaults.headers.common["Authorization"] = null;
@@ -100,8 +122,13 @@ export const logout = async () => {
       await setAuth(null);
       await setIsLoggedIn(false);
       setIsLoading(false);
-      ToastAndroid.showWithGravity("Error en el servidor", ToastAndroid.LONG, ToastAndroid.BOTTOM);
-      return;
+      if (Platform.OS === 'android') {
+         ToastAndroid.showWithGravity("Error en el servidor", ToastAndroid.LONG, ToastAndroid.BOTTOM);
+         return;
+      } else {
+         Alert.alert("Error en el servidor");
+      }
+
    }
 };
 
@@ -114,7 +141,6 @@ export const signup = async (data) => {
          method: "POST",
          data
       });
-      // console.log("🚀 ~ signup ~ req:", req);
       if (!req.data.data) {
          setIsLoading(false);
          ToastAndroid.showWithGravity(
@@ -125,16 +151,24 @@ export const signup = async (data) => {
          return;
       }
       const res = req.data.data;
-      // console.log("🚀 ~ signup ~ res:", res);
-      ToastAndroid.showWithGravity(res.alert_text, ToastAndroid.LONG, ToastAndroid.BOTTOM);
-      // console.log("🚀 ~ signup ~ res:", res);
+      if (Platform.OS === 'android') {
+         ToastAndroid.showWithGravity(res.alert_text, ToastAndroid.LONG, ToastAndroid.BOTTOM);
+      } else {
+         Alert.alert(res.alert_text);
+      }
+
 
       await setIsLoggedIn(false);
       return res;
    } catch (error) {
-      console.log("🚀 ~ signup ~ error:", error);
       setIsLoading(false);
-      ToastAndroid.showWithGravity(error, ToastAndroid.LONG, ToastAndroid.BOTTOM);
+      if (Platform.OS === 'android') {
+         ToastAndroid.showWithGravity(error, ToastAndroid.LONG, ToastAndroid.BOTTOM);
+      } else {
+         Alert.alert(error);
+      }
+
+
    }
 };
 
@@ -144,7 +178,6 @@ export const updatePassword = async (data) => {
 
    try {
       await checkLoggedIn();
-      // console.log("🚀 ~ updatePassword ~ auth:", auth);
       let res = null;
 
       if (auth) {
@@ -152,24 +185,33 @@ export const updatePassword = async (data) => {
             method: "POST",
             data
          });
-         // console.log("🚀 ~ updatePassword ~ req:", req);
          res = req.data.data;
-         console.log("🚀 ~ updatePassword ~ res:", res);
          if (!res.status) {
             setIsLoading(false);
-            ToastAndroid.showWithGravity(res.message, ToastAndroid.LONG, ToastAndroid.BOTTOM);
-            return;
+            if (Platform.OS === 'android') {
+               ToastAndroid.showWithGravity(res.message, ToastAndroid.LONG, ToastAndroid.BOTTOM);
+               return;
+            } else {
+               Alert.alert(res.message);
+               return;
+            }
+
          }
       }
       ApiUrl.defaults.headers.common["Authorization"] = null;
       ApiUrlFiles.defaults.headers.common["Authorization"] = null;
-      // console.log("Todas las cabeceras:", ApiUrl.defaults.headers);
       return res;
    } catch (error) {
-      console.log("🚀 ~ updatePassword ~ error:", error);
       setIsLoading(false);
-      ToastAndroid.showWithGravity("Error en el servidor", ToastAndroid.LONG, ToastAndroid.BOTTOM);
-      return;
+
+      if (Platform.OS === 'android') {
+         ToastAndroid.showWithGravity("Error en el servidor", ToastAndroid.LONG, ToastAndroid.BOTTOM);
+         return;
+      } else {
+         Alert.alert("Error en el servidor");
+         return;
+      }
+
    }
 };
 
@@ -178,17 +220,14 @@ export const getProfile = async () => {
 
    try {
       if (auth) {
-         // console.log("🚀 ~ getProfile ~ auth:", auth);
          const req = await ApiUrl(`/users/${auth.id}`, {
             method: "GET"
          });
-         // return console.log("🚀 ~ getProfile ~ req:", req.data.res);
          const res = req.data.data;
          if (res.status && res.result?.id) return true;
       }
       return false;
    } catch (error) {
-      console.log("🚀 ~ getProfile ~ error:", error);
       return false;
    }
 };
@@ -199,19 +238,14 @@ export const checkLoggedIn = async () => {
    const setIsLoggedIn = useAuthStore.getState().setIsLoggedIn;
    const isLoggedIn = useAuthStore.getState().isLoggedIn;
 
-   // console.log("🚀 ~ checkLoggedIn ~ auth:", auth);
 
    try {
       if (!auth) {
-         console.log("checkLoggedIn ~ no tengo auth");
          await setAuth(null);
          await setIsLoggedIn(false);
       } else {
-         console.log("checkLoggedIn ~ SI tengo auth");
          const authValidate = await getProfile();
-         console.log("🚀 ~ checkLoggedIn ~ authValidate:", authValidate);
          if (!authValidate) {
-            console.log("checkLoggedIn ~ pero no ya no es valido");
             await setAuth(null);
             await setIsLoggedIn(false);
          } else {
@@ -223,7 +257,6 @@ export const checkLoggedIn = async () => {
          }
       }
       if (!auth && !isLoggedIn) {
-         console.log("checkLoggedIn ~ DE PLANO NO TENGO SESIÓN");
          // return <Redirect href={"(auth)"} />;
          if (router.canDismiss()) router.dismissAll();
          else return <Redirect href={"/"} /> /* router.replace("auth") */;
@@ -231,7 +264,6 @@ export const checkLoggedIn = async () => {
          return <Redirect href={"(main)"} />; // router.replace("(main)");
       }
    } catch (error) {
-      console.log("🚀 ~ checkLoggedIn ~ error:", error);
       return <Redirect href={"/"} />;
    }
 };

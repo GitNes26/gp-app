@@ -1,7 +1,7 @@
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { CameraType, FlashMode } from "expo-camera/build/legacy/Camera.types";
 import { useRef, useState } from "react";
-import { Button, Modal, Text, ToastAndroid, View } from "react-native";
+import { Alert, Button, Modal, Platform, Text, ToastAndroid, View } from "react-native";
 import ButtonCompnent from "./ButtonCompnent";
 import { Ionicons } from "@expo/vector-icons";
 import IconPressableComponent from "./IconPressableComponent";
@@ -56,11 +56,17 @@ export default function CameraComponent2({
 
    const handleRetakePhoto = () => setPoto(null);
    const handleApprovedPhoto = async () => {
-      ToastAndroid.showWithGravity(
-         `IMAGEN APROBADA`,
-         ToastAndroid.LONG,
-         ToastAndroid.CENTER,
-      );
+      if (Platform.OS === 'android') {
+         ToastAndroid.showWithGravity(
+            `IMAGEN APROBADA`,
+            ToastAndroid.LONG,
+            ToastAndroid.CENTER,
+         );
+      } else {
+         Alert.alert(`IMAGEN APROBADA`);
+
+      }
+
       console.log("🚀 ~ handleApprovedPhoto ~ photo.base64:", photo.base64);
       await getData(photo.base64);
       setPoto(null);

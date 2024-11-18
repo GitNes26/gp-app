@@ -1,4 +1,4 @@
-import { FlatList, Image, RefreshControl, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Image, Platform, RefreshControl, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
@@ -27,7 +27,13 @@ const Index = () => {
       setRereshing(true);
       // await refetchAffairs();
       await getAllAffairs();
-      ToastAndroid.show("Se actualizo", ToastAndroid.SHORT);
+      if (Platform.OS === 'android') {
+         ToastAndroid.show("Se actualizo", ToastAndroid.SHORT);
+      } else {
+         Alert.alert("Se actualizo");
+
+      }
+
       setRereshing(false);
    };
 

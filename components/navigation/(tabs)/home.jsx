@@ -1,4 +1,4 @@
-import { FlatList, Image, RefreshControl, Text, ToastAndroid, View } from "react-native";
+import { Alert, FlatList, Image, Platform, RefreshControl, Text, ToastAndroid, View } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../images";
@@ -24,7 +24,15 @@ const Home = () => {
       setRereshing(true);
       await refetchPhotos();
       await refetchUsers();
-      ToastAndroid.show("Se actualizo", ToastAndroid.SHORT);
+
+      if (Platform.OS === 'android') {
+         ToastAndroid.show("Se actualizo", ToastAndroid.SHORT);
+      } else {
+         Alert.alert(`Se Actualizo`);
+
+      }
+
+
       setRereshing(false);
    };
 
@@ -52,7 +60,7 @@ const Home = () => {
                      <Text className={"text-gray-100 text-lg font-regular mb-3"}>Ultimas Predicas</Text>
                      <CarruselComponent
                         data={photos}
-                        // data={[{ id: 1 }, { id: 2 }, { id: 3 }]}
+                     // data={[{ id: 1 }, { id: 2 }, { id: 3 }]}
                      />
                   </View>
                </View>
