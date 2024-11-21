@@ -17,7 +17,7 @@
       },
       "ios": {
          "supportsTablet": true,
-         "bundleIdentifier": "com.nestorpuentes.gpapp"
+         "bundleIdentifier": "com.manadadigital.gpapp"
       },
       "android": {
          "adaptiveIcon": {
@@ -25,7 +25,7 @@
             "backgroundColor": "#ffffff"
          },
          "softwareKeyboardlayoutMode": "pan",
-         "package": "com.nestorpuentes.gpapp",
+         "package": "com.manadadigital.gpapp",
          "permissions": [
             "android.permission.CAMERA",
             "android.permission.RECORD_AUDIO",

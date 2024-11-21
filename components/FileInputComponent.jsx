@@ -59,12 +59,13 @@ export default function FileInputComponent({ textButton = "Abrir Cámara", style
       if (!result.canceled) {
          setImage(result.assets[0].uri);
          const imgData = result.assets[0];
+
          const file = await convertImageToFile(imgData.uri, imgData.fileName, imgData.mimeType);
          // const data = {
          //    uri: imgData.uri,
          //    file,
          // };
-         // console.log("🚀 ~ handlePick ~ file:", file);
+         console.log("🚀 ~ handlePick ~ file:", file);
          getData(file);
       }
    };

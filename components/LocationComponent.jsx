@@ -77,7 +77,7 @@ const LocationComponent = ({ textButton = "Conocer mi ubicación", styleButton, 
          const { status: locationStatus } = await Location.requestForegroundPermissionsAsync();
          setPermissionsGranted({ ...permissionsGranted, location: locationStatus === "granted" });
          if (locationStatus !== "granted") return SimpleToast("Se necesita el permiso de Localidad");
-
+         
          setIsLoading(true);
          const currentPosition = await Location.getCurrentPositionAsync({});
          setLocation(currentPosition);

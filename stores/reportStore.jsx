@@ -87,7 +87,6 @@ export const getReport = async () => {
 };
 
 export const postReport = async (data) => {
-   // console.log("🚀 ~ postReport ~ data:", data);
    const auth = useAuthStore.getState().auth;
 
    try {
@@ -97,10 +96,10 @@ export const postReport = async (data) => {
          const req = await ApiUrlFiles("/app/reportes", {
             method: "POST",
             data,
+            headers: { "Content-Type": "multipart/form-data" }
+
          });
-         // console.log("🚀 ~ postReport ~ req:", req);
          const res = req.data.data;
-         // console.log("🚀 ~ postReport ~ res:", res);
          return res;
       }
    } catch (error) {

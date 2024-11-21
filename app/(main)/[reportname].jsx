@@ -1,4 +1,4 @@
-import { Alert, Image, ScrollView, Text, View } from "react-native";
+import { Alert, Image, Platform, ScrollView, Text, View } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { router, useFocusEffect, useLocalSearchParams, useNavigation } from "expo-router";
 import images from "../../constants/images";
@@ -68,7 +68,7 @@ const Report = () => {
       comentarios: Yup.string().required("Comentarios requeridos")
    });
    const onSubmit = async (values) => {
-      // return console.log("🚀 ~ onSubmit ~ imgFile:", values.imgFile);
+      //return console.log("🚀 ~ onSubmit ~ imgFile:", values.imgFile);
       // return console.log("🚀 ~ onSubmit ~ values:", values);
       try {
          setIsLoading(true);
@@ -85,9 +85,10 @@ const Report = () => {
 
          const formData = await convertToFormData(values);
          // console.log("🚀 ~ onSubmit ~ formData:", formData);
+         return console.log("🚀 ~ onSubmit ~ formData:", formData);
 
          const res = await postReport(formData);
-         // console.log("🚀 ~ onSubmit ~ res:", res);
+         console.log("🚀 ~ onSubmit ~ res: samuel", res);
          SimpleToast(res.alert_title, "center");
          SimpleToast(`REPORTE DE [${affair.asunto}] LEVANTADO`.toUpperCase(), "center");
 
@@ -117,9 +118,9 @@ const Report = () => {
    };
 
    const handleGetLocation = (data) => {
-      // console.log("🚀 ~ handleGetLocation ~ data:", data);
+      console.log("🚀 ~ handleGetLocation ~ data:", data);
       formik.setFieldValue("dataLocation", data);
-      formik.setFieldValue("address", data.ubication.formattedAddress);
+      formik.setFieldValue("address", Platform.OS === "android" ? data.ubication.formattedAddress : data.ubication.street);
       formik.setFieldValue("latitud", data.coords.latitude.toString());
       formik.setFieldValue("longitud", data.coords.longitude.toString());
    };
@@ -185,11 +186,11 @@ const Report = () => {
                            formik.values.imgFile === null
                               ? images.camera
                               : {
-                                   uri: formik.values.imgFile.uri
-                                   //   uri:
-                                   //      "data:image/jpg;base64," +
-                                   //      formik.values.imgFilePreview,
-                                }
+                                 uri: formik.values.imgFile.uri
+                                 //   uri:
+                                 //      "data:image/jpg;base64," +
+                                 //      formik.values.imgFilePreview,
+                              }
                         }
                         className={`w-[95%] h-40 rounded-3xl`}
                         resizeMode="contain"
@@ -238,7 +239,7 @@ const Report = () => {
                   textStyleCase={false}
                   readOnly={true}
                   hidden={true}
-                  // keyboardType={"email-address"}
+               // keyboardType={"email-address"}
                />
                <InputComponent
                   formik={formik}
@@ -249,7 +250,7 @@ const Report = () => {
                   textStyleCase={false}
                   readOnly={true}
                   hidden={true}
-                  // keyboardType={"email-address"}
+               // keyboardType={"email-address"}
                />
 
                <InputComponent
@@ -260,7 +261,7 @@ const Report = () => {
                   // helperText={"texto de ayuda"}
                   textStyleCase={false}
                   rows={5}
-                  // keyboardType={"email-address"}
+               // keyboardType={"email-address"}
                />
 
                <InputComponent
@@ -271,7 +272,7 @@ const Report = () => {
                   // helperText={"texto de ayuda"}
                   textStyleCase={false}
                   rows={5}
-                  // keyboardType={"email-address"}
+               // keyboardType={"email-address"}
                />
             </FormikComponent>
             <FooterComponent />

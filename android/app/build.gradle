@@ -109,9 +109,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.nestorpuentes.gpapp'
+    namespace 'com.manadadigital.gpapp'
     defaultConfig {
-        applicationId 'com.nestorpuentes.gpapp'
+        applicationId 'com.manadadigital.gpapp'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

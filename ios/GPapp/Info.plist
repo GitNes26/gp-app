@@ -28,7 +28,7 @@
         <key>CFBundleURLSchemes</key>
         <array>
           <string>gpapp</string>
-          <string>com.nestorpuentes.gpapp</string>
+          <string>com.manadadigital.gpapp</string>
         </array>
       </dict>
     </array>

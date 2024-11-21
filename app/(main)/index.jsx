@@ -41,7 +41,7 @@ const Index = () => {
       /** VALIDAR QUE ESTE EN TERRITORIO GOMEZPALATINO */
       if (!(await requesPermissionLocation())) return;
 
-      if (!(await validateLocation())) {
+      if ((await validateLocation())) {
          setIsLoading(false);
          return;
       }

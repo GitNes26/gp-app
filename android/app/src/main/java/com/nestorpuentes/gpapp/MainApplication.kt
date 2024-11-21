@@ -1,4 +1,4 @@
-package com.nestorpuentes.gpapp
+package com.manadadigital.gpapp
 
 import android.app.Application
 import android.content.res.Configuration

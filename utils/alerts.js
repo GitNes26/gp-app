@@ -1,4 +1,4 @@
-import { ToastAndroid } from "react-native";
+import { Alert, Platform, ToastAndroid } from "react-native";
 
 /**
  *
@@ -7,13 +7,13 @@ import { ToastAndroid } from "react-native";
  * @returns
  */
 export const SimpleToast = (msg, gravity = "center") => {
-   return ToastAndroid.showWithGravity(
-      msg,
-      ToastAndroid.LONG,
-      gravity === "top"
-         ? ToastAndroid.TOP
-         : gravity === "bottom"
-           ? ToastAndroid.BOTTOM
-           : ToastAndroid.CENTER,
-   );
+   if (Platform.OS === "android") {
+      return ToastAndroid.showWithGravity(
+         msg,
+         ToastAndroid.LONG,
+         gravity === "top" ? ToastAndroid.TOP : gravity === "bottom" ? ToastAndroid.BOTTOM : ToastAndroid.CENTER
+      );
+   } else {
+      return Alert.alert(msg);
+   }
 };

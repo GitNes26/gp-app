@@ -371,19 +371,45 @@ export const convertImageToFile = async (uri, fileName, mimeType) => {
  * @returns
  */
 export const convertToFormData = async (objForm) => {
-   const formData = new FormData();
-   Object.keys(objForm).map((key) => {
-      if (typeof objForm[key] === "object" && objForm[key] != null) {
-         if (includesInArray(Object.keys(objForm[key]), ["uri", "name", "type"], true))
-            formData.append(key, {
-               uri: objForm[key].uri,
-               name: objForm[key].name,
-               type: objForm[key].type
-            });
-         else formData.append(key, JSON.stringify(objForm[key]));
-      } else formData.append(key, objForm[key]);
-   });
+   // const formData = new FormData();
+   // Object.keys(objForm).map((key) => {
+   //    if (typeof objForm[key] === "object" && objForm[key] != null) {
+   //       if (includesInArray(Object.keys(objForm[key]), ["uri", "name", "type"], true))
+   //          formData.append(key, {
+   //             uri: objForm[key].uri,
+   //             name: objForm[key].name,
+   //             type: objForm[key].type
+   //          });
+   //       else formData.append(key, JSON.stringify(objForm[key]));
+   //    } else formData.append(key, objForm[key]);
+   // });
+   // Función para verificar si todos los elementos de un array están presentes en otro array
+   const includesInArray = (arr, items) => items.every((item) => arr.includes(item));
 
+   const formData = new FormData();
+
+   // Iterar sobre cada clave del objeto
+   Object.keys(objForm).forEach((key) => {
+      const value = objForm[key];
+
+      // Si el valor es un objeto no nulo
+      if (typeof value === "object" && value !== null) {
+         // Si es un archivo (tiene 'uri', 'name', 'type')
+         if (includesInArray(Object.keys(value), ["uri", "name", "type"])) {
+            formData.append(key, {
+               uri: value.uri,
+               name: value.name,
+               type: value.type
+            });
+         } else {
+            // Si es otro objeto, convertirlo a JSON
+            formData.append(key, JSON.stringify(value));
+         }
+      } else {
+         // Si es un valor primitivo (string, number, boolean), agregarlo directamente
+         formData.append(key, value);
+      }
+   });
    return formData;
 };
 
